@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace SolverCore
 {qqq
     public class Main
-    {
+    {asdasd
     }
 }

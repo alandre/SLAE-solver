@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace SolverCore
-{qqq
-    public class Main
-    {asdasd
+qwe
+namesqweqwepace SolverCqweqweqweore
+{qqqqwe
+    pubqweqweqlic clqweass Mqweqweain
+    {asdddddddddasd
     }
 }

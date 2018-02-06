@@ -1,6 +1,8 @@
-﻿namespace SolverCore
+﻿using System.Collections.Generic;
+
+namespace SolverCore
 {
-    public interface IVector
+    public interface IVector : IEnumerable<double>
     {
         int Size { get; }
         double this[int index] { get; }

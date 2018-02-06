@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace SolverCore
 {
@@ -30,29 +32,16 @@ namespace SolverCore
         /// <summary>
         /// конструктор
         /// </summary>
-        /// <param name="size">размер вектора</param>
         /// <param name="vector">элементы вектора</param>
         /// <exception cref="ArgumentNullException">если аргумент vector == null </exception>
-        /// <exception cref="ArgumentException">если vector.Length != size</exception>
-        /// <exception cref="ArgumentException">если аргумент size < 0</exception>
-        public Vector(int size, double[] vector)
+        public Vector(double[] vector)
         {
             if(vector == null)
             {
                 throw new ArgumentNullException(nameof(vector));
             }
 
-            if (size < 0)
-            {
-                throw new ArgumentException("Size can't be less then 0", nameof(size));
-            }
-
-            if (vector.Length != size)
-            {
-                throw new ArgumentException($"Size of vector not equals {nameof(size)}", nameof(vector));
-            }
-
-            this.vector = new double[size];
+            this.vector = new double[vector.Length];
             vector.CopyTo(this.vector, 0);
         }
 
@@ -62,7 +51,7 @@ namespace SolverCore
         /// <param name="vector">вычитаемый вектор</param>
         /// <returns>результирующий вектор</returns>
         /// <exception cref="ArgumentNullException">если аргумент vector == null</exception>
-        /// <exception cref="ArgumentException">если размер вычитаемого вектора не равен размеру текущего(уменьшаемого) вектора</exception>
+        /// <exception cref="RankException">если размер вычитаемого вектора не равен размеру текущего(уменьшаемого) вектора</exception>
         public IVector Minus(IVector vector)
         {
             if(vector == null)
@@ -72,7 +61,7 @@ namespace SolverCore
 
             if(vector.Size != Size)
             {
-                throw new ArgumentException("Size of vector must be equals size of current", nameof(vector));
+                throw new RankException(nameof(vector));
             }
 
             var result = new double[Size];
@@ -82,7 +71,7 @@ namespace SolverCore
                 result[i] = this[i] - vector[i];
             }
 
-            return new Vector(Size, result);
+            return new Vector(result);
         }
 
         /// <summary>
@@ -91,7 +80,7 @@ namespace SolverCore
         /// <param name="vector">множитель</param>
         /// <returns>результирующее число</returns>
         /// <exception cref="ArgumentNullException">если аргумент vector == null</exception>
-        /// <exception cref="ArgumentException">если размер вектора множителя не равен размеру текущего вектора</exception>
+        /// <exception cref="RankException">если размер вектора множителя не равен размеру текущего вектора</exception>
         public double Multiply(IVector vector)
         {
             if (vector == null)
@@ -101,7 +90,7 @@ namespace SolverCore
 
             if (vector.Size != Size)
             {
-                throw new ArgumentException("Size of vector must be equals size of current", nameof(vector));
+                throw new RankException(nameof(vector));
             }
 
             var result = 0.0;
@@ -126,7 +115,7 @@ namespace SolverCore
         /// <param name="vector">слагаемое</param>
         /// <returns>результирующий вектор</returns>
         /// <exception cref="ArgumentNullException">если аргумент vector == null</exception>
-        /// <exception cref="ArgumentException">если размер вектора слагаемого не равен размеру текущего вектора</exception>
+        /// <exception cref="RankException">если размер вектора слагаемого не равен размеру текущего вектора</exception>
         public IVector Plus(IVector vector)
         {
             if (vector == null)
@@ -136,7 +125,7 @@ namespace SolverCore
 
             if (vector.Size != Size)
             {
-                throw new ArgumentException("Size of vector must be equals size of current", nameof(vector));
+                throw new RankException(nameof(vector));
             }
 
             var result = new double[Size];
@@ -146,7 +135,26 @@ namespace SolverCore
                 result[i] = this[i] + vector[i];
             }
 
-            return new Vector(Size, result);
+            return new Vector(result);
+        }
+
+        /// <summary>
+        /// метод необходимый чтобы по коллекции можно было пробегать циклом foreach
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator<double> GetEnumerator()
+        {
+            var enumerable = vector as IEnumerable<double>;
+            return enumerable.GetEnumerator();
+        }
+
+        /// <summary>
+        /// метод который просто так нужно сделать (он приватный). Исходя из архитектуры делается так
+        /// </summary>
+        /// <returns></returns>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

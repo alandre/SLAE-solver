@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SolverCore
+﻿namespace SolverCore
 {
+    /// <summary>
+    /// Профильный
+    /// </summary>
     class SkylineMatrix
     {
     }

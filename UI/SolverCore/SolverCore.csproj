@@ -41,24 +41,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BandMatrix.cs" />
-    <Compile Include="CoordinationalMatrix.cs" />
-    <Compile Include="DenseMatrix.cs" />
-    <Compile Include="IMatrix.cs" />
-    <Compile Include="IMatrixForUser.cs" />
-    <Compile Include="IVector.cs" />
+    <Compile Include="MatrixFormats\Coordinational\CoordinationalMatrix.cs" />
+    <Compile Include="MatrixFormats\Dense\DenseMatrix.cs" />
+    <Compile Include="Interfaces\IMatrix.cs" />
+    <Compile Include="Interfaces\IMatrixForUser.cs" />
+    <Compile Include="Interfaces\IVector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SkylineMatrix.cs" />
-    <Compile Include="SparseRowColumnMatrix.cs" />
-    <Compile Include="SparseRowMatrix.cs" />
-    <Compile Include="SymmetricBandMatrix.cs" />
-    <Compile Include="SymmetricCoordinationalMatrix.cs" />
-    <Compile Include="SymmetricDenseMatrix.cs" />
-    <Compile Include="SymmetricSkylineMatrix.cs" />
-    <Compile Include="SymmetricSparseRowColumnMatrix.cs" />
-    <Compile Include="SymmetricSparseRowMatrix.cs" />
-    <Compile Include="Vector.cs" />
+    <Compile Include="MatrixFormats\Skyline\SkylineMatrix.cs" />
+    <Compile Include="MatrixFormats\SparseRowColumn\SparseRowColumnMatrix.cs" />
+    <Compile Include="MatrixFormats\SparseRow\SparseRowMatrix.cs" />
+    <Compile Include="MatrixFormats\Coordinational\SymmetricCoordinationalMatrix.cs" />
+    <Compile Include="MatrixFormats\Dense\SymmetricDenseMatrix.cs" />
+    <Compile Include="MatrixFormats\Skyline\SymmetricSkylineMatrix.cs" />
+    <Compile Include="MatrixFormats\SparseRowColumn\SymmetricSparseRowColumnMatrix.cs" />
+    <Compile Include="MatrixFormats\SparseRow\SymmetricSparseRowMatrix.cs" />
+    <Compile Include="MatrixFormats\Vector.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

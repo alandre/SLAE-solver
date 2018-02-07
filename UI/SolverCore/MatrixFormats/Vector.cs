@@ -75,6 +75,35 @@ namespace SolverCore
         }
 
         /// <summary>
+        /// операция нахождения суммы векторов
+        /// </summary>
+        /// <param name="vector">слагаемое</param>
+        /// <returns>результирующий вектор</returns>
+        /// <exception cref="ArgumentNullException">если аргумент vector == null</exception>
+        /// <exception cref="RankException">если размер вектора слагаемого не равен размеру текущего вектора</exception>
+        public IVector Plus(IVector vector)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException(nameof(vector));
+            }
+
+            var result = new double[Size];
+
+            for (int i = 0; i < Size; i++)
+            {
+                result[i] = this[i] + vector[i];
+            }
+
+            return new Vector(result);
+        }
+
+        /// <summary>
         /// операция умножения на вектор
         /// </summary>
         /// <param name="vector">множитель</param>
@@ -109,39 +138,11 @@ namespace SolverCore
         /// <returns>результат - число</returns>
         public double Norm() => Math.Sqrt(Multiply(this));
 
+        // так нужно)))
         /// <summary>
-        /// операция нахождения суммы векторов
+        /// метод необходимый чтобы по коллекции можно было пробегать оператором foreach
         /// </summary>
-        /// <param name="vector">слагаемое</param>
-        /// <returns>результирующий вектор</returns>
-        /// <exception cref="ArgumentNullException">если аргумент vector == null</exception>
-        /// <exception cref="RankException">если размер вектора слагаемого не равен размеру текущего вектора</exception>
-        public IVector Plus(IVector vector)
-        {
-            if (vector == null)
-            {
-                throw new ArgumentNullException(nameof(vector));
-            }
-
-            if (vector.Size != Size)
-            {
-                throw new RankException(nameof(vector));
-            }
-
-            var result = new double[Size];
-
-            for(int i = 0; i < Size; i++)
-            {
-                result[i] = this[i] + vector[i];
-            }
-
-            return new Vector(result);
-        }
-
-        /// <summary>
-        /// метод необходимый чтобы по коллекции можно было пробегать циклом foreach
-        /// </summary>
-        /// <returns></returns>
+        /// <returns>возвращается перечислитель</returns>
         public IEnumerator<double> GetEnumerator()
         {
             var enumerable = vector as IEnumerable<double>;

@@ -5,9 +5,9 @@ namespace SolverCore
     /// <summary>
     /// Плотный формат
     /// </summary>
-    class DenseMatrix
+    public class DenseMatrix
     {
-        private readonly double[,] matrix;
+        private double[,] matrix;
 
         public double this[int i, int j]
         {

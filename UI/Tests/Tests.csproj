@@ -51,7 +51,14 @@
   </Choose>
   <ItemGroup>
     <Compile Include="MainTests.cs" />
+    <Compile Include="MF\TestsVector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SolverCore\SolverCore.csproj">
+      <Project>{ef02a481-1888-4b87-a0ca-a06ba48ac308}</Project>
+      <Name>SolverCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

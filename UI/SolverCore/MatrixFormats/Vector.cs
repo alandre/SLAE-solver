@@ -12,7 +12,7 @@ namespace SolverCore
         {
             get
             {
-                if(index < 0 || index >= vector.Length)
+                if(index < 0 || index >= Size)
                 {
                     throw new IndexOutOfRangeException();
                 }

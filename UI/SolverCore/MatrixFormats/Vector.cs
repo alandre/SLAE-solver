@@ -41,7 +41,7 @@ namespace SolverCore
 
         public int Size => vector.Length;
 
-        public double Norm => Math.Sqrt(Dot(this));
+        public double Norm => Math.Sqrt(DotProduct(this));
 
         public void SetConst(double value = 0)
         {
@@ -81,7 +81,7 @@ namespace SolverCore
             return new Vector(result);
         }
 
-        public double Dot(IVector vector)
+        public double DotProduct(IVector vector)
         {
             if(vector == null)
             {

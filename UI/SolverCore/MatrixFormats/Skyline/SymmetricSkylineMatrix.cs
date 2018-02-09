@@ -1,12 +1,52 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolverCore
 {
-    class SymmetricSkylineMatrix
+    public class SymmetricSkylineMatrix : IMatrix
     {
+        public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        public int Size => throw new NotImplementedException();
+
+        public IVector Diagonal => throw new NotImplementedException();
+
+        public ILinearOperator Transpose => throw new NotImplementedException();
+
+        public IEnumerator<(double value, int row, int col)> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector LMult(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector LSolve(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector Multiply(IVector x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector UMult(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector USolve(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -6,28 +6,7 @@ namespace SolverCore
 {
     public class Vector : IVector
     {
-        private readonly double[] vector;
-
-        public double this[int index]
-        {
-            get
-            {
-                if(index < 0 || index >= Size)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-
-                return vector[index];
-            }
-        }
-
-        public int Size
-        {
-            get
-            {
-                return vector.Length;
-            }
-        }
+        private double[] vector;
 
         /// <summary>
         /// конструктор
@@ -45,14 +24,34 @@ namespace SolverCore
             vector.CopyTo(this.vector, 0);
         }
 
-        /// <summary>
-        /// вычитание вектора
-        /// </summary>
-        /// <param name="vector">вычитаемый вектор</param>
-        /// <returns>результирующий вектор</returns>
-        /// <exception cref="ArgumentNullException">если аргумент vector == null</exception>
-        /// <exception cref="RankException">если размер вычитаемого вектора не равен размеру текущего(уменьшаемого) вектора</exception>
-        public IVector Minus(IVector vector)
+        public double this[int index]
+        {
+            get
+            {
+                if(index < 0 || index >= Size)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                return vector[index];
+            }
+
+            set => vector[index] = value;
+        }
+
+        public int Size => vector.Length;
+
+        public double Norm => Math.Sqrt(Dot(this));
+
+        public void SetConst(double value = 0)
+        {
+            for(int i = 0; i < Size; i++)
+            {
+                vector[i] = value;
+            }
+        }
+
+        public IVector Add(IVector vector, double multiplier = 1)
         {
             if(vector == null)
             {
@@ -61,65 +60,37 @@ namespace SolverCore
 
             if(vector.Size != Size)
             {
-                throw new RankException(nameof(vector));
+                throw new RankException();
             }
 
             var result = new double[Size];
 
             for(int i = 0; i < Size; i++)
             {
-                result[i] = this[i] - vector[i];
+                result[i] = this[i] + multiplier * vector[i];
             }
 
             return new Vector(result);
         }
 
-        /// <summary>
-        /// операция нахождения суммы векторов
-        /// </summary>
-        /// <param name="vector">слагаемое</param>
-        /// <returns>результирующий вектор</returns>
-        /// <exception cref="ArgumentNullException">если аргумент vector == null</exception>
-        /// <exception cref="RankException">если размер вектора слагаемого не равен размеру текущего вектора</exception>
-        public IVector Plus(IVector vector)
+        public IVector Clone()
         {
-            if (vector == null)
-            {
-                throw new ArgumentNullException(nameof(vector));
-            }
-
-            if (vector.Size != Size)
-            {
-                throw new RankException(nameof(vector));
-            }
-
             var result = new double[Size];
-
-            for (int i = 0; i < Size; i++)
-            {
-                result[i] = this[i] + vector[i];
-            }
+            vector.CopyTo(result, 0);
 
             return new Vector(result);
         }
 
-        /// <summary>
-        /// операция умножения на вектор
-        /// </summary>
-        /// <param name="vector">множитель</param>
-        /// <returns>результирующее число</returns>
-        /// <exception cref="ArgumentNullException">если аргумент vector == null</exception>
-        /// <exception cref="RankException">если размер вектора множителя не равен размеру текущего вектора</exception>
-        public double Multiply(IVector vector)
+        public double Dot(IVector vector)
         {
-            if (vector == null)
+            if(vector == null)
             {
                 throw new ArgumentNullException(nameof(vector));
             }
 
-            if (vector.Size != Size)
+            if(vector.Size != Size)
             {
-                throw new RankException(nameof(vector));
+                throw new RankException();
             }
 
             var result = 0.0;
@@ -132,27 +103,12 @@ namespace SolverCore
             return result;
         }
 
-        /// <summary>
-        /// вычисление нормы вектора
-        /// </summary>
-        /// <returns>результат - число</returns>
-        public double Norm() => Math.Sqrt(Multiply(this));
-
-        // так нужно)))
-        /// <summary>
-        /// метод необходимый чтобы по коллекции можно было пробегать оператором foreach
-        /// </summary>
-        /// <returns>возвращается перечислитель</returns>
         public IEnumerator<double> GetEnumerator()
         {
-            var enumerable = vector as IEnumerable<double>;
-            return enumerable.GetEnumerator();
+            var enumerator = vector as IEnumerable<double>;
+            return enumerator.GetEnumerator();
         }
 
-        /// <summary>
-        /// метод который просто так нужно сделать (он приватный). Исходя из архитектуры делается так
-        /// </summary>
-        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();

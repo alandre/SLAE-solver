@@ -1,11 +1,9 @@
-﻿namespace SolverCore
+﻿using System.Collections.Generic;
+
+namespace SolverCore
 {
-    public interface IMatrix
+    public interface IMatrix : ILinearOperator, IEnumerable<(double value, int row, int col)>
     {
-        int Size { get; }
-        IMatrix ConvertTo(string matrixFormat);
-        IVector Multiply(IVector vector);
-        IVector LowerMult(IVector vector);
-        IVector UpperMult(IVector vector);
+        double this[int i, int j] { get; set; }
     }
 }

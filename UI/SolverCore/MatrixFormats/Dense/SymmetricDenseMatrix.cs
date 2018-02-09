@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 
 namespace SolverCore
 {
     /// <summary>
     /// плотная симметричная
     /// </summary>
-    public class SymmetricDenseMatrix : IMatrixForUser
+    public class SymmetricDenseMatrix : IMatrix
     {
         private double[][] matrix;
 
@@ -37,81 +38,45 @@ namespace SolverCore
             }
         }
 
-        /// <summary>
-        /// обращение по индексу
-        /// </summary>
-        /// <param name="i"></param>
-        /// <param name="j"></param>
-        /// <returns></returns>
-        /// <exception cref="IndexOutOfRangeException"></exception>
-        public double this[int i, int j]
-        {
-            get
-            {
-                if(i < 0 || j < 0 || i >= Size || j >= Size)
-                {
-                    throw new IndexOutOfRangeException();
-                }
+        public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-                return matrix[Math.Max(i, j)][Math.Min(i, j)];
-            }
-        }
+        public int Size => throw new NotImplementedException();
 
-        public int Size
-        {
-            get
-            {
-                return matrix.Length;
-            }
-        }
+        public IVector Diagonal => throw new NotImplementedException();
 
-        /// <summary>
-        /// умножение матрицы на вектор
-        /// </summary>
-        /// <param name="vector"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="RankException"></exception>
-        public IVector Multiply(IVector vector)
-        {
-            if(vector == null)
-            {
-                throw new ArgumentNullException(nameof(vector));
-            }
+        public ILinearOperator Transpose => throw new NotImplementedException();
 
-            if(vector.Size != Size)
-            {
-                throw new RankException();
-            }
-
-            var result = new double[Size];
-
-            for(int i = 0; i < Size; i++)
-            {
-                var sum = 0.0;
-
-                for(int j = 0; j < Size; j++)
-                {
-                    sum += matrix[Math.Max(i, j)][Math.Min(i, j)] * vector[j];
-                }
-
-                result[i] = sum;
-            }
-
-            return new Vector(result);
-        }
-
-        public IVector UpperMult(IVector vector)
+        public System.Collections.Generic.IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
             throw new NotImplementedException();
         }
 
-        public IVector LowerMult(IVector vector)
+        public IVector LMult(IVector x, bool UseDiagonal)
         {
             throw new NotImplementedException();
         }
 
-        public IMatrix ConvertTo(string matrixFormat)
+        public IVector LSolve(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector Multiply(IVector x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector UMult(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector USolve(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
         }

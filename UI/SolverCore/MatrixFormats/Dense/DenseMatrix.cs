@@ -1,34 +1,14 @@
 ﻿using System;
+using System.Collections;
 
 namespace SolverCore
 {
     /// <summary>
     /// Плотный формат
     /// </summary>
-    public class DenseMatrix
+    public class DenseMatrix : IMatrix
     {
         private double[,] matrix;
-
-        public double this[int i, int j]
-        {
-            get
-            {
-                if (i < 0 || j < 0 || i >= Size || j >= Size)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-
-                return matrix[i, j];
-            }
-        }
-
-        public int Size
-        {
-            get
-            {
-                return matrix.GetLength(0);
-            }
-        }
 
         /// <summary>
         /// конструктор
@@ -61,58 +41,45 @@ namespace SolverCore
             }
         }
 
-        /// <summary>
-        /// умножение матрицы на вектор
-        /// </summary>
-        /// <param name="vector"> множитель</param>
-        /// <returns>результат - вектор</returns>
-        /// <exception cref="ArgumentNullException">если vector == null</exception>
-        /// <exception cref="RankException">если размерности не соотносятся</exception>
-        public IVector Multiply(IVector vector)
-        {
-            if (vector == null)
-            {
-                throw new ArgumentNullException(nameof(vector));
-            }
+        public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
-            if (vector.Size != Size)
-            {
-                throw new RankException(nameof(vector));
-            }
+        public int Size => throw new NotImplementedException();
 
-            var result = new double[Size];
+        public IVector Diagonal => throw new NotImplementedException();
 
-            for (int i = 0; i < Size; i++)
-            {
-                var sum = 0.0;
+        public ILinearOperator Transpose => throw new NotImplementedException();
 
-                for (int j = 0; j < Size; j++)
-                {
-                    sum += this[i, j] * vector[i];
-                }
-
-                result[i] = sum;
-            }
-
-            return new Vector(result);
-        }
-
-        /// <summary>
-        /// Метод перевода матрицы в новый формат (если это возможно)
-        /// </summary>
-        /// <param name="matrixFormat">формат матрицы, в которую будет переведена текущая</param>
-        /// <returns>новая матрица</returns>
-        public IMatrix ConvertTo(string matrixFormat)
+        public System.Collections.Generic.IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
             throw new NotImplementedException();
         }
 
-        public IVector LowerMult(IVector vector)
+        public IVector LMult(IVector x, bool UseDiagonal)
         {
             throw new NotImplementedException();
         }
 
-        public IVector UpperMult(IVector vector)
+        public IVector LSolve(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector Multiply(IVector x)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector UMult(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector USolve(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
         }

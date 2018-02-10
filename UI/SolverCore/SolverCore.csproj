@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MatrixFormats\Convert.cs" />
     <Compile Include="MatrixFormats\Coordinational\CoordinationalMatrix.cs" />
     <Compile Include="MatrixFormats\Dense\DenseMatrix.cs" />
     <Compile Include="Interfaces\IMatrix.cs" />

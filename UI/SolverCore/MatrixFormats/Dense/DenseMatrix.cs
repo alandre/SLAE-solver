@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SolverCore
 {
@@ -41,17 +42,40 @@ namespace SolverCore
             }
         }
 
-        public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double this[int i, int j]
+        {
+            get => matrix[i, j];
+            set => matrix[i, j] = value;
+        }
 
-        public int Size => throw new NotImplementedException();
+        public int Size => matrix.GetLength(0);
 
-        public IVector Diagonal => throw new NotImplementedException();
+        public IVector Diagonal
+        {
+            get
+            {
+                var diagonal = new double[Size];
+
+                for(int i = 0; i < Size; i++)
+                {
+                    diagonal[i] = matrix[i, i];
+                }
+
+                return new Vector(diagonal);
+            }
+        }
 
         public ILinearOperator Transpose => throw new NotImplementedException();
 
-        public System.Collections.Generic.IEnumerator<(double value, int row, int col)> GetEnumerator()
+        public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j < Size; j++)
+                {
+                    yield return (matrix[i, j], i, j);
+                }
+            }
         }
 
         public IVector LMult(IVector x, bool UseDiagonal)

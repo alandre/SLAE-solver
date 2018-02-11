@@ -44,8 +44,15 @@ namespace SolverCore
 
         public double this[int i, int j]
         {
-            get => matrix[i, j];
-            set => matrix[i, j] = value;
+            get
+            {
+                if(i < 0 || j < 0 || i >= Size || j >= Size)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                return matrix[i, j];
+            }
         }
 
         public int Size => matrix.GetLength(0);
@@ -169,6 +176,8 @@ namespace SolverCore
             return new Vector(result);
         }
 
+        public ILinearOperator Transpose => new TransposeMatrix() { matrix = this };
+
         public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
@@ -179,6 +188,52 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public ILinearOperator Transpose => throw new NotImplementedException();
+        private IVector MultiplyTranspose(IVector vector)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IVector LMultTranspose(IVector vector, bool isUseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IVector UMultTranspose(IVector vector, bool isUseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        private IVector USolveTranspose(IVector vector, bool isUseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        //это мне не очень нравится, но Рояк хотел так :(
+        //придется дублировать код в каждом не симметричном классе
+        private class TransposeMatrix : ILinearOperator
+        {
+            public DenseMatrix matrix;
+
+            public int Size => matrix.Size;
+
+            public IVector Diagonal => matrix.Diagonal;
+
+            public ILinearOperator Transpose => matrix;
+
+            public IVector LMult(IVector vector, bool isUseDiagonal) => matrix.LMultTranspose(vector, isUseDiagonal);
+
+            public IVector LSolve(IVector vector, bool isUseDiagonal) => matrix.LSolveTranspose(vector, isUseDiagonal);
+
+            public IVector Multiply(IVector vector) => matrix.MultiplyTranspose(vector);
+
+            public IVector UMult(IVector vector, bool isUseDiagonal) => matrix.UMultTranspose(vector, isUseDiagonal);
+
+            public IVector USolve(IVector vector, bool isUseDiagonal) => matrix.USolveTranspose(vector, isUseDiagonal);
+        }
     }
 }

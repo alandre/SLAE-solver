@@ -17,7 +17,7 @@ namespace SolverCore.MatrixFormats
         {
             if (!IsSymmetricMatrix(matrix, 1e-10))
             {
-                throw new ArgumentException($"{matrix} is not symmetric matrix", nameof(matrix));
+                throw new ArgumentException($"{nameof(matrix)} is not symmetric matrix", nameof(matrix));
             }
 
             throw new NotImplementedException();
@@ -30,6 +30,11 @@ namespace SolverCore.MatrixFormats
 
         public static IMatrix ToSymmetricCoordinationalMatrix(IMatrix matrix)
         {
+            if (!IsSymmetricMatrix(matrix, 1e-10))
+            {
+                throw new ArgumentException($"{nameof(matrix)} is not symmetric matrix", nameof(matrix));
+            }
+
             throw new NotImplementedException();
         }
 
@@ -40,6 +45,11 @@ namespace SolverCore.MatrixFormats
 
         public static IMatrix ToSymmetricSkylineMatrix(IMatrix matrix)
         {
+            if (!IsSymmetricMatrix(matrix, 1e-10))
+            {
+                throw new ArgumentException($"{nameof(matrix)} is not symmetric matrix", nameof(matrix));
+            }
+
             throw new NotImplementedException();
         }
 
@@ -50,6 +60,11 @@ namespace SolverCore.MatrixFormats
 
         public static IMatrix ToSymmetricSparseRowMatrix(IMatrix matrix)
         {
+            if (!IsSymmetricMatrix(matrix, 1e-10))
+            {
+                throw new ArgumentException($"{nameof(matrix)} is not symmetric matrix", nameof(matrix));
+            }
+
             throw new NotImplementedException();
         }
 
@@ -60,6 +75,11 @@ namespace SolverCore.MatrixFormats
 
         public static IMatrix ToSymmetricSparseRowColumnMatrix(IMatrix matrix)
         {
+            if (!IsSymmetricMatrix(matrix, 1e-10))
+            {
+                throw new ArgumentException($"{matrix} is not symmetric matrix", nameof(matrix));
+            }
+
             throw new NotImplementedException();
         }
 

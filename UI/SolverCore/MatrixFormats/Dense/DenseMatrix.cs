@@ -83,11 +83,21 @@ namespace SolverCore
 
         public IVector LMult(IVector vector, bool isUseDiagonal)
         {
+            if(vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if(vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
             var result = new double[Size];
 
             for(int i = 0; i < Size; i++)
             {
-                var sum = isUseDiagonal ? matrix[i, i] * vector[i] : 0;
+                var sum = isUseDiagonal ? matrix[i, i] * vector[i] : vector[i];
 
                 for(int j = 0; j < i; j++)
                 {
@@ -100,27 +110,75 @@ namespace SolverCore
             return new Vector(result);
         }
 
-        public IVector UMult(IVector x, bool UseDiagonal)
+        public IVector UMult(IVector vector, bool isUseDiagonal)
+        {
+            if(vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if(vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new double[Size];
+
+            for (int i = 0; i < Size; i++)
+            {
+                var sum = isUseDiagonal ? matrix[i, i] * vector[i] : vector[i];
+
+                for (int j = i + 1; j < Size; j++)
+                {
+                    sum += matrix[i, j] * vector[j];
+                }
+
+                result[i] = sum;
+            }
+
+            return new Vector(result);
+        }
+
+        public IVector Multiply(IVector vector)
+        {
+            if(vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if(vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            //можно сделать через LMult и UMult, но хз надо ли
+            var result = new double[Size];
+
+            for (int i = 0; i < Size; i++)
+            {
+                var sum = 0.0;
+
+                for (int j = 0; j < Size; j++)
+                {
+                    sum += matrix[i, j] * vector[j];
+                }
+
+                result[i] = sum;
+            }
+
+            return new Vector(result);
+        }
+
+        public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
 
-        public IVector LSolve(IVector x, bool UseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector USolve(IVector x, bool UseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector Multiply(IVector x)
+        public IVector USolve(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
 
         public ILinearOperator Transpose => throw new NotImplementedException();
-
     }
 }

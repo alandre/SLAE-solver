@@ -65,8 +65,6 @@ namespace SolverCore
             }
         }
 
-        public ILinearOperator Transpose => throw new NotImplementedException();
-
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
             for (int i = 0; i < Size; i++)
@@ -78,7 +76,31 @@ namespace SolverCore
             }
         }
 
-        public IVector LMult(IVector x, bool UseDiagonal)
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IVector LMult(IVector vector, bool isUseDiagonal)
+        {
+            var result = new double[Size];
+
+            for(int i = 0; i < Size; i++)
+            {
+                var sum = isUseDiagonal ? matrix[i, i] * vector[i] : 0;
+
+                for(int j = 0; j < i; j++)
+                {
+                    sum += matrix[i, j] * vector[j];
+                }
+
+                result[i] = sum;
+            }
+
+            return new Vector(result);
+        }
+
+        public IVector UMult(IVector x, bool UseDiagonal)
         {
             throw new NotImplementedException();
         }
@@ -88,24 +110,17 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector Multiply(IVector x)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector UMult(IVector x, bool UseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
         public IVector USolve(IVector x, bool UseDiagonal)
         {
             throw new NotImplementedException();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public IVector Multiply(IVector x)
         {
             throw new NotImplementedException();
         }
+
+        public ILinearOperator Transpose => throw new NotImplementedException();
+
     }
 }

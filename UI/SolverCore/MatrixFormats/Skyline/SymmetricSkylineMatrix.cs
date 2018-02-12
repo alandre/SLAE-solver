@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SolverCore
 {
-    public class SymmetricSkylineMatrix : IMatrix, ILinearOperator
+    public class SymmetricSkylineMatrix : IMatrix
     {
         public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

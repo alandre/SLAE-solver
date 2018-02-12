@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace SolverCore
 {
-    public class SparseRowColumnMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
+    public class SparseRowColumnMatrix : IMatrix, ITransposeLinearOperator
     {
         public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace SolverCore
 {
-    public class SymmetricSparseRowColumnMatrix : IMatrix, ILinearOperator
+    public class SymmetricSparseRowColumnMatrix : IMatrix
     {
         public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

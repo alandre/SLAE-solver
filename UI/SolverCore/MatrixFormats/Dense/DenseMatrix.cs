@@ -57,6 +57,8 @@ namespace SolverCore
 
         public int Size => matrix.GetLength(0);
 
+        public ILinearOperator Transpose => new TransposeMatrix<DenseMatrix> { Matrix = this };
+
         public IVector Diagonal
         {
             get
@@ -83,10 +85,7 @@ namespace SolverCore
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public IVector LMult(IVector vector, bool isUseDiagonal)
         {
@@ -176,7 +175,62 @@ namespace SolverCore
             return new Vector(result);
         }
 
-        public ILinearOperator Transpose => new TransposeMatrix<DenseMatrix> { Matrix = this };
+        public IVector MultiplyTranspose(IVector vector)
+        {
+            var result = new double[Size];
+
+            for (int j = 0; j < Size; j++)
+            {
+                var sum = 0.0;
+
+                for (int i = 0; i < Size; i++)
+                {
+                    sum += matrix[i, j] * vector[i];
+                }
+
+                result[j] = sum;
+            }
+
+            return new Vector(result);
+        }
+
+        public IVector LMultTranspose(IVector vector, bool isUseDiagonal)
+        {
+            var result = new double[Size];
+
+            for (int j = 0; j < Size; j++)
+            {
+                var sum = isUseDiagonal ? matrix[j, j] * vector[j] : vector[j];
+
+                for (int i = j; i < Size; i++)
+                {
+                    sum += matrix[i, j] * vector[i];
+                }
+
+                result[j] = sum;
+            }
+
+            return new Vector(result);
+        }
+
+        public IVector UMultTranspose(IVector vector, bool isUseDiagonal)
+        {
+            var result = new double[Size];
+
+            for (int j = 0; j < Size; j++)
+            {
+                var sum = isUseDiagonal ? matrix[j, j] * vector[j] : vector[j];
+
+                for (int i = 0; i < j; i++)
+                {
+                    sum += matrix[i, j] * vector[i];
+                }
+
+                result[j] = sum;
+            }
+
+            return new Vector(result);
+        }
 
         public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
@@ -184,21 +238,6 @@ namespace SolverCore
         }
 
         public IVector USolve(IVector vector, bool isUseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector MultiplyTranspose(IVector vector)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector LMultTranspose(IVector vector, bool isUseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector UMultTranspose(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }

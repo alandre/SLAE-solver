@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace SolverCore
 {
-    public class SparseRowColumnMatrix : IMatrix
+    public class SparseRowColumnMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
     {
         public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
@@ -23,7 +23,17 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
+        public IVector LMultTranspose(IVector vector, bool isUseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
         public IVector LSolve(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
@@ -33,12 +43,27 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
+        public IVector MultiplyTranspose(IVector vector)
+        {
+            throw new NotImplementedException();
+        }
+
         public IVector UMult(IVector x, bool UseDiagonal)
         {
             throw new NotImplementedException();
         }
 
+        public IVector UMultTranspose(IVector vector, bool isUseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
         public IVector USolve(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IVector USolveTranspose(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }

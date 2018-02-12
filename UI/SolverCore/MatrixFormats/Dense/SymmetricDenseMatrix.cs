@@ -6,7 +6,7 @@ namespace SolverCore
     /// <summary>
     /// плотная симметричная
     /// </summary>
-    public class SymmetricDenseMatrix : IMatrix
+    public class SymmetricDenseMatrix : IMatrix, ILinearOperator
     {
         private double[][] matrix;
 
@@ -22,7 +22,7 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(matrix));
             }
-
+            
             int size = matrix.Length;
             this.matrix = new double[size][];
 

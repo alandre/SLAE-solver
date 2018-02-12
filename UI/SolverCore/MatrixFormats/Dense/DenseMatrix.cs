@@ -7,7 +7,7 @@ namespace SolverCore
     /// <summary>
     /// Плотный формат
     /// </summary>
-    public class DenseMatrix : IMatrix
+    public class DenseMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
     {
         private double[,] matrix;
 
@@ -176,7 +176,7 @@ namespace SolverCore
             return new Vector(result);
         }
 
-        public ILinearOperator Transpose => new TransposeMatrix() { matrix = this };
+        public ILinearOperator Transpose => new TransposeMatrix<DenseMatrix> { Matrix = this };
 
         public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
@@ -188,52 +188,29 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        private IVector MultiplyTranspose(IVector vector)
+        public IVector MultiplyTranspose(IVector vector)
         {
             throw new NotImplementedException();
         }
 
-        private IVector LMultTranspose(IVector vector, bool isUseDiagonal)
+        public IVector LMultTranspose(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
 
-        private IVector UMultTranspose(IVector vector, bool isUseDiagonal)
+        public IVector UMultTranspose(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
 
-        private IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
+        public IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
 
-        private IVector USolveTranspose(IVector vector, bool isUseDiagonal)
+        public IVector USolveTranspose(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
-        }
-
-        //это мне не очень нравится, но Рояк хотел так :(
-        //придется дублировать код в каждом не симметричном классе
-        private class TransposeMatrix : ILinearOperator
-        {
-            public DenseMatrix matrix;
-
-            public int Size => matrix.Size;
-
-            public IVector Diagonal => matrix.Diagonal;
-
-            public ILinearOperator Transpose => matrix;
-
-            public IVector LMult(IVector vector, bool isUseDiagonal) => matrix.LMultTranspose(vector, isUseDiagonal);
-
-            public IVector LSolve(IVector vector, bool isUseDiagonal) => matrix.LSolveTranspose(vector, isUseDiagonal);
-
-            public IVector Multiply(IVector vector) => matrix.MultiplyTranspose(vector);
-
-            public IVector UMult(IVector vector, bool isUseDiagonal) => matrix.UMultTranspose(vector, isUseDiagonal);
-
-            public IVector USolve(IVector vector, bool isUseDiagonal) => matrix.USolveTranspose(vector, isUseDiagonal);
         }
     }
 }

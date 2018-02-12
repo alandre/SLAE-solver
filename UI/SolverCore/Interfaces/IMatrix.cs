@@ -2,8 +2,9 @@
 
 namespace SolverCore
 {
-    public interface IMatrix : ILinearOperator, IEnumerable<(double value, int row, int col)>
+    public interface IMatrix : IEnumerable<(double value, int row, int col)>
     {
         double this[int i, int j] { get; }
+        int Size { get; }
     }
 }

@@ -52,6 +52,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="MainTests.cs" />
+    <Compile Include="MF\TestsDenseMatrix.cs" />
     <Compile Include="MF\TestsVector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

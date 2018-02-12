@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace SolverCore
 {
-    public class SymmetricCoordinationalMatrix : IMatrix
+    public class SymmetricCoordinationalMatrix : IMatrix, ILinearOperator
     {
         public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

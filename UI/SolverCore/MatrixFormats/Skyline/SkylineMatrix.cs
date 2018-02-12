@@ -6,7 +6,7 @@ namespace SolverCore
     /// <summary>
     /// Профильный
     /// </summary>
-    class SkylineMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
+    class SkylineMatrix : IMatrix, ITransposeLinearOperator
     {
         public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 

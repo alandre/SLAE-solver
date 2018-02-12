@@ -7,7 +7,7 @@ namespace SolverCore
     /// <summary>
     /// Плотный формат
     /// </summary>
-    public class DenseMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
+    public class DenseMatrix : IMatrix, ITransposeLinearOperator
     {
         private double[,] matrix;
 

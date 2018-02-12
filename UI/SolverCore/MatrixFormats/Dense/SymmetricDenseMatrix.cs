@@ -6,7 +6,7 @@ namespace SolverCore
     /// <summary>
     /// плотная симметричная
     /// </summary>
-    public class SymmetricDenseMatrix : IMatrix, ILinearOperator
+    public class SymmetricDenseMatrix : IMatrix
     {
         private double[][] matrix;
 

@@ -234,12 +234,58 @@ namespace SolverCore
 
         public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
-            throw new NotImplementedException();
+            if(vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if(vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var rightPart = vector.Clone();
+            var result = new double[Size];
+
+            for(int j = 0; j < Size; j++)
+            {
+                result[j] = isUseDiagonal ? rightPart[j] / matrix[j, j] : rightPart[j];
+
+                for(int i = j + 1; i < Size; i++)
+                {
+                    rightPart[i] -= matrix[i, j] * result[j];
+                }
+            }
+
+            return new Vector(result);
         }
 
         public IVector USolve(IVector vector, bool isUseDiagonal)
         {
-            throw new NotImplementedException();
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var rightPart = vector.Clone();
+            var result = new double[Size];
+
+            for (int j = Size - 1; j >= 0; j--)
+            {
+                result[j] = isUseDiagonal ? rightPart[j] / matrix[j, j] : rightPart[j];
+
+                for (int i = j - 1; i >= 0; i--)
+                {
+                    rightPart[i] -= matrix[i, j] * result[j];
+                }
+            }
+
+            return new Vector(result);
         }
 
         public IVector LSolveTranspose(IVector vector, bool isUseDiagonal)

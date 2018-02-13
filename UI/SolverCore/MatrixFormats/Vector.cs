@@ -19,21 +19,25 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(vector));
             }
-
-            this.vector = new double[vector.Length];
-            vector.CopyTo(this.vector, 0);
+            this.vector = vector.Clone() as double[];
+        }
+        public Vector(int size)
+        {
+            this.vector = new double[size];
         }
 
         public double this[int index]
         {
             get
             {
-                if(index < 0 || index >= Size)
+                try
+                {
+                    return vector[index];
+                }
+                catch(IndexOutOfRangeException)
                 {
                     throw new IndexOutOfRangeException();
                 }
-
-                return vector[index];
             }
 
             set => vector[index] = value;
@@ -63,22 +67,18 @@ namespace SolverCore
                 throw new RankException();
             }
 
-            var result = new double[Size];
+            var result = new Vector(Size);
 
             for(int i = 0; i < Size; i++)
             {
                 result[i] = this[i] + multiplier * vector[i];
             }
-
-            return new Vector(result);
+            return result;
         }
 
         public IVector Clone()
         {
-            var result = new double[Size];
-            vector.CopyTo(result, 0);
-
-            return new Vector(result);
+            return new Vector((double[])vector.Clone());
         }
 
         public double DotProduct(IVector vector)
@@ -105,7 +105,7 @@ namespace SolverCore
 
         public IEnumerator<double> GetEnumerator()
         {
-            var enumerator = vector as IEnumerable<double>;
+            var enumerator = (IEnumerable<double>)vector;
             return enumerator.GetEnumerator();
         }
 

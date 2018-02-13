@@ -89,7 +89,7 @@ namespace SolverCore.MatrixFormats
             {
                 for (var j = 0; j < matrix.Size; j++)
                 {
-                    if (Math.Abs(matrix[i, j] - matrix[j, i]) > eps)
+                    if (Math.Abs(matrix[i, j] - matrix[j, i]) > eps* Math.Abs(matrix[i, j]))
                     {
                         return false;
                     }

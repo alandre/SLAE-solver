@@ -10,8 +10,9 @@ namespace SolverCore
     /// <param name="j"></param>
     /// <returns></returns>
     public delegate double FillFunc(int i, int j);
-    public interface IMatrix : ILinearOperator, IEnumerable<(double value, int row, int col)>
+    public interface IMatrix : IEnumerable<(double value, int row, int col)>
     {
+        int Size { get; }
         double this[int i, int j] { get; }
         CoordinationalMatrix ConvertToCoordinationalMatrix();
         void Fill(FillFunc elems);

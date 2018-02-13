@@ -6,7 +6,7 @@ namespace SolverCore
     /// <summary>
     /// плотная симметричная
     /// </summary>
-    public class SymmetricDenseMatrix : IMatrix
+    public class SymmetricDenseMatrix : IMatrix, ILinearOperator
     {
         private double[][] matrix;
 
@@ -45,6 +45,16 @@ namespace SolverCore
         public IVector Diagonal => throw new NotImplementedException();
 
         public ILinearOperator Transpose => throw new NotImplementedException();
+
+        public CoordinationalMatrix ConvertToCoordinationalMatrix()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Fill(FillFunc elems)
+        {
+            throw new NotImplementedException();
+        }
 
         public System.Collections.Generic.IEnumerator<(double value, int row, int col)> GetEnumerator()
         {

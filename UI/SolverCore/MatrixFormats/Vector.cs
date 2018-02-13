@@ -113,5 +113,27 @@ namespace SolverCore
         {
             return GetEnumerator();
         }
+
+        public IVector HadamardProduct(IVector vector)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new double[Size];
+
+            for (int i = 0; i < Size; i++)
+            {
+                result[i] = this.vector[i] * vector[i];
+            }
+
+            return new Vector(result);
+        }
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace SolverCore
 {
-    public class SparseRowMatrix : IMatrix, ITransposeLinearOperator
+    public class SparseRowMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
     {
         public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
@@ -12,6 +12,16 @@ namespace SolverCore
         public IVector Diagonal => throw new NotImplementedException();
 
         public ILinearOperator Transpose => throw new NotImplementedException();
+
+        public CoordinationalMatrix ConvertToCoordinationalMatrix()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Fill(FillFunc elems)
+        {
+            throw new NotImplementedException();
+        }
 
         public System.Collections.Generic.IEnumerator<(double value, int row, int col)> GetEnumerator()
         {

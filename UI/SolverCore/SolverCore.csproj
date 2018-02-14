@@ -42,7 +42,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interfaces\ITransposeLinearOperator.cs" />
-    <Compile Include="MatrixFormats\Convert.cs" />
     <Compile Include="MatrixFormats\Coordinational\CoordinationalMatrix.cs" />
     <Compile Include="MatrixFormats\Dense\DenseMatrix.cs" />
     <Compile Include="Interfaces\IMatrix.cs" />

@@ -19,10 +19,16 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(vector));
             }
-            this.vector = vector.Clone() as double[];
+
+            this.vector = (double[])vector.Clone();
         }
         public Vector(int size)
         {
+            if(size < 0)
+            {
+                throw new ArgumentException("size must be more then 0", nameof(size));
+            }
+
             this.vector = new double[size];
         }
 
@@ -126,14 +132,14 @@ namespace SolverCore
                 throw new RankException();
             }
 
-            var result = new double[Size];
+            var result = new Vector(Size);
 
             for (int i = 0; i < Size; i++)
             {
                 result[i] = this.vector[i] * vector[i];
             }
 
-            return new Vector(result);
+            return result;
         }
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SolverCore
 {
     /// <summary>
     /// плотная симметричная
     /// </summary>
-    public class SymmetricDenseMatrix : IMatrix
+    public class SymmetricDenseMatrix : IMatrix, ILinearOperator
     {
         private double[][] matrix;
 
@@ -28,6 +29,11 @@ namespace SolverCore
 
             for(int i = 0; i < size; i++)
             {
+                if(matrix[i] == null)
+                {
+                    throw new ArgumentException("one of the references (lines) is null", nameof(matrix));
+                }
+
                 if (matrix[i].Length != i + 1)
                 {
                     throw new RankException(nameof(matrix));
@@ -38,45 +44,156 @@ namespace SolverCore
             }
         }
 
-        public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public double this[int i, int j]
+        {
+            get
+            {
+                try
+                {
+                    return matrix[Math.Max(i, j)][Math.Min(i, j)];
+                }
+                catch(IndexOutOfRangeException)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+            }
+        }
 
-        public int Size => throw new NotImplementedException();
+        public int Size => matrix.Length;
 
-        public IVector Diagonal => throw new NotImplementedException();
+        public IVector Diagonal
+        {
+            get
+            {
+                var result = new Vector(Size);
 
-        public ILinearOperator Transpose => throw new NotImplementedException();
+                for (int i = 0; i < Size; i++)
+                {
+                    result[i] = matrix[i][i];
+                }
 
-        public System.Collections.Generic.IEnumerator<(double value, int row, int col)> GetEnumerator()
+                return result;
+            }
+        }
+
+        public ILinearOperator Transpose => this;
+
+        public IEnumerator<(double value, int row, int col)> GetEnumerator()
+        {
+            for (int i = 0; i < Size; i++)
+            {
+                for (int j = 0; j <= i; j++)
+                {
+                    yield return (matrix[i][j], i, j);
+                }
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public IVector LMult(IVector vector, bool isUseDiagonal)
+        {
+            if(vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if(vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for(int i = 0; i < Size; i++)
+            {
+                var sum = isUseDiagonal ? matrix[i][i] * vector[i] : vector[i];
+
+                for(int j = 0; j < i; j++)
+                {
+                    sum += matrix[i][j] * vector[j];
+                }
+
+                result[i] = sum;
+            }
+
+            return result;
+        }
+
+        public IVector UMult(IVector vector, bool isUseDiagonal)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for(int i = 0; i < Size; i++)
+            {
+                result[i] += isUseDiagonal ? matrix[i][i] * vector[i] : vector[i];
+
+                for (int j = 0; j < i; j++)
+                {
+                    result[j] += matrix[i][j] * vector[i];
+                }
+            }
+
+            return result;
+        }
+
+        public IVector Multiply(IVector vector)
+        {
+            if(vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if(vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for(int i = 0; i < Size; i++)
+            {
+                result[i] += matrix[i][i] * vector[i];
+
+                for (int j = 0; j < i; j++)
+                {
+                    result[i] += matrix[i][j] * vector[j];
+                    result[j] += matrix[i][j] * vector[i];
+                }
+            }
+
+            return result;
+        }
+
+        public void Fill(FillFunc elems)
+        {
+            foreach(var elem in this)
+            {
+                matrix[elem.row][elem.col] = elems(elem.row, elem.col);
+            }
+        }
+
+        public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
 
-        public IVector LMult(IVector x, bool UseDiagonal)
+        public IVector USolve(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
 
-        public IVector LSolve(IVector x, bool UseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector Multiply(IVector x)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector UMult(IVector x, bool UseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector USolve(IVector x, bool UseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
+        public CoordinationalMatrix ConvertToCoordinationalMatrix()
         {
             throw new NotImplementedException();
         }

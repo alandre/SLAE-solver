@@ -7,7 +7,7 @@ namespace SolverCore
     /// <summary>
     /// Плотный формат
     /// </summary>
-    public class DenseMatrix : IMatrix, ITransposeLinearOperator
+    public class DenseMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
     {
         private double[,] matrix;
 
@@ -46,12 +46,14 @@ namespace SolverCore
         {
             get
             {
-                if(i < 0 || j < 0 || i >= Size || j >= Size)
+                try
+                {
+                    return matrix[i, j];
+                }
+                catch (IndexOutOfRangeException)
                 {
                     throw new IndexOutOfRangeException();
                 }
-
-                return matrix[i, j];
             }
         }
 
@@ -63,14 +65,14 @@ namespace SolverCore
         {
             get
             {
-                var diagonal = new double[Size];
+                var diagonal = new Vector(Size);
 
                 for(int i = 0; i < Size; i++)
                 {
                     diagonal[i] = matrix[i, i];
                 }
 
-                return new Vector(diagonal);
+                return diagonal;
             }
         }
 
@@ -99,7 +101,7 @@ namespace SolverCore
                 throw new RankException();
             }
 
-            var result = new double[Size];
+            var result = new Vector(Size);
 
             for(int i = 0; i < Size; i++)
             {
@@ -113,7 +115,7 @@ namespace SolverCore
                 result[i] = sum;
             }
 
-            return new Vector(result);
+            return result;
         }
 
         public IVector UMult(IVector vector, bool isUseDiagonal)
@@ -128,7 +130,7 @@ namespace SolverCore
                 throw new RankException();
             }
 
-            var result = new double[Size];
+            var result = new Vector(Size);
 
             for (int i = 0; i < Size; i++)
             {
@@ -142,7 +144,7 @@ namespace SolverCore
                 result[i] = sum;
             }
 
-            return new Vector(result);
+            return result;
         }
 
         public IVector Multiply(IVector vector)
@@ -158,7 +160,7 @@ namespace SolverCore
             }
 
             //можно сделать через LMult и UMult, но хз надо ли
-            var result = new double[Size];
+            var result = new Vector(Size);
 
             for (int i = 0; i < Size; i++)
             {
@@ -172,12 +174,22 @@ namespace SolverCore
                 result[i] = sum;
             }
 
-            return new Vector(result);
+            return result;
         }
 
         public IVector MultiplyTranspose(IVector vector)
         {
-            var result = new double[Size];
+            if(vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if(vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
 
             for (int j = 0; j < Size; j++)
             {
@@ -191,12 +203,22 @@ namespace SolverCore
                 result[j] = sum;
             }
 
-            return new Vector(result);
+            return result;
         }
 
         public IVector LMultTranspose(IVector vector, bool isUseDiagonal)
         {
-            var result = new double[Size];
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
 
             for (int j = 0; j < Size; j++)
             {
@@ -210,12 +232,22 @@ namespace SolverCore
                 result[j] = sum;
             }
 
-            return new Vector(result);
+            return result;
         }
 
         public IVector UMultTranspose(IVector vector, bool isUseDiagonal)
         {
-            var result = new double[Size];
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
 
             for (int j = 0; j < Size; j++)
             {
@@ -229,7 +261,7 @@ namespace SolverCore
                 result[j] = sum;
             }
 
-            return new Vector(result);
+            return result;
         }
 
         public IVector LSolve(IVector vector, bool isUseDiagonal)
@@ -245,7 +277,7 @@ namespace SolverCore
             }
 
             var rightPart = vector.Clone();
-            var result = new double[Size];
+            var result = new Vector(Size);
 
             for(int j = 0; j < Size; j++)
             {
@@ -257,7 +289,7 @@ namespace SolverCore
                 }
             }
 
-            return new Vector(result);
+            return result;
         }
 
         public IVector USolve(IVector vector, bool isUseDiagonal)
@@ -273,7 +305,7 @@ namespace SolverCore
             }
 
             var rightPart = vector.Clone();
-            var result = new double[Size];
+            var result = new Vector(Size);
 
             for (int j = Size - 1; j >= 0; j--)
             {
@@ -285,15 +317,79 @@ namespace SolverCore
                 }
             }
 
-            return new Vector(result);
+            return result;
         }
 
         public IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
         {
-            throw new NotImplementedException();
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var rightPart = vector.Clone();
+            var result = new Vector(Size);
+
+            for (int i = Size - 1; i >= 0; i--)
+            {
+                result[i] = isUseDiagonal ? rightPart[i] / matrix[i, i] : rightPart[i];
+
+                for (int j = i - 1; j >= 0; j--)
+                {
+                    rightPart[j] -= matrix[i, j] * result[i];
+                }
+            }
+
+            return result;
         }
 
         public IVector USolveTranspose(IVector vector, bool isUseDiagonal)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var rightPart = vector.Clone();
+            var result = new Vector(Size);
+
+            for(int i = 0; i < Size; i++)
+            {
+                result[i] = isUseDiagonal ? rightPart[i] / matrix[i, i] : rightPart[i];
+
+                for (int j = i + 1; j < Size; j++)
+                {
+                    rightPart[j] -= matrix[i, j] * result[i];
+                }
+            }
+
+            return result;
+        }
+
+        public void Fill(FillFunc elems)
+        {
+            if(elems == null)
+            {
+                throw new ArgumentNullException(nameof(elems));
+            }
+
+            foreach(var elem in this)
+            {
+                matrix[elem.row, elem.col] = elems(elem.row, elem.col);
+            }
+        }
+
+        public CoordinationalMatrix ConvertToCoordinationalMatrix()
         {
             throw new NotImplementedException();
         }

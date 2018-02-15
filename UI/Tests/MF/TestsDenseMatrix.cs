@@ -1,12 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+﻿using System;
+using Xunit;
+//using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Tests
+namespace MF_Tests
 {
-    [TestClass]
     public class TestsDenseMatrix
     {
-        [TestMethod]
+        [Fact]
         public void DenseMatrix_Foreach()
         {
             var matrix = new double[3][];

@@ -53,6 +53,7 @@
             this.LOScheck = new System.Windows.Forms.CheckBox();
             this.CGMcheck = new System.Windows.Forms.CheckBox();
             this.inputData = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.formatBox = new System.Windows.Forms.ComboBox();
             this.ManualEntry = new System.Windows.Forms.Button();
@@ -62,7 +63,6 @@
             this.ChoseOutput = new System.Windows.Forms.Button();
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuOpenOutput = new System.Windows.Forms.ToolStripMenuItem();
-            this.label4 = new System.Windows.Forms.Label();
             this.sim = new System.Windows.Forms.RadioButton();
             this.Notsim = new System.Windows.Forms.RadioButton();
             this.groupBox2.SuspendLayout();
@@ -322,6 +322,15 @@
             this.inputData.TabStop = false;
             this.inputData.Text = "Входные данные";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(6, 20);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(156, 17);
+            this.label4.TabIndex = 7;
+            this.label4.Text = "Симметричная матрица";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -334,10 +343,16 @@
             // formatBox
             // 
             this.formatBox.FormattingEnabled = true;
+            this.formatBox.Items.AddRange(new object[] {
+            "Плотный ",
+            "Строчный разреженный без выделенной диагонали",
+            "Строчно-столбцовый",
+            "Координатный"});
             this.formatBox.Location = new System.Drawing.Point(9, 100);
             this.formatBox.Name = "formatBox";
             this.formatBox.Size = new System.Drawing.Size(215, 25);
             this.formatBox.TabIndex = 3;
+            this.formatBox.SelectedIndexChanged += new System.EventHandler(this.formatBox_SelectedIndexChanged);
             // 
             // ManualEntry
             // 
@@ -348,6 +363,7 @@
             this.ManualEntry.TabIndex = 1;
             this.ManualEntry.Text = "Ручной ввод";
             this.ManualEntry.UseVisualStyleBackColor = true;
+            this.ManualEntry.Click += new System.EventHandler(this.ManualEntry_Click);
             // 
             // fileInput
             // 
@@ -388,6 +404,7 @@
             this.ChoseOutput.TabIndex = 6;
             this.ChoseOutput.Text = "Выбрать файл результата";
             this.ChoseOutput.UseVisualStyleBackColor = true;
+            this.ChoseOutput.Click += new System.EventHandler(this.ChoseOutput_Click);
             // 
             // menuStrip2
             // 
@@ -410,15 +427,6 @@
             this.toolStripMenuOpenOutput.Size = new System.Drawing.Size(186, 20);
             this.toolStripMenuOpenOutput.Text = "Открыть файл с результатом";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(6, 20);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(156, 17);
-            this.label4.TabIndex = 7;
-            this.label4.Text = "Симметричная матрица";
-            // 
             // sim
             // 
             this.sim.AutoSize = true;
@@ -429,6 +437,7 @@
             this.sim.TabStop = true;
             this.sim.Text = "Да";
             this.sim.UseVisualStyleBackColor = true;
+            this.sim.Click += new System.EventHandler(this.sim_Click);
             // 
             // Notsim
             // 
@@ -440,6 +449,7 @@
             this.Notsim.TabStop = true;
             this.Notsim.Text = "Нет";
             this.Notsim.UseVisualStyleBackColor = true;
+            this.Notsim.Click += new System.EventHandler(this.Notsim_Click);
             // 
             // MainForm
             // 
@@ -507,9 +517,9 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuOpenOutput;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RadioButton Notsim;
         private System.Windows.Forms.RadioButton sim;
-        private System.Windows.Forms.Label label4;
     }
 }
 

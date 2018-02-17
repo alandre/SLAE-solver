@@ -18,7 +18,7 @@ namespace SolverCore
         /// <param name="eps">Значение относительной невязки для выхода</param>
         /// <param name="malloc">false - результат сохраняется в вектор x0, true - выделяется новый вектор</param>
         /// <returns>Вектор с результатом</returns>
-        IVector InitMethod(IMatrix A, IVector x0, IVector b, int max_iter, double eps, bool malloc = false);
+        IVector InitMethod(ILinearOperator A, IVector x0, IVector b, int max_iter, double eps, bool malloc = false);
 
         /// <summary>
         /// Делает шаг иттерационного метода

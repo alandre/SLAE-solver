@@ -44,13 +44,28 @@ namespace SolverCore
             }
         }
 
+        public SymmetricDenseMatrix(int size)
+        {
+            if(size < 0)
+            {
+                throw new ArgumentException($"{nameof(size)} must be more then 0");
+            }
+
+            matrix = new double[size][];
+
+            for(int i = 0; i < size; i++)
+            {
+                matrix[i] = new double[i + 1];
+            }
+        }
+
         public double this[int i, int j]
         {
             get
             {
                 try
                 {
-                    return matrix[Math.Max(i, j)][Math.Min(i, j)];
+                    return i > j ? matrix[i][j] : matrix[j][i];
                 }
                 catch(IndexOutOfRangeException)
                 {
@@ -91,7 +106,7 @@ namespace SolverCore
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public IVector LMult(IVector vector, bool isUseDiagonal)
+        public IVector LMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
         {
             if(vector == null)
             {
@@ -107,7 +122,7 @@ namespace SolverCore
 
             for(int i = 0; i < Size; i++)
             {
-                var sum = isUseDiagonal ? matrix[i][i] * vector[i] : vector[i];
+                var sum = isUseDiagonal ? matrix[i][i] * vector[i] : diagonalElement * vector[i];
 
                 for(int j = 0; j < i; j++)
                 {
@@ -120,7 +135,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector UMult(IVector vector, bool isUseDiagonal)
+        public IVector UMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
         {
             if (vector == null)
             {
@@ -136,7 +151,7 @@ namespace SolverCore
 
             for(int i = 0; i < Size; i++)
             {
-                result[i] += isUseDiagonal ? matrix[i][i] * vector[i] : vector[i];
+                result[i] += isUseDiagonal ? matrix[i][i] * vector[i] : diagonalElement * vector[i];
 
                 for (int j = 0; j < i; j++)
                 {
@@ -177,6 +192,11 @@ namespace SolverCore
 
         public void Fill(FillFunc elems)
         {
+            if(elems == null)
+            {
+                throw new ArgumentNullException(nameof(elems));
+            }
+
             foreach(var elem in this)
             {
                 matrix[elem.row][elem.col] = elems(elem.row, elem.col);
@@ -185,12 +205,58 @@ namespace SolverCore
 
         public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
-            throw new NotImplementedException();
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var rightPart = vector.Clone();
+            var result = new Vector(Size);
+
+            for (int j = 0; j < Size; j++)
+            {
+                result[j] = isUseDiagonal ? rightPart[j] / matrix[j][j] : rightPart[j];
+
+                for (int i = j + 1; i < Size; i++)
+                {
+                    rightPart[i] -= matrix[i][j] * result[j];
+                }
+            }
+
+            return result;
         }
 
         public IVector USolve(IVector vector, bool isUseDiagonal)
         {
-            throw new NotImplementedException();
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var rightPart = vector.Clone();
+            var result = new Vector(Size);
+
+            for (int j = Size - 1; j >= 0; j--)
+            {
+                result[j] = isUseDiagonal ? rightPart[j] / matrix[j][j] : rightPart[j];
+
+                for (int i = j - 1; i >= 0; i--)
+                {
+                    rightPart[i] -= matrix[j][i] * result[j];
+                }
+            }
+
+            return result;
         }
 
         public CoordinationalMatrix ConvertToCoordinationalMatrix()

@@ -1,25 +1,103 @@
 ﻿using System;
 using Xunit;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SolverCore;
 
-namespace MF_Tests
+namespace MF_DenseMatrixTests
 {
     public class TestsDenseMatrix
     {
+        private double[,] _matrix;
+
         [Fact]
         public void DenseMatrix_Foreach()
         {
-            var di = new double[] { 1, 1, 1, 1 };
-            var al = new double[] { 1, 2, 3 };
-            var au = new double[] { 4, 5, 6 };
-            var ia = new int[] { 1, 1, 1, 2, 4 };
-            var ja = new int[] { 1, 1, 2 };
-            var matrix = new SolverCore.SparseRowColumnMatrix(di, al, au, ia, ja);
+            var matrix = new double[3][];
+            matrix[0] = new[] { 1.0 };
+            matrix[1] = new[] { 1.0, 2.0 };
+            matrix[2] = new[] { 1, 2.0, 3 };
 
-            foreach(var elem in matrix)
+            var symm = new SolverCore.SymmetricDenseMatrix(matrix);
+
+            var res = symm.Multiply(new SolverCore.Vector(new[] { 1.0, 1, 1 }));
+
+            foreach (var el in res)
             {
-                Console.WriteLine($"({elem.row}, {elem.col}): {elem.value}");
+                Console.WriteLine(el);
             }
+        }
+
+
+        [Fact]
+        public void DenseMatrix_TestLMult()
+        {
+            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
+            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
+
+            Vector vector = new Vector(new double[] { 1, 3, 8 });
+
+            var resultTrueDiag = denseMatrix.LMult(vector, true);
+            Vector resultActualTrueDiag = new Vector(new double[] { 1, 17, 74 });
+
+            var resultFalseDiag = denseMatrix.LMult(vector, false);
+            Vector resultActualFalseDiag = new Vector(new double[] { 1, 5, 18 });
+
+            for (int i = 0; i < resultTrueDiag.Size; i++)
+            {
+                Assert.Equal(resultTrueDiag[i], resultActualTrueDiag[i], 8);
+                Assert.Equal(resultFalseDiag[i], resultActualFalseDiag[i], 8);
+            }
+        }
+
+        [Fact]
+        public void DenseMatrix_TestUMult()
+        {
+            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
+            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
+
+            Vector vector = new Vector(new double[] { 1, 3, 8 });
+
+            var resultFalseDiag = denseMatrix.UMult(vector, false);
+            Vector resultActualFalseDiag = new Vector(new double[] { 50, 35, 8 });
+
+            var resultTrueDiag = denseMatrix.UMult(vector, true);
+            Vector resultActualTrueDiag = new Vector(new double[] { 50, 47, 64 });
+
+            for (int i = 0; i < resultFalseDiag.Size; i++)
+            {
+                Assert.Equal(resultFalseDiag[i], resultActualFalseDiag[i], 8);
+                Assert.Equal(resultTrueDiag[i], resultActualTrueDiag[i], 8);
+            }
+        }
+
+        [Fact]
+        public void DenseMatrix_TestLSolve()
+        {
+            _matrix = new double[3, 3] { { 1, 2, 3 }, { 2, -1, 1 }, { 7, -20, 93 } };
+            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
+
+            Vector vector = new Vector(new double[] { 1, 2, 3 });
+
+            var result = denseMatrix.LSolve(vector, true);
+            Vector resultActual = new Vector(new double[] { 1, 0, -0.04301075 });
+
+            for (int i = 0; i < result.Size; i++)
+                Assert.Equal(result[i], resultActual[i], 8);
+        }
+
+        [Fact]
+        public void DenseMatrix_TestUSolve()
+        {
+            _matrix = new double[3, 3] { { 1, 3, 5 }, { 1, 1, 6 }, { 4, 2, 1 } };
+            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
+
+            Vector vector = new Vector(new double[] { 1, 0, -0.04301075 });
+
+            var result = denseMatrix.USolve(vector, false);
+            Vector resultActual = new Vector(new double[] { 0.44086025, 0.2580645, -0.04301075 });
+            int[] precisionVector = new int[] { 2, 2, 3 };
+
+            for (int i = 0; i < result.Size; i++)
+                Assert.Equal(result[i], resultActual[i], 8);
         }
     }
 }

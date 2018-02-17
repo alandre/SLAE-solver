@@ -20,14 +20,33 @@ namespace SolverCore
         {
             this.Method = Method;
         }
-        public IVector Solve(IMatrix A, IVector x0, IVector b, int maxiter, double eps, bool malloc = false)
+        public IVector Solve(ILinearOperator A, IVector x0, IVector b, int maxiter, double eps, bool malloc = false)
         {
             IVector result;
             int iter;
             double discrepancy;
+            bool step_result;
+       
             result = Method.InitMethod(A, x0, b, maxiter, eps, malloc);
 
-            while (Method.MakeStep(out iter, out discrepancy) != true) ;
+            if (result == null)
+                return null;
+
+            while (true)
+            {
+                try
+                {
+                    step_result = Method.MakeStep(out iter, out discrepancy);
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+
+                if (step_result)
+                    break;
+            }
+            return result;
 
             return result;
         }

@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\ILogger.cs" />
+    <Compile Include="Interfaces\IMethod.cs" />
+    <Compile Include="Interfaces\ISolver.cs" />
     <Compile Include="Interfaces\ITransposeLinearOperator.cs" />
     <Compile Include="MatrixFormats\Coordinational\CoordinationalMatrix.cs" />
     <Compile Include="MatrixFormats\Dense\DenseMatrix.cs" />
@@ -58,8 +61,12 @@
     <Compile Include="MatrixFormats\SparseRowColumn\SymmetricSparseRowColumnMatrix.cs" />
     <Compile Include="MatrixFormats\SparseRow\SymmetricSparseRowMatrix.cs" />
     <Compile Include="MatrixFormats\Vector.cs" />
+    <Compile Include="Solvers\LoggingSolver.cs" />
+    <Compile Include="Solvers\Solver.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Methods\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

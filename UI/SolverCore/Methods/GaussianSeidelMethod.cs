@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolverCore
+namespace SolverCore.Methods
 {
-    class JacobiMethod : IMethod
+    class GaussianSeidelMethod : IMethod
     {
         IVector x, x0, b;
         ILinearOperator A;
@@ -17,11 +17,10 @@ namespace SolverCore
         int current_itter;
         bool init;
         IVector x_temp;
-        JacobiMethod()
+        GaussianSeidelMethod()
         {
             init = false;
         }
-
         public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, bool malloc = false)
         {
             if (malloc == true)
@@ -77,7 +76,7 @@ namespace SolverCore
             }
             ////????????????????
 
-            var x_k = D.HadamardProduct(b.Add(A.LMult(x, false, 0).Add(A.UMult(x, false, 0)), -1));
+            var x_k = A.LSolve(b.Add(A.UMult(x, false, 0), -1), true);
 
             double w = 1.0;
 

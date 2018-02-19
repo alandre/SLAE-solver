@@ -69,10 +69,14 @@ namespace SolverCore
             current_itter++;
 
             var D = A.Diagonal;
+
+            ////????????????????
             for (int i = 0; i < D.Size; i++)
             {
                 D[i] = 1.0 / D[i];
             }
+            ////????????????????
+
             var x_k = D.HadamardProduct(b.Add(A.LMult(x, true, 0).Add(A.UMult(x, true, 0)), -1));
 
             double w = 1.0;

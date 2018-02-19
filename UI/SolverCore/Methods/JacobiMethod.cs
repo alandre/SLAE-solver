@@ -10,45 +10,46 @@ namespace SolverCore
     {
         IVector x, x0, b;
         ILinearOperator A;
-        int max_iter;
+        int maxIter;
         double eps;
         double norm_b;
-        double last_discrepancy;
+        double lastDiscrepancy;
         int current_itter;
         bool init;
-
+        IVector x_temp;
         JacobiMethod()
         {
             init = false;
         }
 
-        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, int max_iter, double eps, bool malloc = false)
+        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, bool malloc = false)
         {
-            if(malloc == true)
+            if (malloc == true)
             {
-                x = new Vector(x0.Size);   
+                x = new Vector(x0.Size);
             }
             else
             {
                 x = x0;
             }
- 
+
             this.x0 = x0;
             this.b = b;
             this.A = A;
-            this.max_iter = max_iter;
+            this.maxIter = maxIter;
             this.eps = eps;
             current_itter = 0;
             norm_b = b.Norm;
             try
             {
-                last_discrepancy = A.Multiply(x0).Add(b, -1).Norm / norm_b;
+                lastDiscrepancy = A.Multiply(x0).Add(b, -1).Norm / norm_b;
             }
             catch (DivideByZeroException e)
             {
                 return null;
             }
             init = true;
+            x_temp = new Vector(x.Size);
             return x;
         }
 
@@ -59,9 +60,9 @@ namespace SolverCore
                 throw new InvalidOperationException("Решатель не инициализирован, выполнение операции невозможно");
             }
 
-            if (Math.Abs(last_discrepancy) < eps)
+            if (Math.Abs(lastDiscrepancy) < eps)
             {
-                discrepancy = last_discrepancy;
+                discrepancy = lastDiscrepancy;
                 iter = current_itter;
                 return true;
             }
@@ -72,31 +73,37 @@ namespace SolverCore
             {
                 D[i] = 1.0 / D[i];
             }
-            var x_k = D.HadamardProduct(b.Add(A.LMult(x, false).Add(A.UMult(x, false)),-1));
+            var x_k = D.HadamardProduct(b.Add(A.LMult(x, true, 0).Add(A.UMult(x, true, 0)), -1));
 
             double w = 1.0;
-            var x_temp = new Vector(x.Size);
+
             while (w >= 0.1)
             {
-                for(int i = 0; i < x.Size; i++)
+                ////????????????????
+                for (int i = 0; i < x.Size; i++)
                 {
                     x_temp[i] = w * x_k[i] + (1 - w) * x[i];
                 }
+                ////????????????????
 
                 double temp_discrepancy = A.Multiply(x_temp).Add(b, -1).Norm / norm_b;
 
-                if (temp_discrepancy < last_discrepancy)
+                if (temp_discrepancy < lastDiscrepancy)
                 {
-                    last_discrepancy = temp_discrepancy;
+                    lastDiscrepancy = temp_discrepancy;
                     break;
                 }
-                w *= 0.9;
+                w -= 0.1;
             }
 
-            x = x_temp;
+            ////????????????????
+            for (int i = 0; i < x.Size; i++)
+            {
+                x[i] = x_temp[i];
+            }
+            ////???????????????
 
-            last_discrepancy = A.Multiply(x).Add(b, -1).Norm / norm_b;
-            discrepancy = last_discrepancy;
+            discrepancy = lastDiscrepancy;
             iter = current_itter;
             return false;
         }

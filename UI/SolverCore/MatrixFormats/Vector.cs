@@ -40,13 +40,23 @@ namespace SolverCore
                 {
                     return vector[index];
                 }
-                catch(IndexOutOfRangeException)
+                catch (IndexOutOfRangeException)
                 {
                     throw new IndexOutOfRangeException();
                 }
             }
 
-            set => vector[index] = value;
+            set
+            {
+                try
+                {
+                    vector[index] = value;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+            }
         }
 
         public int Size => vector.Length;

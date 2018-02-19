@@ -47,8 +47,6 @@ namespace SolverCore
                     break;
             }
             return result;
-
-            return result;
         }
     }
 }

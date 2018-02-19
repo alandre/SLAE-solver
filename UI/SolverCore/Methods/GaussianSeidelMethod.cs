@@ -14,7 +14,7 @@ namespace SolverCore.Methods
         double eps;
         double norm_b;
         double lastDiscrepancy;
-        int current_itter;
+        int currentIter;
         bool init;
         IVector x_temp;
         GaussianSeidelMethod()
@@ -37,7 +37,7 @@ namespace SolverCore.Methods
             this.A = A;
             this.maxIter = maxIter;
             this.eps = eps;
-            current_itter = 0;
+            currentIter = 0;
             norm_b = b.Norm;
             try
             {
@@ -62,10 +62,10 @@ namespace SolverCore.Methods
             if (Math.Abs(lastDiscrepancy) < eps)
             {
                 discrepancy = lastDiscrepancy;
-                iter = current_itter;
+                iter = currentIter;
                 return true;
             }
-            current_itter++;
+            currentIter++;
 
             var D = A.Diagonal;
 
@@ -107,7 +107,7 @@ namespace SolverCore.Methods
             ////???????????????
 
             discrepancy = lastDiscrepancy;
-            iter = current_itter;
+            iter = currentIter;
             return false;
         }
     }

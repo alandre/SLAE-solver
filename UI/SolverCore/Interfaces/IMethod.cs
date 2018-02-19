@@ -14,11 +14,11 @@ namespace SolverCore
         /// <param name="A">Матрица СЛАУ</param>
         /// <param name="x0">Начальное приблежение</param>
         /// <param name="b">Вектор правой части СЛАУ</param>
-        /// <param name="max_iter">Макимальное число иттераций</param>
+        /// <param name="maxIter">Макимальное число итераций</param>
         /// <param name="eps">Значение относительной невязки для выхода</param>
         /// <param name="malloc">false - результат сохраняется в вектор x0, true - выделяется новый вектор</param>
         /// <returns>Вектор с результатом</returns>
-        IVector InitMethod(ILinearOperator A, IVector x0, IVector b, int max_iter, double eps, bool malloc = false);
+        IVector InitMethod(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, bool malloc = false);
 
         /// <summary>
         /// Делает шаг иттерационного метода

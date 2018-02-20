@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SolverCore
 {
@@ -13,17 +14,7 @@ namespace SolverCore
 
         public ILinearOperator Transpose => throw new NotImplementedException();
 
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Fill(FillFunc elems)
-        {
-            throw new NotImplementedException();
-        }
-
-        public System.Collections.Generic.IEnumerator<(double value, int row, int col)> GetEnumerator()
+        public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
             throw new NotImplementedException();
         }
@@ -54,6 +45,16 @@ namespace SolverCore
         }
 
         IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Fill(FillFunc elems)
+        {
+            throw new NotImplementedException();
+        }
+
+        public CoordinationalMatrix ConvertToCoordinationalMatrix()
         {
             throw new NotImplementedException();
         }

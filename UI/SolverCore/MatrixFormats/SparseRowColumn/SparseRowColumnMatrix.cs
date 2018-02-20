@@ -1,34 +1,111 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace SolverCore
 {
+    /// <summary>
+    /// симметричный по профилю
+    /// </summary>
     public class SparseRowColumnMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
     {
-        public double this[int i, int j] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private int[] ia;
+        private int[] ja;
 
-        public int Size => throw new NotImplementedException();
+        private double[] di;
+        private double[] al;
+        private double[] au;
 
-        public IVector Diagonal => throw new NotImplementedException();
+        public IVector Diagonal => new Vector(di);
 
-        public ILinearOperator Transpose => throw new NotImplementedException();
+        public ILinearOperator Transpose => new TransposeMatrix<SparseRowColumnMatrix>() { Matrix = this };
 
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
+        public int Size => di.Length;
+
+        public SparseRowColumnMatrix(
+            double[] di,
+            double[] al,
+            double[] au,
+            int[] ia,
+            int[] ja)
         {
-            throw new NotImplementedException();
+            if (di == null) throw new ArgumentNullException(nameof(di));
+            if (al == null) throw new ArgumentNullException(nameof(al));
+            if (au == null) throw new ArgumentNullException(nameof(au));
+            if (ia == null) throw new ArgumentNullException(nameof(ia));
+            if (ja == null) throw new ArgumentNullException(nameof(ja));
+
+            if(ia[0] == 1)
+            {
+                for (int i = 0; i < ia.Length; i++)
+                {
+                    ia[i]--;
+                }
+
+                for (int j = 0; j < ja.Length; j++)
+                {
+                    ja[j]--;
+                }
+            }
+
+            if (ja.Length != ia[ia.Length - 1] || 
+                ja.Length != al.Length || 
+                ja.Length != au.Length ||
+                di.Length != ia.Length - 1)
+            {
+                throw new RankException();
+            }
+
+            this.di = (double[])di.Clone();
+            this.al = (double[])al.Clone();
+            this.au = (double[])au.Clone();
+            this.ia = (int[])ia.Clone();
+            this.ja = (int[])ja.Clone();
         }
 
-        public void Fill(FillFunc elems)
+        public double this[int i, int j]
         {
-            throw new NotImplementedException();
+            get
+            {
+                if (i < 0 || j < 0 || i >= Size || j >= Size)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+
+                if (i == j)
+                {
+                    return di[i];
+                }
+
+                (int start, int end, int minIJ) = i > j ? (ia[i], ia[i + 1], j) : (ia[j], ia[j + 1], i);
+                var rowElementsCount = end - start;
+                var number = Array.IndexOf(ja, minIJ, start, rowElementsCount);
+
+                return number > 0 ? (i > j ? al[number] : au[number]) : 0;
+            }
         }
 
-        public System.Collections.Generic.IEnumerator<(double value, int row, int col)> GetEnumerator()
+        public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
-            throw new NotImplementedException();
+            for (int i = 0; i < Size; i++)
+            {
+                yield return (di[i], i, i);
+
+                var rowColumnElements = ia[i + 1] - ia[i];
+
+                for (int j = 0; j < rowColumnElements; j++)
+                {
+                    var index = ia[i] + j;
+
+                    yield return (al[index], i, ja[index]);
+                    yield return (au[index], ja[index], i);
+                }
+            }
         }
 
-        public IVector LMult(IVector x, bool UseDiagonal, int diagonalElement = 1)
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public IVector LMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
         {
             throw new NotImplementedException();
         }
@@ -38,7 +115,7 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector LSolve(IVector x, bool UseDiagonal)
+        public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
@@ -48,7 +125,7 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector Multiply(IVector x)
+        public IVector Multiply(IVector vector)
         {
             throw new NotImplementedException();
         }
@@ -58,7 +135,7 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector UMult(IVector x, bool UseDiagonal, int diagonalElement = 1)
+        public IVector UMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
         {
             throw new NotImplementedException();
         }
@@ -68,7 +145,7 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector USolve(IVector x, bool UseDiagonal)
+        public IVector USolve(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }
@@ -78,7 +155,12 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public CoordinationalMatrix ConvertToCoordinationalMatrix()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Fill(FillFunc elems)
         {
             throw new NotImplementedException();
         }

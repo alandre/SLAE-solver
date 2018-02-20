@@ -183,9 +183,9 @@ namespace SolverCore
             {
                 var sum = isUseDiagonal ? Diagonal[i] * vector[i] : vector[i];
 
-                for (int j = 0; Jg[j] <= i && Ig[j] < i; j++)
+                for (int j = 0; Ig[j] <= i && Jg[j] < i; j++)
                 {
-                    sum += A[j] * vector[Ig[j]];
+                    sum += A[j] * vector[Jg[j]];
                 }
 
                 result[i] = sum;
@@ -207,34 +207,7 @@ namespace SolverCore
 
         public IVector Multiply(IVector x)
         {
-            if (x == null)
-            {
-                throw new ArgumentNullException(nameof(x));
-            }
-
-            if (x.Size != Size)
-            {
-                throw new RankException();
-            }
-
-            var result = new Vector(Size);
-
-            int igLength = Ig.GetLength(0);
-            for (int i = 0; i < Size; i++)
-            {
-                var sum = 0.0;
-
-                for (int j = 0; j < igLength; j++)
-                {
-                    if (Ig[j] == i)
-                        sum += A[j] * x[Jg[j]];
-                }
-
-                result[i] = sum;
-            }
-
-            return result;
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IVector MultiplyTranspose(IVector vector)
@@ -244,64 +217,12 @@ namespace SolverCore
 
         public IVector UMult(IVector x, bool UseDiagonal, int diagonalElement = 1)
         {
-            if (x == null)
-            {
-                throw new ArgumentNullException(nameof(x));
-            }
-
-            if (x.Size != Size)
-            {
-                throw new RankException();
-            }
-
-            var result = new Vector(Size);
-
-            for (int i = 0; i < Size; i++)
-            {
-                var sum = UseDiagonal ? Diagonal[i] * x[i] : x[i];
-
-                for (int j = 0; Ig[j] <= i && Jg[j] < Size; j++)
-                {
-                    if (Jg[j] > i)
-                        sum += A[j] * x[Jg[j]];
-                }
-
-                result[i] = sum;
-            }
-
-            return result;
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IVector UMultTranspose(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
         {
-            if (vector == null)
-            {
-                throw new ArgumentNullException(nameof(vector));
-            }
-
-            if (vector.Size != Size)
-            {
-                throw new RankException();
-            }
-
-            var result = new Vector(Size);
-
-            for (int i = 0; i < Size; i++)
-            {
-                var sum = isUseDiagonal ? Diagonal[i] * vector[i] : vector[i];
-
-                for (int j = 0; Jg[j] <= i && Ig[j] < Size; j++)
-                {
-                    if (Ig[j] > i)
-                        sum += A[j] * vector[Ig[j]];
-                }
-
-                result[i] = sum;
-            }
-
-            return result;
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IVector USolve(IVector x, bool UseDiagonal)

@@ -41,6 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\ILogger.cs" />
+    <Compile Include="Interfaces\IMethod.cs" />
+    <Compile Include="Interfaces\ISolver.cs" />
     <Compile Include="Interfaces\ITransposeLinearOperator.cs" />
     <Compile Include="MatrixFormats\Coordinational\CoordinationalMatrix.cs" />
     <Compile Include="MatrixFormats\Dense\DenseMatrix.cs" />
@@ -48,6 +51,8 @@
     <Compile Include="Interfaces\ILinearOperator.cs" />
     <Compile Include="Interfaces\IVector.cs" />
     <Compile Include="MatrixFormats\TransposeMatrix.cs" />
+    <Compile Include="Methods\GaussianSeidelMethod.cs" />
+    <Compile Include="Methods\JacobiMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MatrixFormats\Skyline\SkylineMatrix.cs" />
     <Compile Include="MatrixFormats\SparseRowColumn\SparseRowColumnMatrix.cs" />
@@ -58,6 +63,8 @@
     <Compile Include="MatrixFormats\SparseRowColumn\SymmetricSparseRowColumnMatrix.cs" />
     <Compile Include="MatrixFormats\SparseRow\SymmetricSparseRowMatrix.cs" />
     <Compile Include="MatrixFormats\Vector.cs" />
+    <Compile Include="Solvers\LoggingSolver.cs" />
+    <Compile Include="Solvers\Solver.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

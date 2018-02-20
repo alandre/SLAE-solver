@@ -56,26 +56,26 @@ namespace UI
                     {
                         case 0:
                             {
-                                var matrix = new DenseMatrix { symmetry = sim.Checked };
-                                Input.dense = MatrixInitialazer.Input(dataInput, matrix);
+                                var matrix = new DenseMatrix();
+                                Input.dense = MatrixInitialazer.Input(dataInput, matrix, sim.Checked);
                             }
                             break;
                         case 1:
                             {
-                                var matrix = new SparseMatrixWithOutDiag { symmetry = sim.Checked };
-                                Input.sparseWithOutDiag = MatrixInitialazer.Input(dataInput, matrix);
+                                var matrix = new SparseMatrixWithoutDiag();
+                                Input.SparseMatrixWithoutDiag = MatrixInitialazer.Input(dataInput, matrix, sim.Checked);
                             }
                             break;
                         case 2:
                             {
-                                var matrix = new SparseNatrixWithDiag { symmetry = sim.Checked };
-                                Input.sparseWithDiag = MatrixInitialazer.Input(dataInput, matrix);
+                                var matrix = new SparseNatrixWithDiag();
+                                Input.sparseWithDiag = MatrixInitialazer.Input(dataInput, matrix, sim.Checked);
                             }
                             break;
                         case 3:
                             {
-                                var matrix = new CoordinateMatrix() { symmetry = sim.Checked };
-                                Input.coordinate = MatrixInitialazer.Input(dataInput, matrix);
+                                var matrix = new CoordinateMatrix();
+                                Input.coordinate = MatrixInitialazer.Input(dataInput, matrix, sim.Checked);
                             }
                             break;
 

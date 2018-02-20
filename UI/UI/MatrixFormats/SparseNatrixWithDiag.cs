@@ -21,5 +21,11 @@ namespace UI.MatrixFormats
         public double eps { get; set; }
 
         public bool symmetry { get; set; }
+
+        public static SparseNatrixWithDiag SetDefaultx0(SparseNatrixWithDiag matrix)
+        {
+            double[] x = new double[matrix.di.Length];
+            return matrix;
+        }
     }
 }

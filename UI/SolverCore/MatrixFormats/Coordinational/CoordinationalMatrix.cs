@@ -136,7 +136,7 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector LMult(IVector x, bool UseDiagonal)
+        public IVector LMult(IVector x, bool UseDiagonal, int diagonalElement = 1)
         {
             if (x == null)
             {
@@ -165,7 +165,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector LMultTranspose(IVector vector, bool isUseDiagonal)
+        public IVector LMultTranspose(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
         {
             if (vector == null)
             {
@@ -215,12 +215,12 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector UMult(IVector x, bool UseDiagonal)
+        public IVector UMult(IVector x, bool UseDiagonal, int diagonalElement = 1)
         {
             throw new NotImplementedException();
         }
 
-        public IVector UMultTranspose(IVector vector, bool isUseDiagonal)
+        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
         {
             throw new NotImplementedException();
         }

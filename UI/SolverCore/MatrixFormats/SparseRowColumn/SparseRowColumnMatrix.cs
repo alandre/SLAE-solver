@@ -191,10 +191,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector LMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
-        {
-            throw new NotImplementedException();
-        }
+        public IVector LMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1) => throw new NotImplementedException();
 
         public IVector LMultTranspose(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
         {

@@ -20,6 +20,8 @@ namespace SolverCore
 
         public ILinearOperator Transpose => new TransposeMatrix<SparseRowColumnMatrix>() { Matrix = this };
 
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
         public int Size => di.Length;
 
         public SparseRowColumnMatrix(
@@ -103,7 +105,91 @@ namespace SolverCore
             }
         }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        public void Fill(FillFunc elems)
+        {
+            if(elems == null)
+            {
+                throw new ArgumentNullException(nameof(elems));
+            }
+
+            for (int i = 0; i < Size; i++)
+            {
+                di[i] = elems(i, i);
+                var rowColumnElements = ia[i + 1] - ia[i];
+
+                for (int j = 0; j < rowColumnElements; j++)
+                {
+                    var index = ia[i] + j;
+
+                    al[index] = elems(i, ja[index]);
+                    au[index] = elems(ja[index], i);
+                }
+            }
+        }
+
+        public IVector Multiply(IVector vector)
+        {
+            if(vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if(vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for(int i = 0; i < Size; i++)
+            {
+                result[i] += di[i] * vector[i];
+                var rowElementsCount = ia[i + 1] - ia[i];
+
+                for (int j = 0; j < rowElementsCount; j++)
+                {
+                    var index = ia[i] + j;
+                    var column = ja[index];
+
+                    result[i] = al[index] * vector[column];
+                    result[column] = au[index] * vector[i];
+                }
+            }
+
+            return result;
+        }
+
+        public IVector MultiplyTranspose(IVector vector)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for (int i = 0; i < Size; i++)
+            {
+                result[i] += di[i] * vector[i];
+                var rowElementsCount = ia[i + 1] - ia[i];
+
+                for (int j = 0; j < rowElementsCount; j++)
+                {
+                    var index = ia[i] + j;
+                    var column = ja[index];
+
+                    result[i] = au[index] * vector[column];
+                    result[column] = al[index] * vector[i];
+                }
+            }
+
+            return result;
+        }
 
         public IVector LMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
         {
@@ -121,16 +207,6 @@ namespace SolverCore
         }
 
         public IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector Multiply(IVector vector)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector MultiplyTranspose(IVector vector)
         {
             throw new NotImplementedException();
         }
@@ -156,11 +232,6 @@ namespace SolverCore
         }
 
         public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Fill(FillFunc elems)
         {
             throw new NotImplementedException();
         }

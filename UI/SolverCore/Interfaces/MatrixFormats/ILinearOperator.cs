@@ -9,7 +9,7 @@
         IVector Multiply(IVector x);
         IVector LSolve(IVector x, bool UseDiagonal);
         IVector USolve(IVector x, bool UseDiagonal);
-        IVector LMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement);
-        IVector UMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement);
+        IVector LMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero);
+        IVector UMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero);
     }
 }

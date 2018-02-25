@@ -28,12 +28,12 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector LMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement)
+        public IVector LMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
         {
             throw new NotImplementedException();
         }
 
-        public IVector LMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement)
+        public IVector LMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
         {
             throw new NotImplementedException();
         }
@@ -58,12 +58,12 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector UMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement)
+        public IVector UMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
         {
             throw new NotImplementedException();
         }
 
-        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement)
+        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
         {
             throw new NotImplementedException();
         }

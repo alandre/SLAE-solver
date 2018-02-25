@@ -2,7 +2,7 @@
 {
     public enum DiagonalElement
     {
-        Zero,
-        One
+        Zero = 0,
+        One = 1
     }
 }

@@ -94,7 +94,7 @@ namespace SolverCore
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public IVector LMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
+        public IVector LMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if(vector == null)
             {
@@ -123,7 +123,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector UMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
+        public IVector UMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if(vector == null)
             {
@@ -211,7 +211,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector LMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
+        public IVector LMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {
@@ -240,7 +240,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
+        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {

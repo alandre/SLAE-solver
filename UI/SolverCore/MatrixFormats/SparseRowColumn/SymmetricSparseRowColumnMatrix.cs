@@ -19,7 +19,7 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector LMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
+        public IVector LMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             throw new NotImplementedException();
         }
@@ -34,7 +34,7 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector UMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.Zero)
+        public IVector UMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             throw new NotImplementedException();
         }

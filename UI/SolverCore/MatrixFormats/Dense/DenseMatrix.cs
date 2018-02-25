@@ -94,7 +94,7 @@ namespace SolverCore
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public IVector LMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
+        public IVector LMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if(vector == null)
             {
@@ -110,7 +110,7 @@ namespace SolverCore
 
             for(int i = 0; i < Size; i++)
             {
-                var sum = isUseDiagonal ? matrix[i, i] * vector[i] : diagonalElement * vector[i];
+                var sum = isUseDiagonal ? matrix[i, i] * vector[i] : (int)diagonalElement * vector[i];
 
                 for(int j = 0; j < i; j++)
                 {
@@ -123,7 +123,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector UMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
+        public IVector UMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if(vector == null)
             {
@@ -139,7 +139,7 @@ namespace SolverCore
 
             for (int i = 0; i < Size; i++)
             {
-                var sum = isUseDiagonal ? matrix[i, i] * vector[i] : diagonalElement * vector[i];
+                var sum = isUseDiagonal ? matrix[i, i] * vector[i] : (int)diagonalElement * vector[i];
 
                 for (int j = i + 1; j < Size; j++)
                 {
@@ -211,7 +211,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector LMultTranspose(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
+        public IVector LMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {
@@ -227,7 +227,7 @@ namespace SolverCore
 
             for (int j = 0; j < Size; j++)
             {
-                var sum = isUseDiagonal ? matrix[j, j] * vector[j] : diagonalElement * vector[j];
+                var sum = isUseDiagonal ? matrix[j, j] * vector[j] : (int)diagonalElement * vector[j];
 
                 for (int i = j; i < Size; i++)
                 {
@@ -240,7 +240,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
+        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {
@@ -256,7 +256,7 @@ namespace SolverCore
 
             for (int j = 0; j < Size; j++)
             {
-                var sum = isUseDiagonal ? matrix[j, j] * vector[j] : diagonalElement * vector[j];
+                var sum = isUseDiagonal ? matrix[j, j] * vector[j] : (int)diagonalElement * vector[j];
 
                 for (int i = 0; i < j; i++)
                 {

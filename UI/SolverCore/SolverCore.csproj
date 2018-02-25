@@ -44,12 +44,13 @@
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\IMethod.cs" />
     <Compile Include="Interfaces\ISolver.cs" />
-    <Compile Include="Interfaces\ITransposeLinearOperator.cs" />
+    <Compile Include="Interfaces\MatrixFormats\ITransposeLinearOperator.cs" />
     <Compile Include="MatrixFormats\Coordinational\CoordinationalMatrix.cs" />
     <Compile Include="MatrixFormats\Dense\DenseMatrix.cs" />
-    <Compile Include="Interfaces\IMatrix.cs" />
-    <Compile Include="Interfaces\ILinearOperator.cs" />
-    <Compile Include="Interfaces\IVector.cs" />
+    <Compile Include="Interfaces\MatrixFormats\IMatrix.cs" />
+    <Compile Include="Interfaces\MatrixFormats\ILinearOperator.cs" />
+    <Compile Include="Interfaces\MatrixFormats\IVector.cs" />
+    <Compile Include="MatrixFormats\DiagonalElement.cs" />
     <Compile Include="MatrixFormats\TransposeMatrix.cs" />
     <Compile Include="Methods\GaussianSeidelMethod.cs" />
     <Compile Include="Methods\JacobiMethod.cs" />

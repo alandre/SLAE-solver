@@ -69,15 +69,9 @@ namespace SolverCore
         {
             get
             {
-                if (i < 0 || j < 0 || i >= Size || j >= Size)
-                {
-                    throw new IndexOutOfRangeException();
-                }
+                if (i < 0 || j < 0 || i >= Size || j >= Size) throw new IndexOutOfRangeException();
 
-                if (i == j)
-                {
-                    return di[i];
-                }
+                if (i == j) return di[i];
 
                 (int start, int end, int minIJ) = i > j ? (ia[i], ia[i + 1], j) : (ia[j], ia[j + 1], i);
                 var rowElementsCount = end - start;

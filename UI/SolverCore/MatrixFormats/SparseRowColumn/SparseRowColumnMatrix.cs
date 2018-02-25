@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace SolverCore
 {
     /// <summary>
-    /// симметричный по профилю
+    /// Портрет матрицы симметричен
     /// </summary>
     public class SparseRowColumnMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
     {

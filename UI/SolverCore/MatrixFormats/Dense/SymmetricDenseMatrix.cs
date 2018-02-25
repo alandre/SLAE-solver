@@ -106,7 +106,7 @@ namespace SolverCore
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-        public IVector LMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
+        public IVector LMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement)
         {
             if(vector == null)
             {
@@ -122,7 +122,7 @@ namespace SolverCore
 
             for(int i = 0; i < Size; i++)
             {
-                var sum = isUseDiagonal ? matrix[i][i] * vector[i] : diagonalElement * vector[i];
+                var sum = isUseDiagonal ? matrix[i][i] * vector[i] : (int)diagonalElement * vector[i];
 
                 for(int j = 0; j < i; j++)
                 {
@@ -135,7 +135,7 @@ namespace SolverCore
             return result;
         }
 
-        public IVector UMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
+        public IVector UMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement)
         {
             if (vector == null)
             {
@@ -151,7 +151,7 @@ namespace SolverCore
 
             for(int i = 0; i < Size; i++)
             {
-                result[i] += isUseDiagonal ? matrix[i][i] * vector[i] : diagonalElement * vector[i];
+                result[i] += isUseDiagonal ? matrix[i][i] * vector[i] : (int)diagonalElement * vector[i];
 
                 for (int j = 0; j < i; j++)
                 {

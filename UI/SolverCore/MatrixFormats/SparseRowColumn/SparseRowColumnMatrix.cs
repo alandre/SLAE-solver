@@ -151,8 +151,8 @@ namespace SolverCore
                     var index = ia[i] + j;
                     var column = ja[index];
 
-                    result[i] = al[index] * vector[column];
-                    result[column] = au[index] * vector[i];
+                    result[i] += al[index] * vector[column];
+                    result[column] += au[index] * vector[i];
                 }
             }
 
@@ -183,17 +183,77 @@ namespace SolverCore
                     var index = ia[i] + j;
                     var column = ja[index];
 
-                    result[i] = au[index] * vector[column];
-                    result[column] = al[index] * vector[i];
+                    result[i] += au[index] * vector[column];
+                    result[column] += al[index] * vector[i];
                 }
             }
 
             return result;
         }
 
-        public IVector LMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1) => throw new NotImplementedException();
+        public IVector LMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement)
+        {
+            if(vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
 
-        public IVector LMultTranspose(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
+            if(vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for (int i = 0; i < Size; i++)
+            {
+                result[i] += isUseDiagonal ? di[i] * vector[i] : (int)diagonalElement * vector[i];
+                var rowElementsCount = ia[i + 1] - ia[i];
+
+                for (int j = 0; j < rowElementsCount; j++)
+                {
+                    var index = ia[i] + j;
+                    var column = ja[index];
+
+                    result[i] += al[index] * vector[column];
+                }
+            }
+
+            return result;
+        }
+
+        public IVector UMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for (int i = 0; i < Size; i++)
+            {
+                result[i] += isUseDiagonal ? di[i] * vector[i] : (int)diagonalElement * vector[i];
+                var rowElementsCount = ia[i + 1] - ia[i];
+
+                for (int j = 0; j < rowElementsCount; j++)
+                {
+                    var index = ia[i] + j;
+                    var column = ja[index];
+
+                    result[column] += au[index] * vector[i];
+                }
+            }
+
+            return result;
+        }
+
+        public IVector LMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement)
         {
             throw new NotImplementedException();
         }
@@ -208,12 +268,7 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
-        public IVector UMult(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, int diagonalElement = 1)
+        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement)
         {
             throw new NotImplementedException();
         }

@@ -37,20 +37,7 @@ namespace SolverCore
             if (ia == null) throw new ArgumentNullException(nameof(ia));
             if (ja == null) throw new ArgumentNullException(nameof(ja));
 
-            if(ia[0] == 1)
-            {
-                for (int i = 0; i < ia.Length; i++)
-                {
-                    ia[i]--;
-                }
-
-                for (int j = 0; j < ja.Length; j++)
-                {
-                    ja[j]--;
-                }
-            }
-
-            if (ja.Length != ia[ia.Length - 1] || 
+            if (ja.Length != ia[ia.Length - 1] - ia[0] || 
                 ja.Length != al.Length || 
                 ja.Length != au.Length ||
                 di.Length != ia.Length - 1)
@@ -63,6 +50,19 @@ namespace SolverCore
             this.au = (double[])au.Clone();
             this.ia = (int[])ia.Clone();
             this.ja = (int[])ja.Clone();
+
+            if(this.ia[0] == 1)
+            {
+                for (int i = 0; i < this.ia.Length; i++)
+                {
+                    this.ia[i]--;
+                }
+
+                for (int j = 0; j < this.ja.Length; j++)
+                {
+                    this.ja[j]--;
+                }
+            }
         }
 
         public double this[int i, int j]

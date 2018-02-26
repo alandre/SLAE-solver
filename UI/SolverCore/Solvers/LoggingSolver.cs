@@ -24,14 +24,23 @@ namespace SolverCore.Solvers
             this.Logger = Logger;
         }
 
-        public IVector Solve(ILinearOperator A, IVector x0, IVector b, int maxiter, double eps, bool malloc = false)
+        /// <summary>
+        /// Решает СЛАУ Ax=b
+        /// </summary>
+        /// <param name="A">Матрица СЛАУ</param>
+        /// <param name="x0">Начальное приблежение</param>
+        /// <param name="b">Вектор правой части</param>
+        /// <param name="maxIter">Максимальное число итераций</param>
+        /// <param name="eps">Относительня невязка для выхода</param>
+        /// <param name="malloc">false - результат сохранится в x0, true - результат сохранится в новый вектор</param>
+        /// <returns></returns>
+        public IVector Solve(ILinearOperator A, IVector x0, IVector b, int maxIter = (int) 1E+4, double eps = 1.0E-14, bool malloc = false)
         {
             IVector result;
             int iter;
-            double discrepancy;
-            bool step_result;
+            double residual;
 
-            result = Method.InitMethod(A, x0, b, maxiter, eps, malloc);
+            result = Method.InitMethod(A, x0, b, malloc);
 
             if (result == null)
                 return null;
@@ -40,14 +49,15 @@ namespace SolverCore.Solvers
             {
                 try
                 {
-                    step_result = Method.MakeStep(out iter, out discrepancy);
+                    Method.MakeStep(out iter, out residual);
                 }
                 catch (Exception e)
                 {
                     return null;
                 }
+
                 Logger.write();
-                if (step_result)
+                if (iter > maxIter || residual <= eps)
                     break;
             }
             return result;

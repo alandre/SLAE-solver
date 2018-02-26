@@ -10,18 +10,18 @@ namespace SolverCore.Methods
     {
         IVector x, x0, b;
         ILinearOperator A;
-        int maxIter;
-        double eps;
         double norm_b;
         double lastDiscrepancy;
         int currentIter;
         bool init;
         IVector x_temp;
+        IVector Ux;
+
         GaussianSeidelMethod()
         {
             init = false;
         }
-        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, bool malloc = false)
+        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc == true)
             {
@@ -35,8 +35,6 @@ namespace SolverCore.Methods
             this.x0 = x0;
             this.b = b;
             this.A = A;
-            this.maxIter = maxIter;
-            this.eps = eps;
             currentIter = 0;
             norm_b = b.Norm;
             try
@@ -49,34 +47,21 @@ namespace SolverCore.Methods
             }
             init = true;
             x_temp = new Vector(x.Size);
+            Ux = A.UMult(x0, false, 0);
             return x;
         }
 
-        public bool MakeStep(out int iter, out double discrepancy)
+        public void MakeStep(out int iter, out double discrepancy)
         {
             if (init != true)
             {
                 throw new InvalidOperationException("Решатель не инициализирован, выполнение операции невозможно");
             }
 
-            if (Math.Abs(lastDiscrepancy) < eps)
-            {
-                discrepancy = lastDiscrepancy;
-                iter = currentIter;
-                return true;
-            }
             currentIter++;
 
-            var D = A.Diagonal;
-
-            ////????????????????
-            for (int i = 0; i < D.Size; i++)
-            {
-                D[i] = 1.0 / D[i];
-            }
-            ////????????????????
-
-            var x_k = A.LSolve(b.Add(A.UMult(x, false, 0), -1), true);
+            //x_k=(L+D)^(-1)*(b-Ux)
+            var x_k = A.LSolve(b.Add(Ux, -1), true);
 
             double w = 1.0;
 
@@ -89,7 +74,10 @@ namespace SolverCore.Methods
                 }
                 ////????????????????
 
-                double temp_discrepancy = A.Multiply(x_temp).Add(b, -1).Norm / norm_b;
+                Ux = Ux = A.UMult(x_temp, false, 0);
+
+                //temp_discrepancy = ||b - (Ux+Lx+Dx)|| / ||b||
+                double temp_discrepancy = Ux.Add(A.LMult(x_temp,false,0)).Add(A.Diagonal.HadamardProduct(x_temp)).Add(b, -1).Norm / norm_b;
 
                 if (temp_discrepancy < lastDiscrepancy)
                 {
@@ -108,7 +96,6 @@ namespace SolverCore.Methods
 
             discrepancy = lastDiscrepancy;
             iter = currentIter;
-            return false;
         }
     }
 }

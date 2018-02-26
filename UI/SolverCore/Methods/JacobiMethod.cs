@@ -10,19 +10,19 @@ namespace SolverCore
     {
         IVector x, x0, b;
         ILinearOperator A;
-        int maxIter;
-        double eps;
         double norm_b;
-        double lastDiscrepancy;
+        double lastResidual;
         int currentIter;
         bool init;
         IVector x_temp;
+        IVector inverseDioganal;
+        IVector L_Ux;
         JacobiMethod()
         {
             init = false;
         }
 
-        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, bool malloc = false)
+        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc == true)
             {
@@ -36,13 +36,12 @@ namespace SolverCore
             this.x0 = x0;
             this.b = b;
             this.A = A;
-            this.maxIter = maxIter;
-            this.eps = eps;
             currentIter = 0;
             norm_b = b.Norm;
+
             try
             {
-                lastDiscrepancy = A.Multiply(x0).Add(b, -1).Norm / norm_b;
+                lastResidual = A.Multiply(x0).Add(b, -1).Norm / norm_b;
             }
             catch (DivideByZeroException e)
             {
@@ -50,66 +49,55 @@ namespace SolverCore
             }
             init = true;
             x_temp = new Vector(x.Size);
+            inverseDioganal = A.Diagonal.Clone();
+            for (int i = 0; i < inverseDioganal.Size; i++)
+            {
+                inverseDioganal[i] = 1.0 / inverseDioganal[i];
+            }
+            L_Ux = A.LMult(x0, false, 0).Add(A.UMult(x0, false, 0));
             return x;
         }
 
-        public bool MakeStep(out int iter, out double discrepancy)
+        public void MakeStep(out int iter, out double residual)
         {
             if (init != true)
             {
                 throw new InvalidOperationException("Решатель не инициализирован, выполнение операции невозможно");
             }
 
-            if (Math.Abs(lastDiscrepancy) < eps)
-            {
-                discrepancy = lastDiscrepancy;
-                iter = currentIter;
-                return true;
-            }
             currentIter++;
-
-            var D = A.Diagonal;
-
-            ////????????????????
-            for (int i = 0; i < D.Size; i++)
-            {
-                D[i] = 1.0 / D[i];
-            }
-            ////????????????????
-
-            var x_k = D.HadamardProduct(b.Add(A.LMult(x, false, 0).Add(A.UMult(x, false, 0)), -1));
+            
+            //x_k = D^(-1)*(b-(L+U)x)
+            var x_k = inverseDioganal.HadamardProduct(b.Add(L_Ux, -1));
 
             double w = 1.0;
 
             while (w >= 0.1)
             {
-                ////????????????????
                 for (int i = 0; i < x.Size; i++)
                 {
                     x_temp[i] = w * x_k[i] + (1 - w) * x[i];
                 }
-                ////????????????????
 
-                double temp_discrepancy = A.Multiply(x_temp).Add(b, -1).Norm / norm_b;
+                L_Ux = A.LMult(x_temp, false, 0).Add(A.UMult(x_temp, false, 0));
+                //temp_discrepancy = ||b - (Ux+Lx+Dx)|| / ||b||
+                double temp_discrepancy = A.Diagonal.HadamardProduct(x_temp).Add(L_Ux).Add(b, -1).Norm / norm_b;
 
-                if (temp_discrepancy < lastDiscrepancy)
+                if (temp_discrepancy < lastResidual)
                 {
-                    lastDiscrepancy = temp_discrepancy;
+                    lastResidual = temp_discrepancy;
                     break;
                 }
                 w -= 0.1;
             }
 
-            ////????????????????
             for (int i = 0; i < x.Size; i++)
             {
                 x[i] = x_temp[i];
             }
-            ////???????????????
 
-            discrepancy = lastDiscrepancy;
+            residual = lastResidual;
             iter = currentIter;
-            return false;
         }
     }
 }

@@ -65,7 +65,6 @@
     <Compile Include="MatrixFormats\SparseRow\SymmetricSparseRowMatrix.cs" />
     <Compile Include="MatrixFormats\Vector.cs" />
     <Compile Include="Solvers\LoggingSolver.cs" />
-    <Compile Include="Solvers\Solver.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

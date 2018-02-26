@@ -18,15 +18,15 @@ namespace SolverCore
         /// <param name="eps">Значение относительной невязки для выхода</param>
         /// <param name="malloc">false - результат сохраняется в вектор x0, true - выделяется новый вектор</param>
         /// <returns>Вектор с результатом</returns>
-        IVector InitMethod(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, bool malloc = false);
+        IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false);
 
         /// <summary>
         /// Делает шаг иттерационного метода
         /// </summary>
         /// <param name="iter">номер текущей иттерации</param>
-        /// <param name="discrepancy">текущая относительная невязка</param>
+        /// <param name="residual">текущая относительная невязка</param>
         /// <returns>true-решение найдено</returns>
-        bool MakeStep(out int iter, out double discrepancy);
+        void MakeStep(out int iter, out double residual);
 
     }
 }

@@ -11,7 +11,7 @@ namespace SolverCore.Methods
         IVector x, x0, b;
         ILinearOperator A;
         double norm_b;
-        double lastDiscrepancy;
+        double lastResidual;
         int currentIter;
         bool init;
         IVector x_temp;
@@ -23,7 +23,7 @@ namespace SolverCore.Methods
         }
         public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
-            if (malloc == true)
+            if (malloc)
             {
                 x = new Vector(x0.Size);
             }
@@ -39,7 +39,7 @@ namespace SolverCore.Methods
             norm_b = b.Norm;
             try
             {
-                lastDiscrepancy = A.Multiply(x0).Add(b, -1).Norm / norm_b;
+                lastResidual = A.Multiply(x0).Add(b, -1).Norm / norm_b;
             }
             catch (DivideByZeroException e)
             {
@@ -51,9 +51,9 @@ namespace SolverCore.Methods
             return x;
         }
 
-        public void MakeStep(out int iter, out double discrepancy)
+        public void MakeStep(out int iter, out double residual)
         {
-            if (init != true)
+            if (!init)
             {
                 throw new InvalidOperationException("Решатель не инициализирован, выполнение операции невозможно");
             }
@@ -76,12 +76,12 @@ namespace SolverCore.Methods
 
                 Ux = Ux = A.UMult(x_temp, false, 0);
 
-                //temp_discrepancy = ||b - (Ux+Lx+Dx)|| / ||b||
-                double temp_discrepancy = Ux.Add(A.LMult(x_temp,false,0)).Add(A.Diagonal.HadamardProduct(x_temp)).Add(b, -1).Norm / norm_b;
+                //tempResidual = ||b - (Ux+Lx+Dx)|| / ||b||
+                double tempResidual = Ux.Add(A.LMult(x_temp,false,0)).Add(A.Diagonal.HadamardProduct(x_temp)).Add(b, -1).Norm / norm_b;
 
-                if (temp_discrepancy < lastDiscrepancy)
+                if (tempResidual < lastResidual)
                 {
-                    lastDiscrepancy = temp_discrepancy;
+                    lastResidual = tempResidual;
                     break;
                 }
                 w -= 0.1;
@@ -94,7 +94,7 @@ namespace SolverCore.Methods
             }
             ////???????????????
 
-            discrepancy = lastDiscrepancy;
+            residual = lastResidual;
             iter = currentIter;
         }
     }

@@ -24,7 +24,7 @@ namespace SolverCore
 
         public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
-            if (malloc == true)
+            if (malloc)
             {
                 x = new Vector(x0.Size);
             }
@@ -60,7 +60,7 @@ namespace SolverCore
 
         public void MakeStep(out int iter, out double residual)
         {
-            if (init != true)
+            if (!init)
             {
                 throw new InvalidOperationException("Решатель не инициализирован, выполнение операции невозможно");
             }
@@ -80,12 +80,12 @@ namespace SolverCore
                 }
 
                 L_Ux = A.LMult(x_temp, false, 0).Add(A.UMult(x_temp, false, 0));
-                //temp_discrepancy = ||b - (Ux+Lx+Dx)|| / ||b||
-                double temp_discrepancy = A.Diagonal.HadamardProduct(x_temp).Add(L_Ux).Add(b, -1).Norm / norm_b;
+                //tempResidual = ||b - (Ux+Lx+Dx)|| / ||b||
+                double tempResidual = A.Diagonal.HadamardProduct(x_temp).Add(L_Ux).Add(b, -1).Norm / norm_b;
 
-                if (temp_discrepancy < lastResidual)
+                if (tempResidual < lastResidual)
                 {
-                    lastResidual = temp_discrepancy;
+                    lastResidual = tempResidual;
                     break;
                 }
                 w -= 0.1;

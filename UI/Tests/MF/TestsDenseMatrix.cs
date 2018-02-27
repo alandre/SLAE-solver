@@ -9,18 +9,16 @@ namespace Tests
         [TestMethod]
         public void DenseMatrix_Foreach()
         {
-            var matrix = new double[3][];
-            matrix[0] = new[] { 1.0 };
-            matrix[1] = new[] { 1.0, 2.0 };
-            matrix[2] = new[] { 1, 2.0, 3 };
+            var di = new double[] { 1, 1, 1, 1 };
+            var al = new double[] { 1, 2, 3 };
+            var au = new double[] { 4, 5, 6 };
+            var ia = new int[] { 1, 1, 1, 2, 4 };
+            var ja = new int[] { 1, 1, 2 };
+            var matrix = new SolverCore.SparseRowColumnMatrix(di, al, au, ia, ja);
 
-            var symm = new SolverCore.SymmetricDenseMatrix(matrix);
-
-            var res = symm.Multiply(new SolverCore.Vector(new[] { 1.0, 1, 1 }));
-
-            foreach(var el in res)
+            foreach(var elem in matrix)
             {
-                Console.WriteLine(el);
+                Console.WriteLine($"({elem.row}, {elem.col}): {elem.value}");
             }
         }
     }

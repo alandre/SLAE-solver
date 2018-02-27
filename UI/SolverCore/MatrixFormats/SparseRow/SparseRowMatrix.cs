@@ -58,7 +58,7 @@ namespace SolverCore
             a = new double[size_a];
         }
 
-        //получение элемента по индексу(добавить try catch)
+        //получение элемента по индексу(добавить try catch
         public double this[int i, int j]
         {
             get
@@ -157,7 +157,7 @@ namespace SolverCore
     }
 
         //умножение на нижний треугольник
-        public IVector LMult(IVector vector, bool UseDiagonal, int diagonalElement = 1)
+        public IVector LMult(IVector vector, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {
@@ -168,7 +168,6 @@ namespace SolverCore
             {
                 throw new RankException();
             }
-
             var result = new Vector(Size);
             for (int i = 0; i < Size; i++)
             {
@@ -184,14 +183,14 @@ namespace SolverCore
                 j = ja[ia1];
                 if (j == i && ia1 < ia2)
                 {
-                    sum += UseDiagonal ?  a[ia1] * vector[j]: diagonalElement * vector[j];
+                    sum += UseDiagonal ?  a[ia1] * vector[j]: (double)diagonalElement * vector[j];
                 }
                 result[i] = sum;
             }
             return result;
         }
         //умножение на транспонированный нижний треугольник
-        public IVector LMultTranspose(IVector vector, bool UseDiagonal, int diagonalElement = 1)
+        public IVector LMultTranspose(IVector vector, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {
@@ -216,7 +215,7 @@ namespace SolverCore
                 j = ja[ia2];
                 if (j == i && ia1 <= ia2)
                 {
-                    result[j] += UseDiagonal? a[ia2] * vector[j]: diagonalElement * vector[j];
+                    result[j] += UseDiagonal? a[ia2] * vector[j]: (double)diagonalElement * vector[j];
                 }
             }
             return result;
@@ -228,7 +227,6 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(vector));
             }
-
             if (vector.Size != Size)
             {
                 throw new RankException();
@@ -346,7 +344,7 @@ namespace SolverCore
             return result;
         }
         //умножение на верхний треугольник
-        public IVector UMult(IVector vector, bool UseDiagonal, int diagonalElement = 1)
+        public IVector UMult(IVector vector, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {
@@ -372,14 +370,14 @@ namespace SolverCore
                 j = ja[ia2];
                 if (j == i && ia1 <= ia2)
                 {
-                    sum += UseDiagonal ? a[ia2] * vector[j] : diagonalElement*vector[j];
+                    sum += UseDiagonal ? a[ia2] * vector[j] : (double)diagonalElement*vector[j];
                 }
                 result[i] = sum;
             }
             return result;
         }
         //умножение на транспонированный верхний треугольник
-        public IVector UMultTranspose(IVector vector, bool UseDiagonal, int diagonalElement = 1)
+        public IVector UMultTranspose(IVector vector, bool UseDiagonal, , DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {
@@ -403,7 +401,7 @@ namespace SolverCore
                 }
                 j = ja[ia2];
                 if (j == i && ia1 <= ia2)
-                    result[i] += UseDiagonal ? a[ia2] * vector[i] : diagonalElement * vector[i];
+                    result[i] += UseDiagonal ? a[ia2] * vector[i] : (double)diagonalElement * vector[i];
             }
             return result;
         }

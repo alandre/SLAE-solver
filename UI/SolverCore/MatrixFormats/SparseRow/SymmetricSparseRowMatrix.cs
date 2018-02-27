@@ -160,13 +160,12 @@ namespace SolverCore
             }
         }
         //умножение на нижний треугольник
-        public IVector LMult(IVector vector, bool UseDiagonal, int diagonalElement = 1)
+        public IVector LMult(IVector vector, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {
                 throw new ArgumentNullException(nameof(vector));
             }
-
             if (vector.Size != Size)
             {
                 throw new RankException();
@@ -184,7 +183,7 @@ namespace SolverCore
                 }
                 if (i == ja[ia1])
                 {
-                    sum += UseDiagonal ? a[ia1] * vector[i]: diagonalElement * vector[i];
+                    sum += UseDiagonal ? a[ia1] * vector[i]: (double)diagonalElement * vector[i];
                 }
                 else
                 {
@@ -257,7 +256,7 @@ namespace SolverCore
             return result;
         }
         //умножение на верхний треугольник
-        public IVector UMult(IVector vector, bool UseDiagonal, int diagonalElement = 1)
+        public IVector UMult(IVector vector, bool UseDiagonal,  DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {
@@ -273,7 +272,7 @@ namespace SolverCore
             {
                 var ia1 = ia[i];
                 var ia2 = ia[i + 1] - 1;
-                result[i] += UseDiagonal ?  a[ia2] * vector[i] : diagonalElement * vector[i];
+                result[i] += UseDiagonal ?  a[ia2] * vector[i] : (double)diagonalElement * vector[i];
                 for (ia2--; ia1 <= ia2; ia2--)
                 {
                     var j = ja[ia2];

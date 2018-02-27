@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolverCore.Methods
 {
-    class GaussianSeidelMethod : IMethod
+    public class GaussianSeidelMethod : IMethod
     {
         IVector x, x0, b;
         ILinearOperator A;
@@ -17,10 +17,11 @@ namespace SolverCore.Methods
         IVector x_temp;
         IVector Ux;
 
-        GaussianSeidelMethod()
+        public GaussianSeidelMethod()
         {
             init = false;
         }
+
         public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc)

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolverCore
 {
-    class JacobiMethod : IMethod
+    public class JacobiMethod : IMethod
     {
         IVector x, x0, b;
         ILinearOperator A;
@@ -17,7 +17,8 @@ namespace SolverCore
         IVector x_temp;
         IVector inverseDioganal;
         IVector L_Ux;
-        JacobiMethod()
+
+        public JacobiMethod()
         {
             init = false;
         }

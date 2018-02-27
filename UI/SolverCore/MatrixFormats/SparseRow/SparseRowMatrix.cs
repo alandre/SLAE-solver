@@ -68,11 +68,11 @@ namespace SolverCore
                     double x = 0; // значение искомого элемента
                     var ia1 = ia[i];
                     var ia2 = ia[i + 1];
-                    for (; ia1 < ia2; ia1++)
+                    for (; ia1 < ia2 && ja[ia1]<=j ; ia1++)
                     {
                         if (ja[ia1] == j)
                         {
-                            x = a[ia1];
+                            return a[ia1];
                         }
                     }
                     return x;
@@ -377,7 +377,7 @@ namespace SolverCore
             return result;
         }
         //умножение на транспонированный верхний треугольник
-        public IVector UMultTranspose(IVector vector, bool UseDiagonal, , DiagonalElement diagonalElement = DiagonalElement.One)
+        public IVector UMultTranspose(IVector vector, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
             if (vector == null)
             {

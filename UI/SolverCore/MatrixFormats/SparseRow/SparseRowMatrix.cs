@@ -13,7 +13,6 @@ namespace SolverCore
         //ia1- первый элемент в строке
         //ia2 - последний элемент в строке или первый элемент следующий строки
 
-
         //конструктор
         public SparseRowMatrix(double[] a, int[] ja, int[] ia)
         {

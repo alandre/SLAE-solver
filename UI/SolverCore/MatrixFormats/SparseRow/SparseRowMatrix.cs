@@ -65,7 +65,6 @@ namespace SolverCore
             {
                 try
                 {
-                    double x = 0; // значение искомого элемента
                     var ia1 = ia[i];
                     var ia2 = ia[i + 1];
                     for (; ia1 < ia2 && ja[ia1]<=j ; ia1++)
@@ -75,7 +74,7 @@ namespace SolverCore
                             return a[ia1];
                         }
                     }
-                    return x;
+                    return 0.0;
                 }
                 catch (IndexOutOfRangeException)
                 {

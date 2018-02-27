@@ -119,18 +119,28 @@ namespace SolverCore
         {
             throw new NotImplementedException();
         }
-
+        //заполнение
         public void Fill(FillFunc elems)
         {
-            throw new NotImplementedException();
-            //int i = 0;
-            //ia[i] = 0;
-            //foreach (var item in this)
-            //{
-            //    a[i] = elems(item.row, item.col);
-            //    ja[i]=item.col;
-            //    i++;
-            //}
+            if (elems == null)
+            {
+                throw new ArgumentNullException(nameof(elems));
+            }
+            int i = 0, j = 0;
+            ia[i] = 0;
+            ia[i + 1] = 0;
+            foreach (var item in this)
+            {
+                ja[j] = item.col <= Size ? item.col : throw new ArgumentNullException("col>size, i=" + i.ToString() + " j=" + j.ToString(), nameof(elems));
+                a[j] = elems(item.row, item.col);
+                j++;
+                if (item.row != i)
+                {
+                    i++;
+                    ia[i] = item.row - i == 0 && i < Size ? ia[i - 1] : throw new ArgumentNullException("matrix[i,_]=0 || i>size, i=" + i.ToString() + " j=" + j.ToString(), nameof(elems));
+                }
+                ia[i + 1]++;
+            }
         }
 
         //значение и координаты
@@ -267,6 +277,7 @@ namespace SolverCore
                 var ia1 = ia[i];
                 var ia2 = ia[i + 1];
                 int j;
+                di[i] = UseDiagonal ? di[i] : 1.0;
                 for (; ja[ia1] < i && ia1 < ia2; ia1++)
                 {
                     j = ja[ia1];
@@ -274,7 +285,7 @@ namespace SolverCore
                 }
                 if (i == ja[ia1] && ia1 < ia2)
                 {
-                    result[i] = UseDiagonal ? result[i] / di[i] : result[i];
+                    result[i] = result[i] / di[i];
                 }
                 else
                 {
@@ -450,16 +461,17 @@ namespace SolverCore
             for (int i = 0; i < Size; i++)
             {
                 var ia1 = ia[i];
-                var ia2 = ia[i + 1]-1;
+                var ia2 = ia[i + 1] - 1;
                 int j;
+                di[i] = UseDiagonal ? di[i] : 1.0;
                 for (; ja[ia2] > i && ia1 < ia2; ia2--)
                 {
                     j = ja[ia2];
-                    result[j] -= UseDiagonal ? result[i] * a[ia2]/di[i] : result[i] * a[ia2];
+                    result[j] -= result[i] * a[ia2] / di[i];
                 }
                 if (i == ja[ia2] && ia1 <= ia2)
                 {
-                    result[i] = UseDiagonal ? result[i] / di[i] : result[i];
+                    result[i] = result[i] / di[i];
                 }
                 else
                 {

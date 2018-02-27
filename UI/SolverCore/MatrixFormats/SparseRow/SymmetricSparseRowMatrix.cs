@@ -124,9 +124,28 @@ namespace SolverCore
             throw new NotImplementedException();
         }
 
+        //заполнение
         public void Fill(FillFunc elems)
         {
-            throw new NotImplementedException();
+            if (elems == null)
+            {
+                throw new ArgumentNullException(nameof(elems));
+            }
+            int i = 0, j = 0;
+            ia[i] = 0;
+            ia[i + 1] = 0;
+            foreach (var item in this)
+            {
+                ja[j] = item.col <= i ? item.col : throw new ArgumentNullException("col>row, i=" + i.ToString() + " j=" + j.ToString(), nameof(elems));
+                a[j] = elems(item.row, item.col);
+                j++;
+                if (item.row != i)
+                {
+                    i++;
+                    ia[i] = item.row - i == 0 && i < Size ? ia[i - 1] : throw new ArgumentNullException("matrix[i,_]=0 || i>size, i=" + i.ToString() + " j=" + j.ToString(), nameof(elems));
+                }
+                ia[i + 1]++;
+            }
         }
         //коллекциятолько (элементы нижнего треугольника)
         public IEnumerator<(double value, int row, int col)> GetEnumerator()

@@ -73,11 +73,11 @@ namespace SolverCore
                     double x = 0; // значение искомого элемента
                     var ia1 = ia[i];
                     var ia2 = ia[i + 1];
-                    for (; ia1 < ia2; ia1++)
+                    for (; ia1 < ia2 && ja[a1]<=j; ia1++)
                     {
                         if (ja[ia1] == j)
                         {
-                            x = a[ia1];
+                            return a[ia1];
                         }
                     }
                     return x;

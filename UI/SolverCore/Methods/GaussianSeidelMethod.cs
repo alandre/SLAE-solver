@@ -21,6 +21,7 @@ namespace SolverCore.Methods
         {
             init = false;
         }
+
         public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc)

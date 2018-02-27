@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolverCore.Methods
 {
-    class LOS : IMethod
+    public class LOS : IMethod
     {
         IVector x, x0, b, p, z, r, Ar;
         ILinearOperator A;
@@ -14,7 +14,7 @@ namespace SolverCore.Methods
         int currentIter;
         bool init;
 
-        LOS()
+        public LOS()
         {
             init = false;
         }
@@ -29,20 +29,10 @@ namespace SolverCore.Methods
             {
                 x = x0;
             }
-
             this.x0 = x0;
             this.b = b;
             this.A = A;
             norm_b = b.Norm;
-            //???
-            try
-            {
-                coefficient = 1 / norm_b;
-            }
-            catch (DivideByZeroException)
-            {
-                return null;
-            }
             currentIter = 0;
             r = b.Add(A.Multiply(x0), -1);
             z = r.Clone();
@@ -61,26 +51,23 @@ namespace SolverCore.Methods
 
             currentIter++;
             iter = currentIter;
-            //???
             try
             {
                 coefficient = p.DotProduct(r) / dotproduct_pp;
+                x = x.Add(z, coefficient);
+                r = r.Add(p, -coefficient);
+                Ar = A.Multiply(r);
+                coefficient = -p.DotProduct(Ar) / dotproduct_pp;
+                z = r.Add(z, coefficient);
+                p = Ar.Add(p, coefficient);      
+                dotproduct_pp = p.DotProduct(p);
+                residual = r.Norm/norm_b;
             }
             catch (DivideByZeroException)
             {
                 residual = -1;
                 return;
             }
-            x = x.Add(z, coefficient);
-            r = r.Add(p, -coefficient);
-            Ar = A.Multiply(r);
-            coefficient = -p.DotProduct(Ar) / dotproduct_pp;
-            z = r.Add(z, coefficient);
-            p = Ar.Add(p, coefficient);      
-            dotproduct_pp = p.DotProduct(p);
-
-            residual = r.Norm/norm_b;
-            
         }
     }
 }

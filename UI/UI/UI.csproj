@@ -62,10 +62,6 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MatrixFormats\CoordinateMatrix.cs" />
-    <Compile Include="MatrixFormats\DenseMatrix.cs" />
-    <Compile Include="MatrixFormats\SparseMatrixWithOutDiag.cs" />
-    <Compile Include="MatrixFormats\SparseNatrixWithDiag.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ConstructorForm.resx">

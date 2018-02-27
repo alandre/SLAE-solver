@@ -8,7 +8,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
-using UI.MatrixFormats;
 
 namespace UI
 {
@@ -51,35 +50,9 @@ namespace UI
                     string dataInput = sr.ReadToEnd();
                     sr.Close();
 
-                    //Очевидно напрашивается какой-то паттерн, фабрика, может быть
-                    switch (formatBox.SelectedIndex)
-                    {
-                        case 0:
-                            {
-                                var matrix = new DenseMatrix();
-                                Input.dense = MatrixInitialazer.Input(dataInput, matrix, sim.Checked);
-                            }
-                            break;
-                        case 1:
-                            {
-                                var matrix = new SparseMatrixWithoutDiag();
-                                Input.SparseMatrixWithoutDiag = MatrixInitialazer.Input(dataInput, matrix, sim.Checked);
-                            }
-                            break;
-                        case 2:
-                            {
-                                var matrix = new SparseNatrixWithDiag();
-                                Input.sparseWithDiag = MatrixInitialazer.Input(dataInput, matrix, sim.Checked);
-                            }
-                            break;
-                        case 3:
-                            {
-                                var matrix = new CoordinateMatrix();
-                                Input.coordinate = MatrixInitialazer.Input(dataInput, matrix, sim.Checked);
-                            }
-                            break;
-
-                    }
+                    Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
+                    epsBox.Enabled = true;
+                    timeBox.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -108,14 +81,27 @@ namespace UI
 
         private void sim_Click(object sender, EventArgs e)
         {
-            fileInput.Enabled = true;
-            ManualEntry.Enabled = true;
         }
 
         private void Notsim_Click(object sender, EventArgs e)
         {
-            fileInput.Enabled = true;
-            ManualEntry.Enabled = true;
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void epsBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+        }
+
+        private void epsBox_TextChanged(object sender, EventArgs e)
+        {
         }
     }
 }

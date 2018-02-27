@@ -9,7 +9,7 @@ namespace SolverCore.Solvers
     /// <summary>
     /// Решатель сохраняющий результат в объект логгер
     /// </summary>
-    class LoggingSolver : ISolver
+    public class LoggingSolver : ISolver
     {
         IMethod Method;
         ILogger Logger;
@@ -18,7 +18,7 @@ namespace SolverCore.Solvers
         /// </summary>
         /// <param name="Method">Конкретный метод решения</param>
         /// <param name="Logger">Логгер процесса решения</param>
-        LoggingSolver(IMethod Method, ILogger Logger)
+        public LoggingSolver(IMethod Method, ILogger Logger)
         {
             this.Method = Method;
             this.Logger = Logger;

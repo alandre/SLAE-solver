@@ -72,7 +72,7 @@ namespace SolverCore
                     }
                     var ia1 = ia[i];
                     var ia2 = ia[i + 1];
-                    for (; ia1 < ia2 && ja[a1]<=j; ia1++)
+                    for (; ia1 < ia2 && ja[ia1] <= j; ia1++)
                     {
                         if (ja[ia1] == j)
                         {

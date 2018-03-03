@@ -57,8 +57,8 @@ namespace MF_DenseMatrixTests
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
             DenseMatrix denseMatrix = new DenseMatrix(_matrix);
 
-            Assert.Throws<ArgumentNullException>(() => denseMatrix.LMult(null,false,1));
-            Assert.Throws<RankException>(() => denseMatrix.LMult(exampleVector, false, 1));
+            Assert.Throws<ArgumentNullException>(() => denseMatrix.LMult(null,false, DiagonalElement.One));
+            Assert.Throws<RankException>(() => denseMatrix.LMult(exampleVector, false, DiagonalElement.One));
         }
      
         [Fact]
@@ -89,8 +89,8 @@ namespace MF_DenseMatrixTests
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
             DenseMatrix denseMatrix = new DenseMatrix(_matrix);
 
-            Assert.Throws<ArgumentNullException>(() => denseMatrix.UMult(null, false, 1));
-            Assert.Throws<RankException>(() => denseMatrix.UMult(exampleVector, false, 1));
+            Assert.Throws<ArgumentNullException>(() => denseMatrix.UMult(null, false, DiagonalElement.One));
+            Assert.Throws<RankException>(() => denseMatrix.UMult(exampleVector, false, DiagonalElement.One));
         }
 
         [Fact]

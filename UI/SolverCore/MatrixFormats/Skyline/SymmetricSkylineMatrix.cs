@@ -30,30 +30,39 @@ namespace SolverCore
 
             var size = di.Length;
             this.di = new double[size];
-            di.CopyTo(this.di, 0);
+            this.di = (double[])di.Clone();
 
             var size1 = ia.Length;
             if (size1 != size + 1)
             {
-                throw new ArgumentNullException("the massive ia is not properly filled", nameof(ia));
+                throw new ArgumentNullException("Array ia is not properly filled");
             }
             this.ia = new int[size1];
-            ia.CopyTo(this.ia, 0);
+            if (ia[0] == 1) //если массив начинается с 1, то уменьшаем значения всех элементов на 1
+            {
+                for (int i = 0; i < size1; i++) ia[i]--;
+            }  
+            this.ia = (int[])ia.Clone();
 
             var size2 = al.Length;
             if(this.ia[size1 - 1] != size2)
             {
-                throw new ArgumentNullException("the massive ia or al is not properly filled", nameof(al));
+                throw new ArgumentNullException("Array ia or al is not properly filled");
             }
             this.al = new double[size2];
-            al.CopyTo(this.al, 0);    
+            this.al = (double[])al.Clone();
         }
 
-        public SymmetricSkylineMatrix(int size, int size2)
+        /// <summary>
+        /// конструктор
+        /// </summary>
+        /// <param name="dimension"> размерность матрицы</param>
+        /// <param name="elementCount">количество элементов в профиле одного треугольника без диагонали</param>
+        public SymmetricSkylineMatrix(int dimension, int elementCount)
         {
-            di = new double[size];
-            ia = new int[size + 1];
-            al = new double[size2];
+            di = new double[dimension];
+            ia = new int[dimension + 1];
+            al = new double[elementCount];
         }
 
         //Получение значения по индексу
@@ -86,21 +95,7 @@ namespace SolverCore
 
         public int Size => di.Length;
 
-        //диагональ
-        public IVector Diagonal
-        {
-            get
-            {
-                var diagonal = new Vector(Size);
-
-                for(int i = 0; i < Size; i++)
-                {
-                    diagonal[i] = di[i];
-                }
-
-                return diagonal;
-            }
-        }
+        public IVector Diagonal => new Vector(di);
         
         public ILinearOperator Transpose => this;
 

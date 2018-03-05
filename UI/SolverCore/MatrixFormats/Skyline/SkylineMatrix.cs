@@ -12,9 +12,9 @@ namespace SolverCore
         private double[] di; // диагональ
         private double[] al; // массив элементов профиля нижнего треугольника
         private double[] au; // массив элементов профиля верхнего треугольника
-        private int[] ia; // целочисленный массив с указателями начала строк профиля [0,0,...]
+        private int[] ia; // целочисленный массив с указателями начала строк профиля 
 
-        //конструктор
+        /// конструктор
         public SkylineMatrix(double[] di, int[] ia, double[] al, double[] au)
         {
             if (di == null)
@@ -39,31 +39,35 @@ namespace SolverCore
 
             var size = di.Length;
             this.di = new double[size];
-            di.CopyTo(this.di, 0);
+            this.di = (double[])di.Clone();
 
             var size1 = ia.Length;
             if (size1 != size + 1)
             {
-                throw new ArgumentNullException("the massive ia is not properly filled", nameof(ia));
+                throw new ArgumentNullException("Array ia is not properly filled");
             }
             this.ia = new int[size1];
-            ia.CopyTo(this.ia, 0);
+            if (ia[0] == 1) //если массив начинается с 1, то уменьшаем значения всех элементов на 1
+            {
+                for (int i = 0; i < size1; i++) ia[i]--;
+            }  
+            this.ia = (int[])ia.Clone();
             
             var size2 = al.Length;
             var size3 = au.Length;
             if(this.ia[size1 - 1] != size2)
             {
-                throw new ArgumentNullException("the massive ia or al is not properly filled", nameof(al));
+                throw new ArgumentNullException("Arrays ia or al is not properly filled");
             }
             if (this.ia[size1 - 1] != size2 || this.ia[size1 - 1] != size3)
             {
-                throw new ArgumentNullException("the massive ia or al or au is not properly filled", nameof(al));
+                throw new ArgumentNullException("Arrays ia or al or au is not properly filled");
             }
             this.al = new double[size2];
-            al.CopyTo(this.al, 0);  
+            this.al = (double[])al.Clone();
             
             this.au = new double[size2];
-            au.CopyTo(this.au, 0); 
+            this.au = (double[])au.Clone();
         }
 
         public double this[int i, int j]
@@ -96,31 +100,22 @@ namespace SolverCore
             }
         }
 
-        public SkylineMatrix(int size, int size2)
+        /// <summary>
+        /// конструктор
+        /// </summary>
+        /// <param name="dimension"> размерность матрицы</param>
+        /// <param name="elementCount">количество элементов в профиле одного треугольника без диагонали</param>
+        public SkylineMatrix(int dimension, int elementCount)
         {
-            di = new double[size];
-            ia = new int[size + 1];
-            al = new double[size2];
-            au = new double[size2];
+            di = new double[dimension];
+            ia = new int[dimension + 1];
+            al = new double[elementCount];
+            au = new double[elementCount];
         }
 
         public int Size => di.Length;
 
-        //диагональ
-        public IVector Diagonal
-        {
-            get
-            {
-                var diagonal = new Vector(Size);
-
-                for(int i = 0; i < Size; i++)
-                {
-                    diagonal[i] = di[i];
-                }
-
-                return diagonal;
-            }
-        }
+        public IVector Diagonal => new Vector(di);
 
         public ILinearOperator Transpose => new TransposeMatrix<SkylineMatrix> { Matrix = this };
 
@@ -163,7 +158,6 @@ namespace SolverCore
                     ju++;
                 }
                 else
-                if (elem.col < elem.row)
                 {
                     al[jl] = elems(elem.row, elem.col);
                     jl++;

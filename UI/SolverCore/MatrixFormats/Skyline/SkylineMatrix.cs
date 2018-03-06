@@ -38,7 +38,6 @@ namespace SolverCore
             }
 
             var size = di.Length;
-            this.di = new double[size];
             this.di = (double[])di.Clone();
 
             var size1 = ia.Length;
@@ -46,12 +45,11 @@ namespace SolverCore
             {
                 throw new ArgumentNullException("Array ia is not properly filled");
             }
-            this.ia = new int[size1];
-            if (ia[0] == 1) //если массив начинается с 1, то уменьшаем значения всех элементов на 1
-            {
-                for (int i = 0; i < size1; i++) ia[i]--;
-            }  
             this.ia = (int[])ia.Clone();
+            if (this.ia[0] == 1) //если массив начинается с 1, то уменьшаем значения всех элементов на 1
+            {
+                for (int i = 0; i < size1; i++) this.ia[i]--;
+            }  
             
             var size2 = al.Length;
             var size3 = au.Length;
@@ -63,10 +61,8 @@ namespace SolverCore
             {
                 throw new ArgumentNullException("Arrays ia or al or au is not properly filled");
             }
-            this.al = new double[size2];
             this.al = (double[])al.Clone();
-            
-            this.au = new double[size2];
+         
             this.au = (double[])au.Clone();
         }
 

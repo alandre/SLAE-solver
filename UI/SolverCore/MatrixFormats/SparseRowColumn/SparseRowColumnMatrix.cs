@@ -63,6 +63,11 @@ namespace SolverCore
                     this.ja[j]--;
                 }
             }
+
+            for (int i = 0; i < Size; i++)
+            {
+                Array.Sort(ja, ia[i], ia[i + 1] - ia[i]);
+            }
         }
 
         public double this[int i, int j]
@@ -75,9 +80,9 @@ namespace SolverCore
 
                 (int start, int end, int minIJ) = i > j ? (ia[i], ia[i + 1], j) : (ia[j], ia[j + 1], i);
                 var rowElementsCount = end - start;
-                var number = Array.IndexOf(ja, minIJ, start, rowElementsCount);
+                var number = Array.BinarySearch(ja, minIJ, start, rowElementsCount);
 
-                return number > 0 ? (i > j ? al[number] : au[number]) : 0;
+                return number >= 0 ? (i > j ? al[number] : au[number]) : 0;
             }
         }
 
@@ -135,18 +140,16 @@ namespace SolverCore
 
             var result = new Vector(Size);
 
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
-                result[i] += di[i] * vector[i];
-                var rowElementsCount = ia[i + 1] - ia[i];
+                result[i] = di[i] * vector[i];
 
-                for (int j = 0; j < rowElementsCount; j++)
+                for (int j = ia[i]; j < ia[i + 1]; j++)
                 {
-                    var index = ia[i] + j;
-                    var column = ja[index];
+                    var column = ja[j];
 
-                    result[i] += al[index] * vector[column];
-                    result[column] += au[index] * vector[i];
+                    result[i] += al[j] * vector[column];
+                    result[column] += au[j] * vector[i];
                 }
             }
 
@@ -169,16 +172,13 @@ namespace SolverCore
 
             for (int i = 0; i < Size; i++)
             {
-                result[i] += di[i] * vector[i];
-                var rowElementsCount = ia[i + 1] - ia[i];
+                result[i] = di[i] * vector[i];
 
-                for (int j = 0; j < rowElementsCount; j++)
+                for (int j = ia[i]; j < ia[i + 1]; j++)
                 {
-                    var index = ia[i] + j;
-                    var column = ja[index];
-
-                    result[i] += au[index] * vector[column];
-                    result[column] += al[index] * vector[i];
+                    var column = ja[j];
+                    result[i] += au[j] * vector[column];
+                    result[column] += al[j] * vector[i];
                 }
             }
 
@@ -201,15 +201,12 @@ namespace SolverCore
 
             for (int i = 0; i < Size; i++)
             {
-                result[i] += isUseDiagonal ? di[i] * vector[i] : (int)diagonalElement * vector[i];
-                var rowElementsCount = ia[i + 1] - ia[i];
+                result[i] = isUseDiagonal ? di[i] * vector[i] : (int)diagonalElement * vector[i];
 
-                for (int j = 0; j < rowElementsCount; j++)
+                for (int j = ia[i]; j < ia[i + 1]; j++)
                 {
-                    var index = ia[i] + j;
-                    var column = ja[index];
-
-                    result[i] += al[index] * vector[column];
+                    var column = ja[j];
+                    result[i] += al[j] * vector[column];
                 }
             }
 
@@ -232,15 +229,12 @@ namespace SolverCore
 
             for (int i = 0; i < Size; i++)
             {
-                result[i] += isUseDiagonal ? di[i] * vector[i] : (int)diagonalElement * vector[i];
-                var rowElementsCount = ia[i + 1] - ia[i];
+                result[i] = isUseDiagonal ? di[i] * vector[i] : (int)diagonalElement * vector[i];
 
-                for (int j = 0; j < rowElementsCount; j++)
+                for (int j = ia[i]; j < ia[i + 1]; j++)
                 {
-                    var index = ia[i] + j;
-                    var column = ja[index];
-
-                    result[column] += au[index] * vector[i];
+                    var column = ja[j];
+                    result[column] += au[j] * vector[i];
                 }
             }
 
@@ -249,32 +243,176 @@ namespace SolverCore
 
         public IVector LMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
-            throw new NotImplementedException();
-        }
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
 
-        public IVector LSolve(IVector vector, bool isUseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
 
-        public IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
-        {
-            throw new NotImplementedException();
+            var result = new Vector(Size);
+
+            for (int i = 0; i < Size; i++)
+            {
+                result[i] = isUseDiagonal ? di[i] * vector[i] : (int)diagonalElement * vector[i];
+
+                for (int j = ia[i]; j < ia[i + 1]; j++)
+                {
+                    var column = ja[j];
+                    result[column] += al[j] * vector[i];
+                }
+            }
+
+            return result;
         }
 
         public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
-            throw new NotImplementedException();
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for (int i = 0; i < Size; i++)
+            {
+                result[i] = isUseDiagonal ? di[i] * vector[i] : (int)diagonalElement * vector[i];
+
+                for (int j = ia[i]; j < ia[i + 1]; j++)
+                {
+                    var column = ja[j];
+                    result[i] += au[j] * vector[column];
+                }
+            }
+
+            return result;
+        }
+
+        public IVector LSolve(IVector vector, bool isUseDiagonal)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for (int i = 0; i < Size; i++)
+            {
+                var sum = 0.0;
+
+                for (int j = ia[i]; j < ia[i + 1]; j++)
+                {
+                    var column = ja[j];
+                    sum += al[j] * result[column];
+                }
+
+                result[i] = vector[i] - sum;
+                result[i] /= isUseDiagonal ? di[i] : 1;
+            }
+
+            return result;
         }
 
         public IVector USolve(IVector vector, bool isUseDiagonal)
         {
-            throw new NotImplementedException();
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = vector.Clone();
+
+            for(int i = Size - 1; i >= 0; i--)
+            {
+                var diagonalElement = result[i] /= di[i];
+
+                for(int j = ia[i]; j < ia[i + 1]; j++)
+                {
+                    var column = ja[j];
+                    result[column] -= au[j] * diagonalElement;
+                }
+            }
+
+            return result;
+        }
+
+        public IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = vector.Clone();
+
+            for (int i = Size - 1; i >= 0; i--)
+            {
+                var diagonalElement = result[i] /= di[i];
+
+                for (int j = ia[i]; j < ia[i + 1]; j++)
+                {
+                    var column = ja[j];
+                    result[column] -= al[j] * diagonalElement;
+                }
+            }
+
+            return result;
         }
 
         public IVector USolveTranspose(IVector vector, bool isUseDiagonal)
         {
-            throw new NotImplementedException();
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(Size);
+
+            for (int i = 0; i < Size; i++)
+            {
+                var sum = 0.0;
+
+                for (int j = ia[i]; j < ia[i + 1]; j++)
+                {
+                    var column = ja[j];
+                    sum += au[j] * result[column];
+                }
+
+                result[i] = vector[i] - sum;
+                result[i] /= isUseDiagonal ? di[i] : 1;
+            }
+
+            return result;
         }
 
         public CoordinationalMatrix ConvertToCoordinationalMatrix()

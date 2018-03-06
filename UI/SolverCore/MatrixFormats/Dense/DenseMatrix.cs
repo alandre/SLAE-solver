@@ -44,6 +44,11 @@ namespace SolverCore
 
         public DenseMatrix(int size)
         {
+            if(size < 0)
+            {
+                throw new ArgumentException($"{nameof(size)} must be nonnegative");
+            }
+
             matrix = new double[size, size];
         }
 

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SolverCore.Methods
 {
@@ -50,23 +46,22 @@ namespace SolverCore.Methods
             }
             currentIter++;
             iter = currentIter;
-            try
-            {
-                Az = A.Multiply(z);
-                coefficient = dotproduct_rr / Az.DotProduct(z);  
-                x = x.Add(z, coefficient);
-                r = r.Add(Az, -coefficient);
-                coefficient = dotproduct_rr;
-                dotproduct_rr = r.DotProduct(r);
-                coefficient = dotproduct_rr / coefficient;
-                z = r.Add(z, coefficient);
-                residual = Math.Sqrt(dotproduct_rr) / norm_b; 
-            }
-            catch (DivideByZeroException)
+
+            Az = A.Multiply(z);
+            coefficient = dotproduct_rr / Az.DotProduct(z);  
+            x = x.Add(z, coefficient);
+            r = r.Add(Az, -coefficient);
+            coefficient = dotproduct_rr;
+            dotproduct_rr = r.DotProduct(r);
+            coefficient = dotproduct_rr / coefficient;
+            z = r.Add(z, coefficient);
+
+            if (Double.IsInfinity(coefficient) || Double.IsNaN(coefficient))
             {
                 residual = -1;
                 return;
-            } 
+            }
+            residual = Math.Sqrt(dotproduct_rr) / norm_b; 
         }
     }
 }

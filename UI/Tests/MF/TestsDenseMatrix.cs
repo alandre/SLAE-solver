@@ -31,13 +31,8 @@ namespace MF.DenseMatrixTests
         [Fact]
         public void DenseMatrix_Foreach()
         {
-            //var matrix = new double[3][];
-            //matrix[0] = new[] { 1.0 };
-            //matrix[1] = new[] { 1.0, 2.0 };
-            //matrix[2] = new[] { 1, 2.0, 3 };
             _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
             var denseMatrix = new DenseMatrix(_matrix);
-
 
             var res = denseMatrix.Multiply(new Vector(new double[] { 1, 1, 1 }));
             Vector resVector = new Vector(new double[] { 9, 11, 16 });
@@ -166,7 +161,6 @@ namespace MF.DenseMatrixTests
             for (int i = 0; i < result.Size; i++)
                 Assert.Equal(result[i], resultActual[i], 8);
         }
-
 
         [Fact]
         public void DenseMatrix_TestMultyplyExceptions()

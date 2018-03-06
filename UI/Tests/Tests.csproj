@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Methods\TestJacobiMethod.cs" />
     <Compile Include="Methods\TestsGaussianSeidelMethod.cs" />
+    <Compile Include="MF\SparseRow\TestSymmetricSparseRowMatrix.cs" />
     <Compile Include="MF\SparseRow\TestSparseRowMatrix.cs" />
     <Compile Include="MF\TestsDenseMatrix.cs" />
     <Compile Include="MF\TestsVector.cs" />

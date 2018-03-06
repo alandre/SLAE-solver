@@ -9,9 +9,10 @@ namespace MF.VectorTests
 {
     public class TestsVector
     {
+
         [Fact]
         public void Vector_TestConstructor()
-        { // TODO интерфейсу?
+        { 
             var array = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector = new Vector(array);
 
@@ -162,7 +163,6 @@ namespace MF.VectorTests
         }
 
         #endregion
-
 
         #region DotProduct and Norm Test
 

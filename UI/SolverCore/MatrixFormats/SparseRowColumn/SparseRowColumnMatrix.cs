@@ -66,7 +66,44 @@ namespace SolverCore
 
             for (int i = 0; i < Size; i++)
             {
-                Array.Sort(ja, ia[i], ia[i + 1] - ia[i]);
+                Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
+            }
+        }
+
+        public SparseRowColumnMatrix(
+            int[] ia,
+            int[] ja)
+        {
+            if (ia == null) throw new ArgumentNullException(nameof(ia));
+            if (ja == null) throw new ArgumentNullException(nameof(ja));
+
+            if (ja.Length != ia[ia.Length - 1] - ia[0])
+            {
+                throw new RankException();
+            }
+
+            this.ia = (int[])ia.Clone();
+            this.ja = (int[])ja.Clone();
+            this.di = new double[ia.Length - 1];
+            this.al = new double[ja.Length];
+            this.au = new double[ja.Length];
+
+            if (this.ia[0] == 1)
+            {
+                for (int i = 0; i < this.ia.Length; i++)
+                {
+                    this.ia[i]--;
+                }
+
+                for (int j = 0; j < this.ja.Length; j++)
+                {
+                    this.ja[j]--;
+                }
+            }
+
+            for (int i = 0; i < Size; i++)
+            {
+                Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
             }
         }
 
@@ -92,14 +129,10 @@ namespace SolverCore
             {
                 yield return (di[i], i, i);
 
-                var rowColumnElements = ia[i + 1] - ia[i];
-
-                for (int j = 0; j < rowColumnElements; j++)
+                for (int j = ia[i]; j < ia[i + 1]; j++)
                 {
-                    var index = ia[i] + j;
-
-                    yield return (al[index], i, ja[index]);
-                    yield return (au[index], ja[index], i);
+                    yield return (al[j], i, ja[j]);
+                    yield return (au[j], ja[j], i);
                 }
             }
         }
@@ -114,14 +147,11 @@ namespace SolverCore
             for (int i = 0; i < Size; i++)
             {
                 di[i] = elems(i, i);
-                var rowColumnElements = ia[i + 1] - ia[i];
 
-                for (int j = 0; j < rowColumnElements; j++)
+                for (int j = ia[i]; j < ia[i + 1]; j++)
                 {
-                    var index = ia[i] + j;
-
-                    al[index] = elems(i, ja[index]);
-                    au[index] = elems(ja[index], i);
+                    al[j] = elems(i, ja[j]);
+                    au[j] = elems(ja[j], i);
                 }
             }
         }

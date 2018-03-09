@@ -8,7 +8,7 @@ namespace SolverCore.Methods
 {
     public class JacobiMethod : IMethod
     {
-        IVector x, x0, b;
+        IVector x0, b;
         ILinearOperator A;
         double norm_b;
         double lastResidual;
@@ -18,12 +18,13 @@ namespace SolverCore.Methods
         IVector inverseDioganal;
         IVector L_Ux;
 
+        public IVector x { get; private set; }
         public JacobiMethod()
         {
             init = false;
         }
 
-        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
+        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc)
             {
@@ -46,7 +47,7 @@ namespace SolverCore.Methods
             }
             catch (DivideByZeroException e)
             {
-                return null;
+                return false;
             }
             init = true;
             x_temp = new Vector(x.Size);
@@ -56,7 +57,7 @@ namespace SolverCore.Methods
                 inverseDioganal[i] = 1.0 / inverseDioganal[i];
             }
             L_Ux = A.LMult(x0, false, 0).Add(A.UMult(x0, false, 0));
-            return x;
+            return true;
         }
 
         public void MakeStep(out int iter, out double residual)

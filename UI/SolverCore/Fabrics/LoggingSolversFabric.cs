@@ -25,6 +25,14 @@ namespace SolverCore
 
         }
 
+        /// <summary>
+        /// Создаёт решатель для метода с указанным логером
+        /// </summary>
+        /// <param name="type">Метод</param>
+        /// <param name="Logger">Логер</param>
+        /// <param name="Factorizer">Разложение</param>
+        /// <param name="KrylovSubspaceDimension">Размерность подпространства Крылова</param>
+        /// <returns></returns>
         public ISolver Spawn(MethodsEnum type, ILogger Logger, IFactorization Factorizer = null, int KrylovSubspaceDimension = 4)
         {
             IMethod method = null;
@@ -43,6 +51,14 @@ namespace SolverCore
             return new LoggingSolver(method, Logger);
         }
 
+        /// <summary>
+        /// Создаёт решатель для метода с указанным логером
+        /// </summary>
+        /// <param name="type">Метод</param>
+        /// <param name="Logger">Логер</param>
+        /// <param name="Factorizer">Разложение</param>
+        /// <param name="KrylovSubspaceDimension">Размерность подпространства Крылова</param>
+        /// <returns></returns>
         public ISolver Spawn(String type, ILogger Logger, IFactorization Factorizer = null, int KrylovSubspaceDimension = 4)
         {
             try

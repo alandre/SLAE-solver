@@ -44,6 +44,7 @@ namespace UI
             try
             {
                 OpenFileDialog file = new OpenFileDialog();
+                file.Filter = "Text file|*.txt";
                 if (file.ShowDialog() == DialogResult.OK)
                 {
                     StreamReader sr = new StreamReader(file.FileName);
@@ -57,8 +58,7 @@ namespace UI
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-                throw;
+                MessageBox.Show(ex.Message, "Ошбика", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
         }

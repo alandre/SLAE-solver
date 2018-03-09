@@ -72,14 +72,10 @@ namespace SolverCore
                     }
                     var ia1 = ia[i];
                     var ia2 = ia[i + 1];
-                    for (; ia1 < ia2 && ja[ia1] <= j; ia1++)
-                    {
-                        if (ja[ia1] == j)
-                        {
-                            return a[ia1];
-                        }
-                    }
-                    return 0.0;
+                    var m = Array.IndexOf(ja, j, ia1, ia2 - ia1);
+
+                    return m == -1 ? 0.0 : a[m];
+
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -175,7 +171,7 @@ namespace SolverCore
                 double sum = 0;
                 var ia1 = ia[i];
                 var ia2 = ia[i + 1];
-                for (; i < ja[ia1] && ia1 < ia2; ia1++)
+                for (; i > ja[ia1] && ia1 < ia2; ia1++)
                 {
                     var j = ja[ia1];
                     sum += a[ia1] * vector[j];
@@ -245,12 +241,15 @@ namespace SolverCore
             {
                 var ia1 = ia[i];
                 var ia2 = ia[i + 1];
-                for (; ia1 < ia2; ia1++)
+                int j;
+                for (; ia1 < ia2 - 1; ia1++)
                 {
-                    var j = ja[ia1];
-                    for (int k = j; k <= i; k++)
-                        result[k] += a[ia1] * vector[k];
+                    j = ja[ia1];
+                    result[j] += a[ia1] * vector[i];
+                    result[i] += a[ia1] * vector[j];
                 }
+                j = ja[ia1];
+                result[i] += a[ia1] * vector[j];
             }
             return result;
         }
@@ -299,14 +298,15 @@ namespace SolverCore
                 var ia1 = ia[i];
                 var ia2 = ia[i + 1];
                 int j;
+                di[i] = UseDiagonal ? di[i] : 1.0;
                 for (; ja[ia1] < i && ia1 < ia2; ia1++)
                 {
                     j = ja[ia1];
-                    result[j] -= UseDiagonal ? result[i] * a[ia1] / di[i] : result[i] * a[ia1];//??????
+                    result[j] -= result[i] * a[ia1] / di[i] ;//??????
                 }
                 if (i == ja[ia1] && ia1 < ia2)
                 {
-                    result[i] = UseDiagonal ? result[i] / di[i] : result[i];
+                    result[i] =  result[i] / di[i];
                 }
                 else
                 {

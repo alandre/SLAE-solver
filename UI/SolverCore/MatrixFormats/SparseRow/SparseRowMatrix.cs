@@ -67,14 +67,10 @@ namespace SolverCore
                 {
                     var ia1 = ia[i];
                     var ia2 = ia[i + 1];
-                    for (; ia1 < ia2 && ja[ia1]<=j ; ia1++)
-                    {
-                        if (ja[ia1] == j)
-                        {
-                            return a[ia1];
-                        }
-                    }
-                    return 0.0;
+                    var m = Array.IndexOf(ja, j, ia1, ia2 - ia1);
+
+                    return m == -1 ? 0.0 : a[m];
+
                 }
                 catch (IndexOutOfRangeException)
                 {

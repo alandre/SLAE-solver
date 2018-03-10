@@ -100,10 +100,11 @@ namespace MF.SparseRow
         public void SparseRowMatrix_TestUMultTranspose()
         {
             var resultTrueDiag = sparseRowMatrix.UMultTranspose(vector, true);
-            Vector resultActualTrueDiag = new Vector(new double[] { 4, 8, 3, 4 });
+            Vector resultActualTrueDiag = new Vector(new double[] { 2, 2, 19, 11 });
 
             var resultFalseDiag = sparseRowMatrix.UMultTranspose(vector, false);
-            Vector resultActualFalseDiag = new Vector(new double[] { 4, 7, 1, 1 });
+            Vector resultActualFalseDiag = new Vector(new double[] { 2, 1, 17, 8 });
+
 
             for (int i = 0; i < resultTrueDiag.Size; i++)
             {
@@ -116,10 +117,10 @@ namespace MF.SparseRow
         public void SparseRowMatrix_TestLMultTranspose()
         {
             var resultTrueDiag = sparseRowMatrix.LMultTranspose(vector, true);
-            Vector resultActualTrueDiag = new Vector(new double[] { 2, 2, 19, 11 });
+            Vector resultActualTrueDiag = new Vector(new double[] { 4, 8, 3, 4 });
 
             var resultFalseDiag = sparseRowMatrix.LMultTranspose(vector, false);
-            Vector resultActualFalseDiag = new Vector(new double[] { 2, 1, 17, 8 });
+            Vector resultActualFalseDiag = new Vector(new double[] { 4, 7, 1, 1 });
 
             for (int i = 0; i < resultTrueDiag.Size; i++)
             {

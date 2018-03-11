@@ -8,76 +8,51 @@ using SolverCore;
 
 namespace UI
 {
-    public enum FormatsEnum { Coordinational, Dense, Skyline, SparseRow, SparseRowColumn }
+    public enum Formats { Coordinational = 0, Dense = 1, Skyline = 2, SparseRow = 3, SparseRowColumn = 4}
+
     class FormatFactory
     {
-        public static IMatrix Init(int type, MatrixInitialazer tmp, bool symmetry)
+        public static IMatrix Init(Formats type, MatrixInitialazer initialazer, bool symmetry)
         {
             try
             {
                 if (symmetry)
                     switch (type)
                     {
-                        case 0:
+                        case Formats.Coordinational:
                             {
                                 // SymmetricCoordinationalMatrix matrix = new SymmetricCoordinationalMatrix();
                             }
                             break;
-                        case 1:
-                            {
-                                SymmetricDenseMatrix matrix = new SymmetricDenseMatrix(tmp.denseL);
-                            }
-                            break;
-                        case 2:
-                            {
-                                SymmetricSkylineMatrix matrix = new SymmetricSkylineMatrix(tmp.di, tmp.ig, tmp.gg);
-                            }
-                            break;
-                        case 3:
-                            {
-                                SymmetricSparseRowMatrix matrix = new SymmetricSparseRowMatrix(tmp.gg, tmp.jg, tmp.ig);
-                            }
-                            break;
-                        case 4:
-                            {
-                                SymmetricSparseRowColumnMatrix matrix = new SymmetricSparseRowColumnMatrix(tmp.di, tmp.gg, tmp.ig, tmp.ig);
-                            }
-                            break;
+                        case Formats.Dense:
+                                return new SymmetricDenseMatrix(initialazer.denseL);
+                        case Formats.Skyline:
+                                return new SymmetricSkylineMatrix(initialazer.di, initialazer.ig, initialazer.gg);
+                        case Formats.SparseRow:
+                                return new SymmetricSparseRowMatrix(initialazer.gg, initialazer.jg, initialazer.ig);
+                        case Formats.SparseRowColumn:
+                                return new SymmetricSparseRowColumnMatrix(initialazer.di, initialazer.gg, initialazer.ig, initialazer.ig);
                         default:
                             break;
                     }
-                switch (type)
+                else
+                    switch (type)
                 {
-                    case 0:
+                    case Formats.Coordinational:
                         {
-                            var list = tmp.column.Select((c, i) => (c, tmp.row[i], tmp.gg[i])).ToList();
-                            CoordinationalMatrix matrix = new CoordinationalMatrix(list, tmp.size);
+                            var list = initialazer.column.Select((c, i) => (c, initialazer.row[i], initialazer.gg[i])).ToList();
+                            return new CoordinationalMatrix(list, initialazer.size);
                         }
-                        break;
-                    case 1:
-                        {
-                            DenseMatrix matrix = new DenseMatrix(tmp.dense);
-                            IMatrix m = matrix;
-                        }
-                        break;
-                    case 2:
-                        {
-                            SkylineMatrix matrix = new SkylineMatrix(tmp.di, tmp.ig, tmp.gl, tmp.gl);
-                        }
-                        break;
-                    case 3:
-                        {
-                            SparseRowMatrix matrix = new SparseRowMatrix(tmp.gg, tmp.jg, tmp.ig);
-                        }
-                        break;
-                    case 4:
-                        {
-                            SparseRowColumnMatrix matrix = new SparseRowColumnMatrix(tmp.di, tmp.gl, tmp.gu, tmp.ig, tmp.jg);
-                        }
-                        break;
+                    case Formats.Dense:
+                            return new DenseMatrix(initialazer.dense);
+                    case Formats.Skyline:
+                            return new SkylineMatrix(initialazer.di, initialazer.ig, initialazer.gl, initialazer.gl);
+                    case Formats.SparseRow:
+                            return new SparseRowMatrix(initialazer.gg, initialazer.jg, initialazer.ig);
+                    case Formats.SparseRowColumn:
+                            return new SparseRowColumnMatrix(initialazer.di, initialazer.gl, initialazer.gu, initialazer.ig, initialazer.jg);
                     default:
                         break;
-
                 }
             }
             catch (ArgumentNullException ex)

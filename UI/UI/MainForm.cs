@@ -20,7 +20,7 @@ namespace UI
         public MainForm()
         {
             InitializeComponent();
-            formatBox.DataSource = Enum.GetValues(typeof(FormatsEnum));
+            formatBox.DataSource = Enum.GetValues(typeof(Formats));
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)
@@ -58,7 +58,7 @@ namespace UI
                     Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
                     epsBox.Enabled = true;
                     timeBox.Enabled = true;
-                    matrix = FormatFactory.Init(formatBox.SelectedIndex, Input, Input.symmetry);
+                    matrix = FormatFactory.Init((Formats)formatBox.SelectedIndex, Input, Input.symmetry);
                 }
             }
             catch (Exception)

@@ -32,7 +32,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.timeBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.epsBox = new System.Windows.Forms.TextBox();
             this.inputData = new System.Windows.Forms.GroupBox();
@@ -48,6 +47,7 @@
             this.ChoseOutput = new System.Windows.Forms.Button();
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuOpenOutput = new System.Windows.Forms.ToolStripMenuItem();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.groupBox2.SuspendLayout();
             this.inputData.SuspendLayout();
             this.menuStrip2.SuspendLayout();
@@ -55,10 +55,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.checkedListBox1);
             this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.timeBox);
             this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.listBox1);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.epsBox);
             this.groupBox2.Font = new System.Drawing.Font("Book Antiqua", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -95,25 +95,6 @@
             this.label5.Size = new System.Drawing.Size(46, 17);
             this.label5.TabIndex = 24;
             this.label5.Text = "Время";
-            // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 17;
-            this.listBox1.Items.AddRange(new object[] {
-            "LOS",
-            "GMRes",
-            "BiCGStab",
-            "Jacoby",
-            "Seidel",
-            "Pardiso",
-            "CGM"});
-            this.listBox1.Location = new System.Drawing.Point(18, 44);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.listBox1.Size = new System.Drawing.Size(129, 140);
-            this.listBox1.TabIndex = 23;
-            this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -196,6 +177,7 @@
             // 
             // formatBox
             // 
+            this.formatBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.formatBox.FormattingEnabled = true;
             this.formatBox.Location = new System.Drawing.Point(9, 100);
             this.formatBox.Name = "formatBox";
@@ -274,6 +256,22 @@
             this.toolStripMenuOpenOutput.Size = new System.Drawing.Size(186, 20);
             this.toolStripMenuOpenOutput.Text = "Открыть файл с результатом";
             // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Items.AddRange(new object[] {
+            "LOS",
+            "GMRes",
+            "BiCGStab",
+            "Jacoby",
+            "Seidel",
+            "Pardiso",
+            "CGM"});
+            this.checkedListBox1.Location = new System.Drawing.Point(13, 46);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(153, 156);
+            this.checkedListBox1.TabIndex = 27;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -322,10 +320,10 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.RadioButton Notsim;
         private System.Windows.Forms.RadioButton sim;
-        private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox timeBox;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
     }
 }
 

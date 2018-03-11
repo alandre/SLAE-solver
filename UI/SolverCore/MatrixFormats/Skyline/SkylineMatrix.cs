@@ -7,7 +7,7 @@ namespace SolverCore
     /// <summary>
     /// Профильный
     /// </summary>
-    class SkylineMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
+    public class SkylineMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
     {
         private double[] di; // диагональ
         private double[] al; // массив элементов профиля нижнего треугольника

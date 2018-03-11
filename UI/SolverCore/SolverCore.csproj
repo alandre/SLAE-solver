@@ -55,7 +55,6 @@
     <Compile Include="Methods\BCGStab.cs" />
     <Compile Include="Methods\CGM.cs" />
     <Compile Include="Methods\GaussianSeidelMethod.cs" />
-    <Compile Include="Methods\GMRes.cs" />
     <Compile Include="Methods\JacobiMethod.cs" />
     <Compile Include="Methods\LOS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

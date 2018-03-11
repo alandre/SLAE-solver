@@ -10,11 +10,11 @@ namespace UI
 {
     class MatrixInitialazer
     {
-        public int[] rows { get; set; }
-        public int[] cols { get; set; }
+        public int[] column { get; set; }
+        public int[] row { get; set; }
 
-        public double[] denseL { get; set; }
         public double[,] dense { get; set; }
+        public double[][] denseL { get; set; }
 
         public int[] ig { get; set; }
         public int[] jg { get; set; }
@@ -29,6 +29,7 @@ namespace UI
 
         public bool symmetry { get; set; }
 
+        public int size { set; get; }
 
         public static MatrixInitialazer Input(string data, MatrixInitialazer matrix, bool symmetry)
         {

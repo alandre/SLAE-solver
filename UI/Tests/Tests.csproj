@@ -67,6 +67,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Extensions\Counters.cs" />
+    <Compile Include="Extensions\MatrixGen.cs" />
+    <Compile Include="Methods\ProxySolver.cs" />
     <Compile Include="Methods\TestJacobiMethod.cs" />
     <Compile Include="Methods\TestsGaussianSeidelMethod.cs" />
     <Compile Include="MF\SparseRow\TestSparseRowMatrix.cs" />

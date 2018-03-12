@@ -15,6 +15,8 @@ using Xunit;
 
 namespace Methods
 {
+    // TODO соглашение об именовании
+
     internal class FakeLog : ILogger
     {
         public void read()
@@ -58,6 +60,30 @@ namespace Methods
 
             var result = loggingSolver.Solve(denseMatrix, x0, b);
 
+            for (int i = 0; i < resultActual.Size; i++)
+                Assert.Equal(result[i], resultActual[i], 8);
+
+        }
+
+        [Fact]
+        public void TestAlgorithmCountMult()
+        {
+            var proxyMethod = new ProxyMethod(new JacobiMethod());
+            loggingSolver = new LoggingSolver(proxyMethod, Logger);
+            double[,] _matrix = new double[3, 3] { { 3, 1, 1 },
+                                                   { 0, 5, 1 },
+                                                   { 2, 0, 3 } };
+            
+            IVector resultActual = new Vector(new double[] { 1, 1, 1 });
+
+            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
+            ProxyMatrix proxyMatrix = new ProxyMatrix(denseMatrix);
+
+            Vector x0 = new Vector(new double[] { 0, 0, 0 });
+            Vector b = new Vector(new double[] { 5, 6, 5 });
+
+            var result = loggingSolver.Solve(proxyMatrix, x0, b);
+            var a = proxyMethod.listofCount;
             for (int i = 0; i < resultActual.Size; i++)
                 Assert.Equal(result[i], resultActual[i], 8);
 

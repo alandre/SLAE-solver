@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Methods
 {
-    public class TestsGaussianSeidelMethod
+    public class TestsCGMMethod
     {
 
         IMethod Method;
@@ -20,9 +20,9 @@ namespace Methods
         private double[,] _matrix;
         LoggingSolver loggingSolver;
 
-        public TestsGaussianSeidelMethod()
+        public TestsCGMMethod()
         {
-            Method = new GaussianSeidelMethod();
+            Method = new CGM();
             Logger = new FakeLog();
             loggingSolver = new LoggingSolver(Method, Logger);
         }
@@ -41,7 +41,8 @@ namespace Methods
             IVector b = denseMatrix.Multiply(resultActual);
 
             var result = loggingSolver.Solve(denseMatrix, x0, b);
-            Assert.NotEmpty(result);
+            for (int i = 0; i < resultActual.Size; i++)
+                Assert.Equal(result[i], resultActual[i], 8);
 
         }
 
@@ -65,7 +66,7 @@ namespace Methods
         [Fact]
         public void TestAlgorithmCountMult()
         {
-            var proxyMethod = new ProxyMethod(new GaussianSeidelMethod());
+            var proxyMethod = new ProxyMethod(new CGM());
             loggingSolver = new LoggingSolver(proxyMethod, Logger);
             double[,] _matrix = new double[3, 3] { { 3, 1, 1 },
                                                        { 0, 5, 1 },

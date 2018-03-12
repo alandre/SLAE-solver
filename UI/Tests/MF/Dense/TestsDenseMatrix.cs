@@ -2,7 +2,7 @@
 using Xunit;
 using SolverCore;
 
-namespace MF.DenseMatrixTests
+namespace MF.Dense
 {
     public class TestsDenseMatrix
     {

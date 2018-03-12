@@ -68,13 +68,23 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Extensions\Counters.cs" />
-    <Compile Include="Extensions\MatrixGen.cs" />
-    <Compile Include="Methods\ProxySolver.cs" />
+    <Compile Include="Extensions\DenseMatrixGen.cs" />
+    <Compile Include="Extensions\FakeLog.cs" />
+    <Compile Include="Extensions\ProxyMatrix.cs" />
+    <Compile Include="Extensions\ProxyMethod.cs" />
+    <Compile Include="Methods\TestBCGStabMethod.cs" />
     <Compile Include="Methods\TestJacobiMethod.cs" />
+    <Compile Include="Methods\TestsCGMMethod.cs" />
+    <Compile Include="Methods\TestsLOSMethod.cs" />
     <Compile Include="Methods\TestsGaussianSeidelMethod.cs" />
+    <Compile Include="MF\Dense\TestsSymmetricDenseMatrix.cs" />
+    <Compile Include="MF\Skyline\TestSkylineMatrix.cs" />
+    <Compile Include="MF\Skyline\TestSymmetricSkylineMatrix.cs" />
+    <Compile Include="MF\SparseRowColumn\TestSparseRowColumnMatrix.cs" />
+    <Compile Include="MF\SparseRowColumn\TestSparseSymmetricRowColumnMatrix.cs" />
     <Compile Include="MF\SparseRow\TestSparseRowMatrix.cs" />
     <Compile Include="MF\SparseRow\TestSymmetricSparseRowMatrix.cs" />
-    <Compile Include="MF\TestsDenseMatrix.cs" />
+    <Compile Include="MF\Dense\TestsDenseMatrix.cs" />
     <Compile Include="MF\TestsVector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

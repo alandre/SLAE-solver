@@ -12,10 +12,10 @@ namespace UI
 {
     public partial class ConstructorForm : Form
     {
-        int n = 2;
-        int width, height;
-        int cellWidth = 35, cellHeight;
-        bool symmetrized = false;
+        int n = 2; // размерность матрицы
+        int width, height; // базовые ширина и высота формы
+        int cellWidth = 35, cellHeight; // ширина и высота ячеек
+        bool symmetrized = false; // является ли матрица симметричной
 
         public ConstructorForm()
         {
@@ -34,15 +34,26 @@ namespace UI
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
-            bool inc = (n < (int)numericUpDown1.Value);
+            int diff;
+            bool inc = (diff = (int)numericUpDown1.Value - n) > 0;
 
             n = (int)numericUpDown1.Value;
-            this.Width = width + cellWidth * (n - 2);
-            this.Height = height + cellHeight * (n - 2);
 
-            InitializeSLAE();
+            // изменение размеров формы в соответствии с размерностью матрицы
+
+            Size size = new Size(width + cellWidth * (n - 2), height + cellHeight * (n - 2));
+            MaximumSize = size;
+            MinimumSize = size;
+            Size = size;
+            //Width = width + cellWidth * (n - 2);
+            //Height = height + cellHeight * (n - 2);
+
+            // изменение размера матрицы и векторов
+            SizeChanged(diff);
 
             if (inc && checkBox1.Checked)
+                // если установлен режим симметричной матрицы, 
+                // добавленные элементы верхнего треугольника необходимо enable
                 Symmetrize();
         }
 
@@ -55,55 +66,74 @@ namespace UI
         {
             width = this.Width;
             height = this.Height;
-            cellHeight = A.RowTemplate.Height;
-            F.RowTemplate.Height = cellHeight;
+            F.RowTemplate.Height = cellHeight = A.RowTemplate.Height;
+
+            toolTip1.SetToolTip(CleanX0_Btn, "Очистить");
+            toolTip2.SetToolTip(CleanF_Btn, "Очистить");
+            toolTip3.SetToolTip(CleanMatrix_Btn, "Очистить");
 
             InitializeSLAE();
         }
 
         private void InitializeSLAE()
         {
+            F.Columns.Add("Column1", "");
+            F.Columns[0].Width = cellWidth;
+
+            SizeChanged(n);
+        }
+
+        private void SizeChanged(int diff)
+        {
             A.Height = F.Height = n * cellHeight + 2;
             A.Width = x0.Width = n * cellWidth + 1;
             F.Width = cellWidth + 1;
             x0.Height = cellHeight + 1;
 
-            A.Columns.Clear();
-
-            for (int j = 0; j < n; ++j)// наименование столбцов
+            // если размерность увеличилась 
+            if (diff > 0)
             {
-                A.Columns.Add("Column" + (j + 1).ToString(), "");
-                A.Columns[j].Width = cellWidth;
-            }
+                int j0 = n - diff;
+                for (int j = j0; j < n; ++j)
+                {
+                    A.Columns.Add("Column" + (j + 1).ToString(), "");
+                    A.Columns[j].Width = cellWidth;
+                    x0.Columns.Add("Column" + (j + 1).ToString(), "");
+                    x0.Columns[j].Width = cellWidth;
+                }
 
-            for (int i = 0; i < n; i++)
+                A.Rows.Add(diff);
+                Clean(A, 0, j0);
+                Clean(A, j0, 0);
+
+                x0.RowCount = 1;
+                Clean(x0, 0, j0);
+
+                F.Rows.Add(diff);
+                Clean(F, j0, 0);
+            }
+            // если размерность уменьшилась
+            else
             {
-                A.Rows.Add();
-                for (int j = 0; j < n; j++)
-                    A.Rows[i].Cells[j].Value = (double)0;
+                for (int j = n; j < n - diff; ++j)
+                {
+                    A.Columns.RemoveAt(j);
+                    A.Rows.RemoveAt(j);
+                    F.Rows.RemoveAt(j);
+                    x0.Columns.RemoveAt(j);
+                }
             }
+        }
 
-            F.Columns.Clear();
-            F.Columns.Add("Column1", "");
-            F.Columns[0].Width = cellWidth;
+        // обнуление элементов матрицы/вектора
+        private void Clean(DataGridView sender, int i0, int j0)
+        {
+            int ni = sender.RowCount;
+            int nj = sender.ColumnCount;
 
-            for (int i = 0; i < n; i++)
-            {
-                F.Rows.Add();
-                F.Rows[i].Cells[0].Value = (double)0;
-            }
-
-            x0.Columns.Clear();
-
-            for (int j = 0; j < n; ++j)// наименование столбцов
-            {
-                x0.Columns.Add("Column" + (j + 1).ToString(), "");
-                x0.Columns[j].Width = cellWidth;
-            }
-
-            x0.Rows.Add();
-            for (int j = 0; j < n; j++)
-                x0.Rows[0].Cells[j].Value = (double)0;
+            for (int i = i0; i < ni; i++)
+                for (int j = j0; j < nj; j++)
+                    sender.Rows[i].Cells[j].Value = 0.0;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -163,6 +193,29 @@ namespace UI
             }
         }
 
+        private void CleanMatrix_Btn_Click(object sender, EventArgs e)
+        {
+            Clean(A,0,0);
+        }
+
+        private void CleanF_Btn_Click(object sender, EventArgs e)
+        {
+            Clean(F,0,0);
+        }
+
+        private void CleanX0_Btn_Click(object sender, EventArgs e)
+        {
+            Clean(x0,0,0);
+        }
+
+        private void далееToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormatForm formatForm = new FormatForm(A, cellWidth * (n - 2), cellHeight * (n - 2));
+            formatForm.Show();
+            //PatternForm patternForm = new PatternForm(A, cellWidth * (n - 2), cellHeight * (n - 2));
+            //patternForm.Show();
+        }
+
         private void Unsymmetrize()
         {
             symmetrized = false;
@@ -178,13 +231,10 @@ namespace UI
 
         private void A_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
-            // Check if cell is read-only. If so the force move to next control.
-
+            // Если ячейка read-only, принудительный TAB 
             if (((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].ReadOnly)
             {
-
                 SendKeys.Send("{TAB}");
-
             }
         }
     }

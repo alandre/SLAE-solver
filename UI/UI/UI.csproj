@@ -56,6 +56,12 @@
     <Compile Include="ConstructorForm.Designer.cs">
       <DependentUpon>ConstructorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormatForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormatForm.Designer.cs">
+      <DependentUpon>FormatForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MatrixInitialazer.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -63,13 +69,25 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PatternForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatternForm.Designer.cs">
+      <DependentUpon>PatternForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ConstructorForm.resx">
       <DependentUpon>ConstructorForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormatForm.resx">
+      <DependentUpon>FormatForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PatternForm.resx">
+      <DependentUpon>PatternForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -94,6 +112,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CleanIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Галочка.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Галочка_чб.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

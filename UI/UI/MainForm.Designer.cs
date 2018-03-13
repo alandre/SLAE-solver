@@ -30,6 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.iterBox = new System.Windows.Forms.TextBox();
             this.methodCheckedImg = new System.Windows.Forms.PictureBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -57,8 +59,6 @@
             this.progressBar2 = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.iterBox = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
             this.inputData.SuspendLayout();
@@ -85,6 +85,24 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Выбор методов решения";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter_1);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 25);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(43, 13);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "maxiter:";
+            // 
+            // iterBox
+            // 
+            this.iterBox.Location = new System.Drawing.Point(51, 22);
+            this.iterBox.Name = "iterBox";
+            this.iterBox.Size = new System.Drawing.Size(44, 20);
+            this.iterBox.TabIndex = 28;
+            this.iterBox.Text = "100";
+            this.iterBox.Validating += new System.ComponentModel.CancelEventHandler(this.iterBox_Validating);
             // 
             // methodCheckedImg
             // 
@@ -137,6 +155,7 @@
             this.epsBox.Text = "1e-10";
             this.epsBox.TextChanged += new System.EventHandler(this.epsBox_TextChanged);
             this.epsBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.epsBox_KeyPress);
+            this.epsBox.Validating += new System.ComponentModel.CancelEventHandler(this.epsBox_Validating);
             // 
             // inputData
             // 
@@ -391,23 +410,6 @@
             this.label5.TabIndex = 22;
             this.label5.Text = "1 из 4";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 25);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(43, 13);
-            this.label7.TabIndex = 29;
-            this.label7.Text = "maxiter:";
-            // 
-            // iterBox
-            // 
-            this.iterBox.Location = new System.Drawing.Point(51, 22);
-            this.iterBox.Name = "iterBox";
-            this.iterBox.Size = new System.Drawing.Size(44, 20);
-            this.iterBox.TabIndex = 28;
-            this.iterBox.Text = "100";
             // 
             // MainForm
             // 

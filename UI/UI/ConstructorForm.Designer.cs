@@ -138,6 +138,7 @@
             this.A.TabIndex = 12;
             this.A.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.A_CellEndEdit);
             this.A.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.A_CellEnter);
+            this.A.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.A_CellValidating);
             this.A.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.A_CellValueChanged);
             // 
             // F
@@ -154,6 +155,7 @@
             this.F.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.F.Size = new System.Drawing.Size(36, 45);
             this.F.TabIndex = 13;
+            this.F.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.F_CellValidating);
             // 
             // menuStrip1
             // 
@@ -198,6 +200,7 @@
             this.x0.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.x0.Size = new System.Drawing.Size(71, 23);
             this.x0.TabIndex = 15;
+            this.x0.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.x0_CellValidating);
             // 
             // label3
             // 

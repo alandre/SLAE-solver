@@ -19,8 +19,9 @@ namespace MF.Dense
         public void DenseMatrix_TestConstructorExeptions()
         {
             _matrix = new double[2, 3] { { 1, 3, 5 }, { 2, 5, 4 } };
+            double[,] nullArray = null;
 
-            Assert.Throws<ArgumentNullException>(() => { DenseMatrix denseMatrix = new DenseMatrix(null); });
+            Assert.Throws<ArgumentNullException>(() => { DenseMatrix denseMatrix = new DenseMatrix(nullArray); });
             Assert.Throws<ArgumentException>(() => { DenseMatrix denseMatrix = new DenseMatrix(_matrix); });
             Assert.Throws<ArgumentException>(() => { DenseMatrix denseMatrix2 = new DenseMatrix(-1); }); 
         }

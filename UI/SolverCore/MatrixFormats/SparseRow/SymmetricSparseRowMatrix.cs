@@ -107,14 +107,13 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(matrix));
             }
-            var elems = (IEnumerable)matrix.GetEnumerator();
+            IEnumerable elems = ((IEnumerable)matrix.GetEnumerator()).Cast<(double value, int row, int col)>().OrderBy(key => key.row).ThenBy(key => key.col);
             ia = new int[matrix.Size + 1];
             ja = new int[elems.Cast<(double value, int row, int col)>().Count()];
             a = new double[elems.Cast<(double value, int row, int col)>().Count()];
             int i = 0, j = 0;
             ia[i] = 0;
             ia[i + 1] = 0;
-            elems.Cast<(double value, int row, int col)>().OrderBy(key => key.row).ThenBy(key => key.col);
             foreach (KeyValuePair<(int row, int col), double> item in elems)
             {
                 ja[j] = item.Key.col;

@@ -58,7 +58,7 @@ namespace SolverCore
                 }
             }
 
-            for (int i = 0; i < Size; i++)
+            for (int i = 1; i < Size; i++)
             {
                 Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
             }
@@ -66,11 +66,7 @@ namespace SolverCore
 
         public SymmetricSparseRowMatrix(int[] ja, int[] ia)
         {
-            if (a == null)
-            {
-                throw new ArgumentNullException(nameof(a));
-            }
-
+        
             if (ja == null)
             {
                 throw new ArgumentNullException(nameof(ja));
@@ -83,7 +79,7 @@ namespace SolverCore
 
             this.ia = (int[])ia.Clone();
             this.ja = (int[])ja.Clone();
-            this.a = (double[])a.Clone();
+            this.a = new double[ja.Length];
 
             if (this.ia[0] == 1)
             {
@@ -98,7 +94,7 @@ namespace SolverCore
                 }
             }
 
-            for (int i = 0; i < Size; i++)
+            for (int i = 1; i < Size; i++)
             {
                 Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
             }

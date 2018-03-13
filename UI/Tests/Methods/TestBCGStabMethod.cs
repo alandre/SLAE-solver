@@ -18,7 +18,7 @@ namespace Methods
 {
     // TODO соглашение об именовании
 
-    public class TestBCGStabMethod
+    /*public class TestBCGStabMethod
     {
        
         IMethod Method;
@@ -100,5 +100,5 @@ namespace Methods
         }
         // ...
 
-    }
+    }*/
 }

@@ -40,44 +40,43 @@ namespace SolverCore
         {
             get
             {
-                if (i >= Size)
+                if (i >= Size || j >= Size || i < 0 || j < 0)
                 {
-                    throw new IndexOutOfRangeException(nameof(i));
-                }
-                if (j >= Size)
-                {
-                    throw new IndexOutOfRangeException(nameof(j));
+                    throw new IndexOutOfRangeException();
                 }
 
-                if (matrix.ContainsKey((i, j)))
+                if (matrix.TryGetValue((i, j), out var value))
                 {
-                    return matrix[(i, j)];
+                    return value;
                 }
+
                 return 0;
             }
         }
 
-        public int Size { get; private set; }
+        public int Size { get; }
 
         public IVector Diagonal
         {
             get
             {
                 var diagonal = new Vector(Size);
-                foreach (KeyValuePair<(int i, int j), double> elem in this.matrix)
+
+                foreach (var elem in matrix)
                 {
                     (int i, int j) = elem.Key;
+
                     if (i == j)
                     {
                         diagonal[i] = elem.Value;
                     }
                 }
+
                 return diagonal;
             }
         }
 
-        public ILinearOperator Transpose
-            => throw new NotImplementedException();
+        public ILinearOperator Transpose => new TransposeMatrix<CoordinationalMatrix>() { Matrix = this };
 
         public void Fill(FillFunc elems)
         {
@@ -94,33 +93,45 @@ namespace SolverCore
 
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
-            foreach (KeyValuePair<(int i, int j), double> rcv in matrix)
+            foreach(var item in matrix)
             {
-                (int i, int j) = rcv.Key;
-                yield return (rcv.Value, i, j);
+                yield return (item.Value, item.Key.row, item.Key.column);
             }
         }
 
-        public IVector LMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public IVector LMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
-            if (x == null)
+            if (vector == null)
             {
-                throw new ArgumentNullException(nameof(x));
+                throw new ArgumentNullException(nameof(vector));
             }
 
-            var result = new Vector(x.Size);
-            result.SetConst(0.0);
-            foreach (KeyValuePair<(int i, int j), double> elem in this.matrix)
+            if(vector.Size != Size)
             {
-                (int, int) key = elem.Key;
-                if (key.Item2 <= key.Item1)
+                throw new RankException();
+            }
+
+            var result = new Vector(vector.Size);
+
+            foreach (var elem in matrix)
+            {
+                var key = elem.Key;
+
+                if (key.row < key.column)
                 {
-                    if (key.Item1 == key.Item2)
-                        result[key.Item1] += UseDiagonal ? elem.Value * x[key.Item2] : (double)diagonalElement * x[key.Item2];
-                    else
-                        result[key.Item1] += elem.Value * x[key.Item2];
+                    break;
                 }
 
+                if (key.column == key.row)
+                {
+                    result[key.row] += (isUseDiagonal ? elem.Value : (double)diagonalElement) * vector[key.row];
+                }
+                else
+                {
+                    result[key.row] += elem.Value * vector[key.column];
+                }
             }
 
             return result;
@@ -133,49 +144,125 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(vector));
             }
 
-            var result = new Vector(vector.Size);
-            result.SetConst(0.0);
-            foreach (KeyValuePair<(int i, int j), double> elem in this.matrix)
+            if (vector.Size != Size)
             {
-                (int, int) key = elem.Key;
-                if (key.Item2 <= key.Item1)
+                throw new RankException();
+            }
+
+            var result = new Vector(vector.Size);
+
+            foreach (var elem in matrix)
+            {
+                var key = elem.Key;
+
+                if (key.row < key.column)
                 {
-                    if (key.Item1 == key.Item2)
-                        result[key.Item2] += isUseDiagonal ? elem.Value * vector[key.Item2] : (double)diagonalElement * vector[key.Item2];
-                    else
-                        result[key.Item2] += elem.Value * vector[key.Item2];
+                    break;
                 }
 
+                if (key.column == key.row)
+                {
+                    result[key.row] += (isUseDiagonal ? elem.Value : (double)diagonalElement) * vector[key.row];
+                }
+                else
+                {
+                    result[key.column] += elem.Value * vector[key.row];
+                }
             }
 
             return result;
         }
 
-        public IVector LSolve(IVector x, bool UseDiagonal)
+        public IVector UMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
-            throw new NotImplementedException();
-        }
-
-        public IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IVector Multiply(IVector x)
-        {
-            if (x == null)
+            if (vector == null)
             {
-                throw new ArgumentNullException(nameof(x));
+                throw new ArgumentNullException(nameof(vector));
             }
 
-            var result = new Vector(x.Size);
-            result.SetConst(0.0);
-            foreach (KeyValuePair<(int i, int j), double> elem in this.matrix)
+            if (vector.Size != Size)
             {
-                (int, int) key = elem.Key;
-                result[key.Item1] += elem.Value * x[key.Item2];
-                if (key.Item1 != key.Item2)
-                    result[key.Item2] += elem.Value * x[key.Item1];
+                throw new RankException();
+            }
+
+            var result = new Vector(vector.Size);
+
+            foreach (var elem in matrix)
+            {
+                var key = elem.Key;
+
+                if (key.row > key.column)
+                {
+                    break;
+                }
+
+                if (key.column == key.row)
+                {
+                    result[key.row] += (isUseDiagonal ? elem.Value : (double)diagonalElement) * vector[key.row];
+                }
+                else
+                {
+                    result[key.row] += elem.Value * vector[key.column];
+                }
+            }
+
+            return result;
+        }
+
+        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(vector.Size);
+
+            foreach (var elem in matrix)
+            {
+                var key = elem.Key;
+
+                if (key.row > key.column)
+                {
+                    break;
+                }
+
+                if (key.column == key.row)
+                {
+                    result[key.row] += (isUseDiagonal ? elem.Value : (double)diagonalElement) * vector[key.row];
+                }
+                else
+                {
+                    result[key.column] += elem.Value * vector[key.row];
+                }
+            }
+
+            return result;
+        }
+
+        public IVector Multiply(IVector vector)
+        {
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = new Vector(vector.Size);
+
+            foreach (var elem in matrix)
+            {
+                (var i, var j) = elem.Key;
+                result[i] += elem.Value * vector[j];
             }
 
             return result;
@@ -188,63 +275,31 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(vector));
             }
 
-            var result = new Vector(vector.Size);
-            result.SetConst(0.0);
-            foreach (KeyValuePair<(int i, int j), double> elem in this.matrix)
+            if (vector.Size != Size)
             {
-                (int, int) key = elem.Key;
-                result[key.Item2] += elem.Value * vector[key.Item1];
-                if (key.Item1 != key.Item2)
-                    result[key.Item1] += elem.Value * vector[key.Item2];
+                throw new RankException();
+            }
+
+            var result = new Vector(vector.Size);
+
+            foreach (var elem in matrix)
+            {
+                (var i, var j) = elem.Key;
+                result[j] += elem.Value * vector[i];
             }
 
             return result;
         }
 
-        public IVector UMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
-        {
-            if (x == null)
-            {
-                throw new ArgumentNullException(nameof(x));
-            }
 
-            var result = new Vector(x.Size);
-            result.SetConst(0.0);
-            foreach (KeyValuePair<(int i, int j), double> elem in this.matrix)
-            {
-                (int, int) key = elem.Key;
-                if (key.Item2 >= key.Item1)
-                {
-                    if (key.Item1 == key.Item2)
-                        result[key.Item1] += UseDiagonal ? elem.Value * x[key.Item2] : (double)diagonalElement * x[key.Item2];
-                    else
-                        result[key.Item1] += elem.Value * x[key.Item2];
-                }
-            }
-            return result;
+        public IVector LSolve(IVector x, bool UseDiagonal)
+        {
+            throw new NotImplementedException();
         }
 
-        public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
+        public IVector LSolveTranspose(IVector vector, bool isUseDiagonal)
         {
-            if (vector == null)
-            {
-                throw new ArgumentNullException(nameof(vector));
-            }
-
-            var result = new Vector(vector.Size);
-            result.SetConst(0.0);
-            foreach (KeyValuePair<(int i, int j), double> elem in this.matrix)
-            {
-                (int, int) key = elem.Key;
-                if (key.Item2 >= key.Item1)
-                {
-                    if (key.Item1 == key.Item2)
-                        result[key.Item2] += isUseDiagonal ? elem.Value * vector[key.Item1] : (double)diagonalElement * vector[key.Item1];
-                    else
-                        result[key.Item2] += elem.Value * vector[key.Item1];
-                }
-            }
-            return result;
+            throw new NotImplementedException();
         }
 
         public IVector USolve(IVector x, bool UseDiagonal)
@@ -256,7 +311,5 @@ namespace SolverCore
         {
             throw new NotImplementedException();
         }
-
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

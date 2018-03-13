@@ -53,6 +53,21 @@ namespace SolverCore
             matrix = new double[size, size];
         }
 
+        public DenseMatrix(CoordinationalMatrix coordinationalMatrix)
+        {
+            if(matrix == null)
+            {
+                throw new ArgumentNullException(nameof(coordinationalMatrix));
+            }
+
+            matrix = new double[coordinationalMatrix.Size, coordinationalMatrix.Size];
+
+            foreach(var item in coordinationalMatrix)
+            {
+                matrix[item.row, item.col] = item.value;
+            }
+        }
+
         public double this[int i, int j]
         {
             get

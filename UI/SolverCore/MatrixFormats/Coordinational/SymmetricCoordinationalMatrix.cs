@@ -7,7 +7,9 @@ namespace SolverCore
 {
     public class SymmetricCoordinationalMatrix : IMatrix, ILinearOperator
     {
-        Dictionary<(int row, int column), double> matrix;
+        private int count;
+
+        private Dictionary<(int row, int column), double> matrix;
 
         public SymmetricCoordinationalMatrix(IEnumerable<(int i, int j, double value)> items, int size)
         {
@@ -23,6 +25,8 @@ namespace SolverCore
 
             Size = size;
             matrix = items.ToDictionary(item => item.i > item.j ? (item.i, item.j) : (item.j, item.i), item => item.value);
+
+            count = matrix.Count + matrix.Where(x => x.Key.column != x.Key.row).Count();
         }
 
         public SymmetricCoordinationalMatrix(int size)
@@ -58,6 +62,7 @@ namespace SolverCore
             }
         }
 
+        public int Count => count;
 
         public IVector Diagonal
         {

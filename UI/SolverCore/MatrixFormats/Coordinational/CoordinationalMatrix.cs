@@ -7,7 +7,7 @@ namespace SolverCore
 {
     public class CoordinationalMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
     {
-        Dictionary<(int row, int column), double> matrix;
+        private Dictionary<(int row, int column), double> matrix;
 
         public CoordinationalMatrix(IEnumerable<(int i, int j, double value)> items, int size)
         {
@@ -55,6 +55,8 @@ namespace SolverCore
         }
 
         public int Size { get; }
+
+        public int Count => matrix.Count;
 
         public IVector Diagonal
         {

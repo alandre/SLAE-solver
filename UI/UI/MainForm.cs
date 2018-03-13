@@ -22,6 +22,8 @@ namespace UI
         bool outputChecked = false;
 
         private IMatrix matrix;
+        
+        ConstructorForm constructorForm;
 
         public MainForm()
         {
@@ -63,7 +65,7 @@ namespace UI
 
                     Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
                     epsBox.Enabled = true;
-                    timeBox.Enabled = true;
+                    iterBox.Enabled = true;
                     matrix = FormatFactory.Init((Formats)formatBox.SelectedIndex, Input, Input.symmetry);
                 }
             }
@@ -81,8 +83,12 @@ namespace UI
 
         private void ManualEntry_Click(object sender, EventArgs e)
         {
-            ConstructorForm form = new ConstructorForm();
-            form.Show();
+            if (constructorForm == null || constructorForm.IsDisposed)
+                constructorForm = new ConstructorForm();
+
+            constructorForm.Owner = this;
+            constructorForm.Show();
+            Hide();
         }
 
         private void formatBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -133,6 +139,11 @@ namespace UI
         }
 
         private void manualInputBtn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
+        }
+
+        private void groupBox3_Enter(object sender, EventArgs e)
         {
 
         }

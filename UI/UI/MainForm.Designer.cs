@@ -30,12 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.methodCheckedImg = new System.Windows.Forms.PictureBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.timeBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.epsBox = new System.Windows.Forms.TextBox();
             this.inputData = new System.Windows.Forms.GroupBox();
+            this.inputCheckedImg = new System.Windows.Forms.PictureBox();
             this.manualInputBtn = new System.Windows.Forms.LinkLabel();
             this.manualInpitRadioBtn = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
@@ -51,30 +51,30 @@
             this.toolStripMenuOpenOutput = new System.Windows.Forms.ToolStripMenuItem();
             this.протоколРешенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.outputCheckedImg = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.progressBar2 = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.outputCheckedImg = new System.Windows.Forms.PictureBox();
-            this.inputCheckedImg = new System.Windows.Forms.PictureBox();
-            this.methodCheckedImg = new System.Windows.Forms.PictureBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.iterBox = new System.Windows.Forms.TextBox();
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
             this.inputData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).BeginInit();
             this.fileInputPanel.SuspendLayout();
             this.menuStrip2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outputCheckedImg)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label7);
+            this.groupBox2.Controls.Add(this.iterBox);
             this.groupBox2.Controls.Add(this.methodCheckedImg);
             this.groupBox2.Controls.Add(this.checkedListBox1);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.timeBox);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.epsBox);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -85,6 +85,17 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Выбор методов решения";
             this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter_1);
+            // 
+            // methodCheckedImg
+            // 
+            this.methodCheckedImg.Enabled = false;
+            this.methodCheckedImg.Image = ((System.Drawing.Image)(resources.GetObject("methodCheckedImg.Image")));
+            this.methodCheckedImg.Location = new System.Drawing.Point(220, 11);
+            this.methodCheckedImg.Name = "methodCheckedImg";
+            this.methodCheckedImg.Size = new System.Drawing.Size(20, 20);
+            this.methodCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.methodCheckedImg.TabIndex = 21;
+            this.methodCheckedImg.TabStop = false;
             // 
             // checkedListBox1
             // 
@@ -108,50 +119,6 @@
             this.checkedListBox1.Sorted = true;
             this.checkedListBox1.TabIndex = 27;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(8, 25);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(43, 13);
-            this.label6.TabIndex = 26;
-            this.label6.Text = "maxiter:";
-            // 
-            // timeBox
-            // 
-            this.timeBox.Location = new System.Drawing.Point(52, 22);
-            this.timeBox.Name = "timeBox";
-            this.timeBox.Size = new System.Drawing.Size(41, 20);
-            this.timeBox.TabIndex = 25;
-            this.timeBox.Text = "0";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(166, 125);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(80, 17);
-            this.label6.TabIndex = 26;
-            this.label6.Text = "(в секундах)";
-            // 
-            // timeBox
-            // 
-            this.timeBox.Enabled = false;
-            this.timeBox.Location = new System.Drawing.Point(172, 145);
-            this.timeBox.Name = "timeBox";
-            this.timeBox.Size = new System.Drawing.Size(68, 24);
-            this.timeBox.TabIndex = 25;
-            this.timeBox.Text = "0";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(182, 106);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(46, 17);
-            this.label5.TabIndex = 24;
-            this.label5.Text = "Время";
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -167,7 +134,7 @@
             this.epsBox.Name = "epsBox";
             this.epsBox.Size = new System.Drawing.Size(55, 20);
             this.epsBox.TabIndex = 8;
-            this.epsBox.Text = "-10";
+            this.epsBox.Text = "1e-10";
             this.epsBox.TextChanged += new System.EventHandler(this.epsBox_TextChanged);
             this.epsBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.epsBox_KeyPress);
             // 
@@ -186,6 +153,17 @@
             this.inputData.TabIndex = 3;
             this.inputData.TabStop = false;
             this.inputData.Text = "Входные данные";
+            // 
+            // inputCheckedImg
+            // 
+            this.inputCheckedImg.Enabled = false;
+            this.inputCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
+            this.inputCheckedImg.Location = new System.Drawing.Point(211, 11);
+            this.inputCheckedImg.Name = "inputCheckedImg";
+            this.inputCheckedImg.Size = new System.Drawing.Size(20, 20);
+            this.inputCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.inputCheckedImg.TabIndex = 20;
+            this.inputCheckedImg.TabStop = false;
             // 
             // manualInputBtn
             // 
@@ -354,6 +332,18 @@
             this.groupBox3.TabIndex = 20;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Выходные данные";
+            this.groupBox3.Enter += new System.EventHandler(this.groupBox3_Enter);
+            // 
+            // outputCheckedImg
+            // 
+            this.outputCheckedImg.Enabled = false;
+            this.outputCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
+            this.outputCheckedImg.Location = new System.Drawing.Point(220, 12);
+            this.outputCheckedImg.Name = "outputCheckedImg";
+            this.outputCheckedImg.Size = new System.Drawing.Size(20, 20);
+            this.outputCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.outputCheckedImg.TabIndex = 28;
+            this.outputCheckedImg.TabStop = false;
             // 
             // textBox1
             // 
@@ -402,38 +392,22 @@
             this.label5.Text = "1 из 4";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // outputCheckedImg
+            // label7
             // 
-            this.outputCheckedImg.Enabled = false;
-            this.outputCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
-            this.outputCheckedImg.Location = new System.Drawing.Point(220, 12);
-            this.outputCheckedImg.Name = "outputCheckedImg";
-            this.outputCheckedImg.Size = new System.Drawing.Size(20, 20);
-            this.outputCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.outputCheckedImg.TabIndex = 28;
-            this.outputCheckedImg.TabStop = false;
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 25);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(43, 13);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "maxiter:";
             // 
-            // inputCheckedImg
+            // iterBox
             // 
-            this.inputCheckedImg.Enabled = false;
-            this.inputCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
-            this.inputCheckedImg.Location = new System.Drawing.Point(211, 11);
-            this.inputCheckedImg.Name = "inputCheckedImg";
-            this.inputCheckedImg.Size = new System.Drawing.Size(20, 20);
-            this.inputCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.inputCheckedImg.TabIndex = 20;
-            this.inputCheckedImg.TabStop = false;
-            // 
-            // methodCheckedImg
-            // 
-            this.methodCheckedImg.Enabled = false;
-            this.methodCheckedImg.Image = ((System.Drawing.Image)(resources.GetObject("methodCheckedImg.Image")));
-            this.methodCheckedImg.Location = new System.Drawing.Point(220, 11);
-            this.methodCheckedImg.Name = "methodCheckedImg";
-            this.methodCheckedImg.Size = new System.Drawing.Size(20, 20);
-            this.methodCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.methodCheckedImg.TabIndex = 21;
-            this.methodCheckedImg.TabStop = false;
+            this.iterBox.Location = new System.Drawing.Point(51, 22);
+            this.iterBox.Name = "iterBox";
+            this.iterBox.Size = new System.Drawing.Size(44, 20);
+            this.iterBox.TabIndex = 28;
+            this.iterBox.Text = "100";
             // 
             // MainForm
             // 
@@ -443,12 +417,12 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.progressBar2);
-            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.menuStrip2);
             this.Controls.Add(this.Start);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.inputData);
             this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox3);
             this.MaximumSize = new System.Drawing.Size(535, 387);
             this.MinimumSize = new System.Drawing.Size(535, 387);
             this.Name = "MainForm";
@@ -456,8 +430,10 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).EndInit();
             this.inputData.ResumeLayout(false);
             this.inputData.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).EndInit();
             this.fileInputPanel.ResumeLayout(false);
             this.fileInputPanel.PerformLayout();
             this.menuStrip2.ResumeLayout(false);
@@ -465,8 +441,6 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outputCheckedImg)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -489,8 +463,6 @@
         private System.Windows.Forms.MenuStrip menuStrip2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuOpenOutput;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox timeBox;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.RadioButton fileInputRadioBtn;
         private System.Windows.Forms.RadioButton manualInpitRadioBtn;
@@ -509,6 +481,8 @@
         private System.Windows.Forms.PictureBox inputCheckedImg;
         private System.Windows.Forms.PictureBox methodCheckedImg;
         private System.Windows.Forms.PictureBox outputCheckedImg;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox iterBox;
     }
 }
 

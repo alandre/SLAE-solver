@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.далееToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.forwardItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backwardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.forwardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label1 = new System.Windows.Forms.Label();
             this.formatBox = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
@@ -41,29 +41,30 @@
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.далееToolStripMenuItem,
-            this.forwardItem});
+            this.backwardToolStripMenuItem,
+            this.forwardToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 65);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(257, 24);
             this.menuStrip1.TabIndex = 15;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // далееToolStripMenuItem
+            // backwardToolStripMenuItem
             // 
-            this.далееToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.далееToolStripMenuItem.Name = "далееToolStripMenuItem";
-            this.далееToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
-            this.далееToolStripMenuItem.Text = "Назад";
+            this.backwardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.backwardToolStripMenuItem.Name = "backwardToolStripMenuItem";
+            this.backwardToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.backwardToolStripMenuItem.Text = "Назад";
+            this.backwardToolStripMenuItem.Click += new System.EventHandler(this.backwardToolStripMenuItem_Click);
             // 
-            // forwardItem
+            // forwardToolStripMenuItem
             // 
-            this.forwardItem.Enabled = false;
-            this.forwardItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.forwardItem.Name = "forwardItem";
-            this.forwardItem.Size = new System.Drawing.Size(55, 20);
-            this.forwardItem.Text = "Далее";
-            this.forwardItem.Click += new System.EventHandler(this.forwardItem_Click);
+            this.forwardToolStripMenuItem.Enabled = false;
+            this.forwardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.forwardToolStripMenuItem.Name = "forwardToolStripMenuItem";
+            this.forwardToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.forwardToolStripMenuItem.Text = "Далее";
+            this.forwardToolStripMenuItem.Click += new System.EventHandler(this.forwardItem_Click);
             // 
             // label1
             // 
@@ -101,7 +102,9 @@
             this.MinimumSize = new System.Drawing.Size(273, 128);
             this.Name = "FormatForm";
             this.Text = "Конструктор СЛАУ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormatForm_FormClosing);
             this.Load += new System.EventHandler(this.FormatForm_Load);
+            this.Shown += new System.EventHandler(this.FormatForm_Shown);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -112,8 +115,8 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem далееToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem forwardItem;
+        private System.Windows.Forms.ToolStripMenuItem backwardToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem forwardToolStripMenuItem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox formatBox;
     }

@@ -30,9 +30,9 @@
         {
             this.A = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.далееToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.backwardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.forwardToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.infoTextBox = new System.Windows.Forms.RichTextBox();
-            this.далееToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.A)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -63,21 +63,29 @@
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.далееToolStripMenuItem,
-            this.далееToolStripMenuItem1});
+            this.backwardToolStripMenuItem,
+            this.forwardToolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 127);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(282, 24);
             this.menuStrip1.TabIndex = 15;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // далееToolStripMenuItem
+            // backwardToolStripMenuItem
             // 
-            this.далееToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.далееToolStripMenuItem.Name = "далееToolStripMenuItem";
-            this.далееToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
-            this.далееToolStripMenuItem.Text = "Назад";
-            this.далееToolStripMenuItem.Click += new System.EventHandler(this.далееToolStripMenuItem_Click);
+            this.backwardToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.backwardToolStripMenuItem.Name = "backwardToolStripMenuItem";
+            this.backwardToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.backwardToolStripMenuItem.Text = "Назад";
+            this.backwardToolStripMenuItem.Click += new System.EventHandler(this.backwardToolStripMenuItem_Click);
+            // 
+            // forwardToolStripMenuItem1
+            // 
+            this.forwardToolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.forwardToolStripMenuItem1.Name = "forwardToolStripMenuItem1";
+            this.forwardToolStripMenuItem1.Size = new System.Drawing.Size(55, 20);
+            this.forwardToolStripMenuItem1.Text = "Далее";
+            this.forwardToolStripMenuItem1.Click += new System.EventHandler(this.forwardToolStripMenuItem1_Click);
             // 
             // infoTextBox
             // 
@@ -90,13 +98,6 @@
             this.infoTextBox.Text = "Портрет матрицы был определен автоматически. Для добавления в него нулевых элемен" +
     "тов, щелкните по ним мышью.";
             // 
-            // далееToolStripMenuItem1
-            // 
-            this.далееToolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.далееToolStripMenuItem1.Name = "далееToolStripMenuItem1";
-            this.далееToolStripMenuItem1.Size = new System.Drawing.Size(55, 20);
-            this.далееToolStripMenuItem1.Text = "Далее";
-            // 
             // PatternForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -107,7 +108,9 @@
             this.Controls.Add(this.A);
             this.Name = "PatternForm";
             this.Text = "Портрет матрицы";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PatternForm_FormClosing);
             this.Load += new System.EventHandler(this.PatternForm_Load);
+            this.Shown += new System.EventHandler(this.PatternForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.A)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -120,8 +123,8 @@
 
         private System.Windows.Forms.DataGridView A;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem далееToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem backwardToolStripMenuItem;
         private System.Windows.Forms.RichTextBox infoTextBox;
-        private System.Windows.Forms.ToolStripMenuItem далееToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem forwardToolStripMenuItem1;
     }
 }

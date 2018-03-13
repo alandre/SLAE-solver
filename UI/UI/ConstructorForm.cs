@@ -17,6 +17,8 @@ namespace UI
         int cellWidth = 35, cellHeight; // ширина и высота ячеек
         bool symmetrized = false; // является ли матрица симметричной
 
+        FormatForm formatForm;
+
         public ConstructorForm()
         {
             InitializeComponent();
@@ -55,11 +57,6 @@ namespace UI
                 // если установлен режим симметричной матрицы, 
                 // добавленные элементы верхнего треугольника необходимо enable
                 Symmetrize();
-        }
-
-        private void сохранитьКакToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void ConstructorForm_Load(object sender, EventArgs e)
@@ -208,12 +205,20 @@ namespace UI
             Clean(x0,0,0);
         }
 
-        private void далееToolStripMenuItem_Click(object sender, EventArgs e)
+        private void cancelToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FormatForm formatForm = new FormatForm(A, cellWidth * (n - 2), cellHeight * (n - 2));
+            Owner.Show();
+            this.Hide();
+        }
+
+        private void forwardToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            if (formatForm == null || formatForm.IsDisposed)
+                formatForm = new FormatForm();
+            
+            formatForm.Owner = this;
             formatForm.Show();
-            //PatternForm patternForm = new PatternForm(A, cellWidth * (n - 2), cellHeight * (n - 2));
-            //patternForm.Show();
+            Hide();
         }
 
         private void Unsymmetrize()
@@ -229,6 +234,21 @@ namespace UI
                 }
         }
 
+        private void ConstructorForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+            Owner.Show();
+        }
+
+        private void ConstructorForm_Shown(object sender, EventArgs e)
+        {
+            Location = Owner.Location;
+        }
+
         private void A_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             // Если ячейка read-only, принудительный TAB 
@@ -236,6 +256,13 @@ namespace UI
             {
                 SendKeys.Send("{TAB}");
             }
+        }
+
+        public void GetSLAEParams(ref DataGridView mat, ref int w, ref int h)
+        {
+            mat = A;
+            w = cellWidth * (n - 2);
+            h = cellHeight * (n - 2);
         }
     }
 }

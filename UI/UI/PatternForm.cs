@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SolverCore;
 
 namespace UI
 {
     public partial class PatternForm : Form
     {
-        Dictionary<(int row, int column), double> matrix = new Dictionary<(int row, int column), double>();
+        Dictionary<(int row, int column), double> matrix;
         int width, heigth;
         bool symmetric = true;
 
@@ -56,7 +57,8 @@ namespace UI
         private void A_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             DataGridViewCell cell = ((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex];
-            if (cell.Value.ToString() == "0")
+            DataGridViewCell scell = ((DataGridView)sender).Rows[e.ColumnIndex].Cells[e.RowIndex];
+            if (cell.Value.ToString() == "0" && scell.Value.ToString() == "0")
             {
                 if (cell.Style.BackColor == Color.SteelBlue)
                 {
@@ -103,21 +105,32 @@ namespace UI
 
         private void forwardToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-
+            IVector b, x0;
+            int n;
+            SLAESource.GetSLAEParams(out n, out b, out x0);
+            mainForm.SetSLAE(new CoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n), b, x0);
+            Close();
         }
 
         private void PatternForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //if (e.CloseReason == CloseReason.UserClosing)
+            //{
+            //    e.Cancel = true;
+            //    Hide();
+            //}
             if (e.CloseReason == CloseReason.UserClosing)
-            {
-                e.Cancel = true;
-                Hide();
-            }
-            mainForm.Show();
+                mainForm.Show();
         }
 
         private void PatternForm_Shown(object sender, EventArgs e)
         {
+        }
+
+        private void backwardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Owner.Show();
+            Hide();
         }
 
         public void Update()
@@ -125,7 +138,8 @@ namespace UI
             Location = Owner.Location;
 
             DataGridView mat = new DataGridView();
-            SLAESource.GetSLAEParams(ref mat, ref width, ref heigth);
+
+            SLAESource.GetGridParams(ref mat, ref width, ref heigth);
             CopyDataGridView(mat, A);
 
             Size size = new Size(Width > 115 + width ? Width : 115 + width, 190 + heigth);
@@ -136,14 +150,10 @@ namespace UI
             BuildMatrix();
         }
 
-        private void backwardToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Owner.Show();
-            Hide();
-        }
-
         private void BuildMatrix()
         {
+            matrix = new Dictionary<(int row, int column), double>();
+
             foreach (DataGridViewRow row in A.Rows)
                 foreach (DataGridViewCell cell in row.Cells)
                     if (cell.Value.ToString() != "0")

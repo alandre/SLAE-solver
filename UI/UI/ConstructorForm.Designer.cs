@@ -47,6 +47,7 @@
             this.CleanF_Btn = new System.Windows.Forms.Button();
             this.CleanMatrix_Btn = new System.Windows.Forms.Button();
             this.CleanX0_Btn = new System.Windows.Forms.Button();
+            this.timerCellHighlight = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.sizePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.A)).BeginInit();
@@ -96,7 +97,6 @@
             this.sizePanel.Name = "sizePanel";
             this.sizePanel.Size = new System.Drawing.Size(183, 65);
             this.sizePanel.TabIndex = 2;
-            this.sizePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.sizePanel_Paint);
             // 
             // checkBox1
             // 
@@ -136,9 +136,10 @@
             this.A.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.A.Size = new System.Drawing.Size(71, 45);
             this.A.TabIndex = 12;
-            this.A.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.A_CellEndEdit);
+            this.A.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.CellBeginEdit);
+            this.A.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellEndEdit);
             this.A.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.A_CellEnter);
-            this.A.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.A_CellValueChanged);
+            this.A.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.CellValidating);
             // 
             // F
             // 
@@ -154,6 +155,9 @@
             this.F.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.F.Size = new System.Drawing.Size(36, 45);
             this.F.TabIndex = 13;
+            this.F.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.CellBeginEdit);
+            this.F.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellEndEdit);
+            this.F.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.CellValidating);
             // 
             // menuStrip1
             // 
@@ -198,6 +202,9 @@
             this.x0.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.x0.Size = new System.Drawing.Size(71, 23);
             this.x0.TabIndex = 15;
+            this.x0.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.CellBeginEdit);
+            this.x0.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellEndEdit);
+            this.x0.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.CellValidating);
             // 
             // label3
             // 
@@ -209,7 +216,6 @@
             this.label3.Size = new System.Drawing.Size(136, 13);
             this.label3.TabIndex = 16;
             this.label3.Text = "Начальное приближение:";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // CleanF_Btn
             // 
@@ -246,6 +252,10 @@
             this.CleanX0_Btn.TabIndex = 16;
             this.CleanX0_Btn.UseVisualStyleBackColor = true;
             this.CleanX0_Btn.Click += new System.EventHandler(this.CleanX0_Btn_Click);
+            // 
+            // timerCellHighlight
+            // 
+            this.timerCellHighlight.Tick += new System.EventHandler(this.timerCellHighlight_Tick);
             // 
             // ConstructorForm
             // 
@@ -304,5 +314,6 @@
         private System.Windows.Forms.ToolTip toolTip2;
         private System.Windows.Forms.ToolTip toolTip3;
         private System.Windows.Forms.ToolStripMenuItem forwardToolStripMenuItem1;
+        private System.Windows.Forms.Timer timerCellHighlight;
     }
 }

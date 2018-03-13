@@ -15,8 +15,14 @@ namespace UI
     public partial class MainForm : Form
     {
         private MatrixInitialazer Input = new MatrixInitialazer();
+
+
+        bool inputChecked = false;
+        bool methodChecked = false;
+        bool outputChecked = false;
+
         private IMatrix matrix;
-        
+
         public MainForm()
         {
             InitializeComponent();
@@ -107,6 +113,28 @@ namespace UI
 
         private void epsBox_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            fileInputPanel.Enabled = fileInputRadioBtn.Checked;
+            manualInpitRadioBtn.Checked = !fileInputRadioBtn.Checked;
+        }
+
+        private void manualInpitRadioBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            manualInputBtn.Enabled = manualInpitRadioBtn.Checked;
+            fileInputRadioBtn.Checked = !manualInpitRadioBtn.Checked;
+        }
+
+        private void groupBox2_Enter_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void manualInputBtn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
         }
     }
 }

@@ -57,14 +57,13 @@ namespace SolverCore
                     this.ja[j]--;
                 }
             }
-
             for (int i = 0; i < Size; i++)
             {
                 Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
             }
         }
 
-        public SparseRowMatrix(int[] ja, int[] ia)
+        public SparseRowMatrix(int[] ja,int[] ia )
         {
             if (ja == null)
             {
@@ -78,7 +77,7 @@ namespace SolverCore
 
             this.ia = (int[])ia.Clone();
             this.ja = (int[])ja.Clone();
-            this.a = (double[])a.Clone();
+            this.a = new double[ja.Length];
 
             if (this.ia[0] == 1)
             {

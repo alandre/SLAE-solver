@@ -62,6 +62,7 @@
     <Compile Include="FormatForm.Designer.cs">
       <DependentUpon>FormatForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormatFactory.cs" />
     <Compile Include="MatrixInitialazer.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -100,6 +101,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\FormatFactory.datasource" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -121,6 +123,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Галочка_чб.png" />
+    <ProjectReference Include="..\SolverCore\SolverCore.csproj">
+      <Project>{ef02a481-1888-4b87-a0ca-a06ba48ac308}</Project>
+      <Name>SolverCore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -125,6 +125,33 @@
             this.timeBox.TabIndex = 25;
             this.timeBox.Text = "0";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(166, 125);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(80, 17);
+            this.label6.TabIndex = 26;
+            this.label6.Text = "(в секундах)";
+            // 
+            // timeBox
+            // 
+            this.timeBox.Enabled = false;
+            this.timeBox.Location = new System.Drawing.Point(172, 145);
+            this.timeBox.Name = "timeBox";
+            this.timeBox.Size = new System.Drawing.Size(68, 24);
+            this.timeBox.TabIndex = 25;
+            this.timeBox.Text = "0";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(182, 106);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(46, 17);
+            this.label5.TabIndex = 24;
+            this.label5.Text = "Время";
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -140,7 +167,7 @@
             this.epsBox.Name = "epsBox";
             this.epsBox.Size = new System.Drawing.Size(55, 20);
             this.epsBox.TabIndex = 8;
-            this.epsBox.Text = "1e-10";
+            this.epsBox.Text = "-10";
             this.epsBox.TextChanged += new System.EventHandler(this.epsBox_TextChanged);
             this.epsBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.epsBox_KeyPress);
             // 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using SolverCore;
 
 namespace UI
 {
@@ -15,13 +16,17 @@ namespace UI
     {
         private MatrixInitialazer Input = new MatrixInitialazer();
 
+
         bool inputChecked = false;
         bool methodChecked = false;
         bool outputChecked = false;
 
+        private IMatrix matrix;
+
         public MainForm()
         {
             InitializeComponent();
+            formatBox.DataSource = Enum.GetValues(typeof(Formats));
         }
 
         private void groupBox2_Enter(object sender, EventArgs e)
@@ -59,11 +64,12 @@ namespace UI
                     Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
                     epsBox.Enabled = true;
                     timeBox.Enabled = true;
+                    matrix = FormatFactory.Init((Formats)formatBox.SelectedIndex, Input, Input.symmetry);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Неправильный формат входного файла.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
         }

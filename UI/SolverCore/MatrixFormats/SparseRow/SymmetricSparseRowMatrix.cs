@@ -113,11 +113,6 @@ namespace SolverCore
         }
         public ILinearOperator Transpose => this;
 
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            throw new NotImplementedException();
-        }
-
         //заполнение
         public void Fill(FillFunc elems)
         {

@@ -2,11 +2,18 @@
 using Xunit;
 using SolverCore;
 
-namespace MF.DenseMatrixTests
+namespace MF.Dense
 {
     public class TestsDenseMatrix
     {
         private double[,] _matrix;
+        private DenseMatrix denseMatrix;
+
+        public TestsDenseMatrix()
+        {
+            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
+            denseMatrix = new DenseMatrix(_matrix);
+        }
 
         [Fact]
         public void DenseMatrix_TestConstructorExeptions()
@@ -21,9 +28,6 @@ namespace MF.DenseMatrixTests
         [Fact]
         public void DenseMatrix_TestIndexator()
         {
-            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
-            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
-
             Assert.Throws<IndexOutOfRangeException>(() =>  denseMatrix[4,2]);
             Assert.Equal(1.0,denseMatrix[2,1]);
         }
@@ -31,9 +35,6 @@ namespace MF.DenseMatrixTests
         [Fact]
         public void DenseMatrix_Foreach()
         {
-            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
-            var denseMatrix = new DenseMatrix(_matrix);
-
             var res = denseMatrix.Multiply(new Vector(new double[] { 1, 1, 1 }));
             Vector resVector = new Vector(new double[] { 9, 11, 16 });
 
@@ -48,9 +49,7 @@ namespace MF.DenseMatrixTests
         [Fact]
         public void DenseMatrix_TestLMultExeptions()
         {
-            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
-            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
 
             Assert.Throws<ArgumentNullException>(() => denseMatrix.LMult(null,false, DiagonalElement.One));
             Assert.Throws<RankException>(() => denseMatrix.LMult(exampleVector, false, DiagonalElement.One));
@@ -59,9 +58,6 @@ namespace MF.DenseMatrixTests
         [Fact]
         public void DenseMatrix_TestLMult()
         {
-            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
-            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
-
             Vector vector = new Vector(new double[] { 1, 3, 8 });
 
             var resultTrueDiag = denseMatrix.LMult(vector, true);
@@ -80,9 +76,7 @@ namespace MF.DenseMatrixTests
         [Fact]
         public void DenseMatrix_TestUMultExeptions()
         {
-            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
-            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
 
             Assert.Throws<ArgumentNullException>(() => denseMatrix.UMult(null, false, DiagonalElement.One));
             Assert.Throws<RankException>(() => denseMatrix.UMult(exampleVector, false, DiagonalElement.One));
@@ -91,9 +85,6 @@ namespace MF.DenseMatrixTests
         [Fact]
         public void DenseMatrix_TestUMult()
         {
-            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
-            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
-
             Vector vector = new Vector(new double[] { 1, 3, 8 });
 
             var resultFalseDiag = denseMatrix.UMult(vector, false);
@@ -112,9 +103,7 @@ namespace MF.DenseMatrixTests
         [Fact]
         public void DenseMatrix_TestLSolveExeptions()
         {
-            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
-            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
 
             Assert.Throws<ArgumentNullException>(() => denseMatrix.LSolve(null, false));
             Assert.Throws<RankException>(() => denseMatrix.LSolve(exampleVector, false));
@@ -139,8 +128,9 @@ namespace MF.DenseMatrixTests
         public void DenseMatrix_TestUSolveExeptions()
         {
             _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
-            Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
             DenseMatrix denseMatrix = new DenseMatrix(_matrix);
+
+            Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
 
             Assert.Throws<ArgumentNullException>(() => denseMatrix.USolve(null, false));
             Assert.Throws<RankException>(() => denseMatrix.USolve(exampleVector, false));
@@ -165,9 +155,6 @@ namespace MF.DenseMatrixTests
         [Fact]
         public void DenseMatrix_TestMultyplyExceptions()
         {
-            _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
-            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
-
             Vector vector = new Vector(new double[] { 1, 0});
 
             Assert.Throws<ArgumentNullException>(() => denseMatrix.Multiply(null));

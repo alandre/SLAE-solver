@@ -109,10 +109,6 @@ namespace SolverCore
         //транспонирование
         public ILinearOperator Transpose => new TransposeMatrix<SparseRowMatrix>();
 
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            throw new NotImplementedException();
-        }
         //заполнение
         public void Fill(FillFunc elems)
         {

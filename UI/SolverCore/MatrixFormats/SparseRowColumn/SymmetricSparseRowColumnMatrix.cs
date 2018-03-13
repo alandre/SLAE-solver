@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SolverCore
 {
@@ -123,6 +124,7 @@ namespace SolverCore
                 for (int j = ia[i]; j < ia[i + 1]; j++)
                 {
                     yield return (aa[j], i, ja[j]);
+                    yield return (aa[j], ja[j], i);
                 }
             }
         }
@@ -288,11 +290,6 @@ namespace SolverCore
             }
 
             return result;
-        }
-
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -148,12 +148,6 @@ namespace SolverCore
             } 
         }
 
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            // перевод в координатную
-            throw new NotImplementedException();
-        }
-
         //умножение на нижний треугольник
         public IVector LMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {

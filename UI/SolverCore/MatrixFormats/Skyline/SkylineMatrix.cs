@@ -446,11 +446,5 @@ namespace SolverCore
             
             return result;
         }
-
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            // перевод в координатную
-            throw new NotImplementedException();
-        }
     }        
 }

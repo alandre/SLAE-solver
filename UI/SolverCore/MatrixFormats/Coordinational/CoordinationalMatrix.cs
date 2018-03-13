@@ -79,11 +79,6 @@ namespace SolverCore
         public ILinearOperator Transpose
             => throw new NotImplementedException();
 
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            return new CoordinationalMatrix(this.Select(x=>(x.row, x.col, x.value)), Size);
-        }
-
         public void Fill(FillFunc elems)
         {
             if (elems == null)
@@ -97,7 +92,7 @@ namespace SolverCore
             }
         }
 
-        public System.Collections.Generic.IEnumerator<(double value, int row, int col)> GetEnumerator()
+        public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
             foreach (KeyValuePair<(int i, int j), double> rcv in matrix)
             {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SolverCore
 {
@@ -257,11 +258,6 @@ namespace SolverCore
             }
 
             return result;
-        }
-
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -14,25 +14,21 @@ namespace UI
     {
         Dictionary<(int row, int column), double> matrix = new Dictionary<(int row, int column), double>();
         int width, heigth;
+        bool symmetric = true;
+
+        ConstructorForm SLAESource;
+        MainForm mainForm;
 
         public PatternForm()
         {
             InitializeComponent();
         }
 
-        public PatternForm(DataGridView mat, int w, int h)
-        {
-            InitializeComponent();
-
-            CopyDataGridView(mat, A);
-
-            width = w;
-            heigth = h;
-
-        }
-
         private void CopyDataGridView(DataGridView org, DataGridView copy)
         {
+            copy.Columns.Clear();
+            copy.Rows.Clear();
+
             foreach (DataGridViewColumn col in org.Columns)
                 copy.Columns.Add(col.Clone() as DataGridViewColumn);
 
@@ -66,23 +62,32 @@ namespace UI
                 {
                     matrix.Remove((cell.RowIndex, cell.ColumnIndex));
                     cell.Style.BackColor = Color.White;
+
+                    if (symmetric)
+                    {
+                        matrix.Remove((cell.ColumnIndex, cell.RowIndex));
+                        ((DataGridView)sender).Rows[e.ColumnIndex].Cells[e.RowIndex].Style.BackColor = Color.White;
+                    }
                 }
                 else
                 {
                     matrix.Add((cell.RowIndex, cell.ColumnIndex), 0.0);
                     cell.Style.BackColor = Color.SteelBlue;
+
+                    if (symmetric)
+                    {
+                        matrix.Add((cell.ColumnIndex, cell.RowIndex), 0.0);
+                        ((DataGridView)sender).Rows[e.ColumnIndex].Cells[e.RowIndex].Style.BackColor = Color.SteelBlue;
+                    }
                 }
             }
         }
 
         private void PatternForm_Load(object sender, EventArgs e)
         {
-            Width = Width > 115 + width ? Width : 115 + width;
-            Height += heigth;
-            MaximumSize = Size;
-            MinimumSize = Size;
-            A.ReadOnly = true;
-            BuildMatrix();
+            SLAESource = (ConstructorForm)(Owner.Owner);
+            mainForm = (MainForm)(Owner.Owner.Owner);
+
             infoTextBox.Width = Width - 40;
         }
 
@@ -96,9 +101,45 @@ namespace UI
             A.ClearSelection();
         }
 
-        private void далееToolStripMenuItem_Click(object sender, EventArgs e)
+        private void forwardToolStripMenuItem1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void PatternForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+            mainForm.Show();
+        }
+
+        private void PatternForm_Shown(object sender, EventArgs e)
+        {
+        }
+
+        public void Update()
+        {
+            Location = Owner.Location;
+
+            DataGridView mat = new DataGridView();
+            SLAESource.GetSLAEParams(ref mat, ref width, ref heigth);
+            CopyDataGridView(mat, A);
+
+            Size size = new Size(Width > 115 + width ? Width : 115 + width, 190 + heigth);
+            MaximumSize = size;
+            MinimumSize = size;
+            Size = size;
+            A.ReadOnly = true;
+            BuildMatrix();
+        }
+
+        private void backwardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Owner.Show();
+            Hide();
         }
 
         private void BuildMatrix()
@@ -109,6 +150,13 @@ namespace UI
                     {
                         matrix.Add((cell.RowIndex, cell.ColumnIndex), Double.Parse(cell.Value.ToString()));
                         cell.Style.BackColor = Color.SteelBlue;
+
+                        if (symmetric && !matrix.ContainsKey((cell.ColumnIndex,cell.RowIndex)))
+                        {
+                            DataGridViewCell symcell = A.Rows[cell.ColumnIndex].Cells[cell.RowIndex];
+                            matrix.Add((symcell.RowIndex, symcell.ColumnIndex), Double.Parse(symcell.Value.ToString()));
+                            symcell.Style.BackColor = Color.SteelBlue;
+                        }
                     }
         }
     }

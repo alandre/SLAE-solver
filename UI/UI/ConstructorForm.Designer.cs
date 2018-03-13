@@ -37,7 +37,8 @@
             this.A = new System.Windows.Forms.DataGridView();
             this.F = new System.Windows.Forms.DataGridView();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.далееToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cancelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.forwardToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.x0 = new System.Windows.Forms.DataGridView();
             this.label3 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -113,7 +114,7 @@
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(116, 96);
+            this.label2.Location = new System.Drawing.Point(116, 100);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(32, 15);
             this.label2.TabIndex = 7;
@@ -159,20 +160,29 @@
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.далееToolStripMenuItem});
+            this.cancelToolStripMenuItem,
+            this.forwardToolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 212);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(227, 24);
             this.menuStrip1.TabIndex = 14;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // далееToolStripMenuItem
+            // cancelToolStripMenuItem
             // 
-            this.далееToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.далееToolStripMenuItem.Name = "далееToolStripMenuItem";
-            this.далееToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
-            this.далееToolStripMenuItem.Text = "Далее";
-            this.далееToolStripMenuItem.Click += new System.EventHandler(this.далееToolStripMenuItem_Click);
+            this.cancelToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.cancelToolStripMenuItem.Name = "cancelToolStripMenuItem";
+            this.cancelToolStripMenuItem.Size = new System.Drawing.Size(62, 20);
+            this.cancelToolStripMenuItem.Text = "Отмена";
+            this.cancelToolStripMenuItem.Click += new System.EventHandler(this.cancelToolStripMenuItem_Click);
+            // 
+            // forwardToolStripMenuItem1
+            // 
+            this.forwardToolStripMenuItem1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.forwardToolStripMenuItem1.Name = "forwardToolStripMenuItem1";
+            this.forwardToolStripMenuItem1.Size = new System.Drawing.Size(55, 20);
+            this.forwardToolStripMenuItem1.Text = "Далее";
+            this.forwardToolStripMenuItem1.Click += new System.EventHandler(this.forwardToolStripMenuItem1_Click);
             // 
             // x0
             // 
@@ -182,7 +192,7 @@
             this.x0.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.x0.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.x0.ColumnHeadersVisible = false;
-            this.x0.Location = new System.Drawing.Point(15, 174);
+            this.x0.Location = new System.Drawing.Point(15, 163);
             this.x0.Name = "x0";
             this.x0.RowHeadersVisible = false;
             this.x0.ScrollBars = System.Windows.Forms.ScrollBars.None;
@@ -194,7 +204,7 @@
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(12, 156);
+            this.label3.Location = new System.Drawing.Point(12, 145);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(136, 13);
             this.label3.TabIndex = 16;
@@ -230,7 +240,7 @@
             this.CleanX0_Btn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.CleanX0_Btn.BackgroundImage = global::UI.Properties.Resources.CleanIcon;
             this.CleanX0_Btn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.CleanX0_Btn.Location = new System.Drawing.Point(90, 174);
+            this.CleanX0_Btn.Location = new System.Drawing.Point(90, 163);
             this.CleanX0_Btn.Name = "CleanX0_Btn";
             this.CleanX0_Btn.Size = new System.Drawing.Size(20, 20);
             this.CleanX0_Btn.TabIndex = 16;
@@ -258,7 +268,9 @@
             this.MinimumSize = new System.Drawing.Size(243, 275);
             this.Name = "ConstructorForm";
             this.Text = "Конструктор СЛАУ";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConstructorForm_FormClosing);
             this.Load += new System.EventHandler(this.ConstructorForm_Load);
+            this.Shown += new System.EventHandler(this.ConstructorForm_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.sizePanel.ResumeLayout(false);
             this.sizePanel.PerformLayout();
@@ -281,7 +293,7 @@
         private System.Windows.Forms.DataGridView A;
         private System.Windows.Forms.DataGridView F;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem далееToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem cancelToolStripMenuItem;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.DataGridView x0;
         private System.Windows.Forms.Label label3;
@@ -291,5 +303,6 @@
         private System.Windows.Forms.Button CleanF_Btn;
         private System.Windows.Forms.ToolTip toolTip2;
         private System.Windows.Forms.ToolTip toolTip3;
+        private System.Windows.Forms.ToolStripMenuItem forwardToolStripMenuItem1;
     }
 }

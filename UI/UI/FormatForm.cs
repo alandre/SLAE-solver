@@ -15,6 +15,9 @@ namespace UI
         DataGridView A;
         int width, height;
 
+        PatternForm patternForm;
+        MainForm mainForm;
+
         public FormatForm()
         {
             InitializeComponent();
@@ -31,18 +34,44 @@ namespace UI
 
         private void formatBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            forwardItem.Enabled = formatBox.SelectedIndex > -1;
+            forwardToolStripMenuItem.Enabled = formatBox.SelectedIndex > -1;
         }
 
         private void forwardItem_Click(object sender, EventArgs e)
         {
-            PatternForm patternForm = new PatternForm(A, width, height);
+            if (patternForm == null || patternForm.IsDisposed)
+                patternForm = new PatternForm();
+            
+            patternForm.Owner = this;
             patternForm.Show();
+            patternForm.Update();
+            Hide();
+        }
+
+        private void backwardToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Owner.Show();
+            Hide();
+        }
+
+        private void FormatForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+            }
+            mainForm.Show();
+        }
+
+        private void FormatForm_Shown(object sender, EventArgs e)
+        {
+            Location = Owner.Location;
         }
 
         private void FormatForm_Load(object sender, EventArgs e)
         {
-
+            mainForm = (MainForm)Owner.Owner;
         }
     }
 }

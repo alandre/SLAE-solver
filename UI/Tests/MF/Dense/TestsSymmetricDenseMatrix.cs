@@ -25,7 +25,8 @@ namespace MF.SymmetricDense
                                        new double[] { 2, 5 },
                                        new double[] { 2, 5, 4 } };
             
-            Assert.Throws<ArgumentNullException>(() => { SymmetricDenseMatrix denseSymmetricMatrix = new SymmetricDenseMatrix(null); });      
+
+            Assert.Throws<ArgumentNullException>(() => { SymmetricDenseMatrix denseSymmetricMatrix = new SymmetricDenseMatrix((double[][])null); });      
             Assert.Throws<ArgumentException>(() => { SymmetricDenseMatrix denseMatrix2 = new SymmetricDenseMatrix(-1); });
             Assert.Throws<RankException>(() => { SymmetricDenseMatrix denseMatrix1 = new SymmetricDenseMatrix(_matrix); });
         }

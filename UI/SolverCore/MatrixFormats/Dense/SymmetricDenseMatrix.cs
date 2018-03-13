@@ -52,11 +52,21 @@ namespace SolverCore
                 throw new ArgumentException($"{nameof(size)} must be nonnegative");
             }
 
-            matrix = new double[size][];
+            AllocateMemory(size);
+        }
 
-            for(int i = 0; i < size; i++)
+        public SymmetricDenseMatrix(SymmetricCoordinationalMatrix coordinationalMatrix)
+        {
+            if(coordinationalMatrix == null)
             {
-                matrix[i] = new double[i + 1];
+                throw new ArgumentNullException(nameof(coordinationalMatrix));
+            }
+
+            AllocateMemory(coordinationalMatrix.Size);
+
+            foreach(var item in coordinationalMatrix)
+            {
+                matrix[item.row][item.col] = item.value;
             }
         }
 
@@ -258,6 +268,16 @@ namespace SolverCore
             }
 
             return result;
+        }
+
+        private void AllocateMemory(int size)
+        {
+            matrix = new double[size][];
+
+            for (int i = 0; i < size; i++)
+            {
+                matrix[i] = new double[i + 1];
+            }
         }
     }
 }

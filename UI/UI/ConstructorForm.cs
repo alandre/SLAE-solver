@@ -249,6 +249,33 @@ namespace UI
             Location = Owner.Location;
         }
 
+        private void A_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (!Double.TryParse(e.FormattedValue.ToString(), out double result))
+            {
+                MessageBox.Show("Введите корректное значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                A.EditingControl.Text = "0";
+            }
+        }
+
+        private void F_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (!Double.TryParse(e.FormattedValue.ToString(), out double result))
+            {
+                MessageBox.Show("Введите корректное значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                F.EditingControl.Text = "0";
+            }
+        }
+
+        private void x0_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (!Double.TryParse(e.FormattedValue.ToString(), out double result))
+            {
+                MessageBox.Show("Введите корректное значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                x0.EditingControl.Text = "0";
+            }
+        }
+
         private void A_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             // Если ячейка read-only, принудительный TAB 

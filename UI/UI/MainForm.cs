@@ -120,5 +120,23 @@ namespace UI
             ResultsForm resultsForm = new ResultsForm();
             resultsForm.Show();
         }
+
+        private void epsBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (!Double.TryParse(epsBox.Text, out double result))
+            {
+                MessageBox.Show("Введите корректное значение погрешности.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                epsBox.Text = "1e-10";
+            }
+        }
+
+        private void iterBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (!int.TryParse(epsBox.Text, out int result))
+            {
+                MessageBox.Show("Введите корректное значение погрешности.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                iterBox.Text = "100";
+            }
+        }
     }
 }

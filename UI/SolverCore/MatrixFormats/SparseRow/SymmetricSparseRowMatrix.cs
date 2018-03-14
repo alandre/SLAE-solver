@@ -34,12 +34,12 @@ namespace SolverCore
 
             if (a.Length != ja.Length)
             {
-                throw new ArgumentNullException("a.size != ja.size", nameof(a));
+                throw new ArgumentNullException("a and ja must be equal size");
             }
 
             if (a.Length != ia[ia.Length - 1])
             {
-                throw new ArgumentNullException("a.size != ia.[size_matrix]", nameof(ia));
+                throw new ArgumentNullException("wrong count of elements");
             }
             this.ia = (int[])ia.Clone();
             this.ja = (int[])ja.Clone();
@@ -77,6 +77,10 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(ia));
             }
 
+            if (ja.Length != ia[ia.Length - 1])
+            {
+                throw new ArgumentNullException("wrong count of elements");
+            }
             this.ia = (int[])ia.Clone();
             this.ja = (int[])ja.Clone();
             this.a = new double[ja.Length];
@@ -107,27 +111,26 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(matrix));
             }
-            var elems = (IEnumerable)matrix.GetEnumerator();
+            IEnumerable elems = matrix.OrderBy(key => key.row).ThenBy(key => key.col);
             ia = new int[matrix.Size + 1];
-            ja = new int[elems.Cast<(double value, int row, int col)>().Count()];
-            a = new double[elems.Cast<(double value, int row, int col)>().Count()];
-            int i = 0, j = 0;
-            ia[i] = 0;
-            ia[i + 1] = 0;
-            elems.Cast<(double value, int row, int col)>().OrderBy(key => key.row).ThenBy(key => key.col);
+            List<int> list_ja=new List<int>();
+            List<double> list_a = new List<double>();
             foreach (KeyValuePair<(int row, int col), double> item in elems)
             {
-                ja[j] = item.Key.col;
-                a[j] = item.Value;
-                j++;
-                if (item.Key.row != i)
+                if (item.Key.row>=item.Key.col)
                 {
-                    i++;
-                    ia[i + 1] = ia[i];
-
+                    ia[item.Key.col + 1]++;
+                    list_ja.Add(item.Key.col);
+                    list_a.Add(item.Value);
                 }
-                else
-                    ia[i + 1]++;
+            }
+            ja = new int[ia[Size+1]];
+            a = new double[ja.Length];
+            ja = list_ja.ToArray();
+            a = list_a.ToArray();
+            for (int i = 1; i < Size; i++)
+            {
+                ia[i + 1] += ia[i];
             }
         }
 
@@ -219,6 +222,7 @@ namespace SolverCore
                 for (; ia1 < ia2; ia1++)
                 {
                     yield return (a[ia1], i, ja[ia1]);
+                   if ( i != ja[ia1] ) yield return (a[ia1],  ja[ia1],i);
                 }
             }
         }
@@ -250,7 +254,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0, i = " + i.ToString(), nameof(a));
+                    throw new ArgumentNullException(nameof(a));
                 }
                 result[i] = sum;
             }
@@ -287,7 +291,7 @@ namespace SolverCore
                 } 
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0, i = " + i.ToString(), nameof(a));
+                    throw new ArgumentNullException(nameof(a));
                 }
             }
             return result;
@@ -378,7 +382,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0, i = " + i.ToString(), nameof(a));
+                    throw new ArgumentNullException(nameof(a));
                 }
             }
             return result;

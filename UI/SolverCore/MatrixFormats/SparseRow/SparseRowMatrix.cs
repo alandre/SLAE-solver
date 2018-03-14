@@ -27,19 +27,14 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(ja));
             }
 
-            if (ia == null)
-            {
-                throw new ArgumentNullException(nameof(ia));
-            }
-
             if (a.Length != ja.Length)
             {
-                throw new ArgumentNullException("a.size != ja.size", nameof(a));
+                throw new ArgumentException("a and ja must be equal size");
             }
 
             if (a.Length != ia[ia.Length - 1])
             {
-                throw new ArgumentNullException("a.size != ia.[size_matrix]", nameof(ia));
+                throw new ArgumentException("wrong count of elements");
             }
             this.ia = (int[])ia.Clone();
             this.ja = (int[])ja.Clone();
@@ -75,6 +70,11 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(ia));
             }
 
+
+            if (ja.Length != ia[ia.Length - 1])
+            {
+                throw new ArgumentException("wrong count of elements");
+            }
             this.ia = (int[])ia.Clone();
             this.ja = (int[])ja.Clone();
             this.a = new double[ja.Length];
@@ -186,7 +186,6 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(elems));
             }
-
             for (int i=0;i<=Size;i++)
             {
                 int ia1 = ia[i];
@@ -306,7 +305,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0, i = "+i.ToString(), nameof(a));
+                    throw new ArgumentNullException(nameof(a));
                 }
             }
             return result;
@@ -342,7 +341,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0, i = " + i.ToString(), nameof(a));
+                    throw new ArgumentNullException( nameof(a));
                 }
             }
             return result;
@@ -492,7 +491,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0, i = "+i.ToString(), nameof(a));
+                    throw new ArgumentNullException(nameof(a));
                 }
             }
             return result;
@@ -528,7 +527,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0,i = " + i.ToString(), nameof(a));
+                    throw new ArgumentNullException();
                 }
             }
             return result;

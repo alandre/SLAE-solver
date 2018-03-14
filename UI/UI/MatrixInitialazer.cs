@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 
 namespace UI
 {
-    class MatrixInitialazer
+    public class MatrixInitialazer
     {
         public int[] column { get; set; }
         public int[] row { get; set; }

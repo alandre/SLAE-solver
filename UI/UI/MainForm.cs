@@ -30,7 +30,13 @@ namespace UI
         public MainForm()
         {
             InitializeComponent();
-            formatBox.DataSource = Enum.GetValues(typeof(Formats));
+            var tmp = new FormatFactory();            
+            var keyList = new List<string>(tmp.formats.Keys);
+            for (int i = 0; i < keyList.Count; i++)
+            {
+                formatBox.Items.Add(keyList[i]);
+            }
+            formatBox.Text = formatBox.Items[0].ToString();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -42,7 +48,7 @@ namespace UI
         {
             try
             {
-                OpenFileDialog file = new OpenFileDialog();
+                var file = new OpenFileDialog();
                 file.Filter = "Text file|*.txt";
                 if (file.ShowDialog() == DialogResult.OK)
                 {
@@ -53,7 +59,10 @@ namespace UI
                     Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
-                    matrix = FormatFactory.Init((Formats)formatBox.SelectedIndex, Input, Input.symmetry);
+                    var tmp = new FormatFactory();
+                    var value = tmp.formats[formatBox.SelectedItem.ToString()];
+                    matrix = FormatFactory.Init(value, Input, Input.symmetry);
+                    var a = FormatFactory.patternRequired(formatBox.SelectedItem.ToString());
                 }
             }
             catch (Exception)

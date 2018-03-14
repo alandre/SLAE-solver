@@ -79,11 +79,6 @@
             // 
             this.formatBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.formatBox.FormattingEnabled = true;
-            this.formatBox.Items.AddRange(new object[] {
-            "Плотный ",
-            "Строчный разреженный без выделенной диагонали",
-            "Строчно-столбцовый",
-            "Координатный"});
             this.formatBox.Location = new System.Drawing.Point(15, 27);
             this.formatBox.Name = "formatBox";
             this.formatBox.Size = new System.Drawing.Size(197, 21);

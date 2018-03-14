@@ -21,12 +21,19 @@ namespace UI
         public FormatForm()
         {
             InitializeComponent();
+            var tmp = new FormatFactory();
+            var keyList = new List<string>(tmp.formats.Keys);
+            for (int i = 0; i < keyList.Count; i++)
+            {
+                formatBox.Items.Add(keyList[i]);
+            }
+            formatBox.Text = formatBox.Items[0].ToString();
         }
 
         public FormatForm(DataGridView mat, int w, int h)
         {
             InitializeComponent();
-
+            
             A = mat;
             width = w;
             height = h;

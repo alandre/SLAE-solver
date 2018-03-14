@@ -29,12 +29,12 @@ namespace SolverCore
 
             if (a.Length != ja.Length)
             {
-                throw new ArgumentNullException("a and ja must be equal size");
+                throw new ArgumentException("a and ja must be equal size");
             }
 
             if (a.Length != ia[ia.Length - 1])
             {
-                throw new ArgumentNullException("wrong count of elements");
+                throw new ArgumentException("wrong count of elements");
             }
             this.ia = (int[])ia.Clone();
             this.ja = (int[])ja.Clone();
@@ -73,7 +73,7 @@ namespace SolverCore
 
             if (ja.Length != ia[ia.Length - 1])
             {
-                throw new ArgumentNullException("wrong count of elements");
+                throw new ArgumentException("wrong count of elements");
             }
             this.ia = (int[])ia.Clone();
             this.ja = (int[])ja.Clone();

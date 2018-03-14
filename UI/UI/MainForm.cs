@@ -62,7 +62,7 @@ namespace UI
                     var tmp = new FormatFactory();
                     var value = tmp.formats[formatBox.SelectedItem.ToString()];
                     matrix = FormatFactory.Init(value, Input, Input.symmetry);
-                    var a = FormatFactory.patternRequired(formatBox.SelectedItem.ToString());
+                    var a = FormatFactory.PatternRequired(formatBox.SelectedItem.ToString());
                 }
             }
             catch (Exception)

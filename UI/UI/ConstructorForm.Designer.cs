@@ -47,7 +47,6 @@
             this.CleanF_Btn = new System.Windows.Forms.Button();
             this.CleanMatrix_Btn = new System.Windows.Forms.Button();
             this.CleanX0_Btn = new System.Windows.Forms.Button();
-            this.timerCellHighlight = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.sizePanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.A)).BeginInit();
@@ -253,10 +252,6 @@
             this.CleanX0_Btn.UseVisualStyleBackColor = true;
             this.CleanX0_Btn.Click += new System.EventHandler(this.CleanX0_Btn_Click);
             // 
-            // timerCellHighlight
-            // 
-            this.timerCellHighlight.Tick += new System.EventHandler(this.timerCellHighlight_Tick);
-            // 
             // ConstructorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -314,6 +309,5 @@
         private System.Windows.Forms.ToolTip toolTip2;
         private System.Windows.Forms.ToolTip toolTip3;
         private System.Windows.Forms.ToolStripMenuItem forwardToolStripMenuItem1;
-        private System.Windows.Forms.Timer timerCellHighlight;
     }
 }

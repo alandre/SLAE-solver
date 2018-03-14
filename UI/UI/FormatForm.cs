@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SolverCore;
 
 namespace UI
 {
@@ -15,6 +16,7 @@ namespace UI
         DataGridView A;
         int width, height;
 
+        ConstructorForm constructorForm;
         PatternForm patternForm;
         MainForm mainForm;
 
@@ -46,13 +48,27 @@ namespace UI
 
         private void forwardItem_Click(object sender, EventArgs e)
         {
-            if (patternForm == null || patternForm.IsDisposed)
-                patternForm = new PatternForm();
-            
-            patternForm.Owner = this;
-            patternForm.Show();
-            patternForm.Update();
-            Hide();
+            if (FormatFactory.PatternRequired(formatBox.Text))
+            {
+                if (patternForm == null || patternForm.IsDisposed)
+                    patternForm = new PatternForm();
+
+                patternForm.Owner = this;
+                patternForm.Show();
+                patternForm.Update(formatBox.Text);
+                Hide();
+            }
+            else
+            {
+                CoordinationalMatrix A;
+                IVector x0, b;
+                constructorForm = (ConstructorForm)Owner;
+                constructorForm.GetSLAE(out A, out b, out x0);
+                IMatrix mat = FormatFactory.Convert(A, formatBox.Text);
+                mainForm.SetSLAE(mat, b, x0);
+                mainForm.Show();
+                Hide();
+            }
         }
 
         private void backwardToolStripMenuItem_Click(object sender, EventArgs e)

@@ -16,11 +16,10 @@ namespace UI
         int n = 2; // размерность матрицы
         int width, height; // базовые ширина и высота формы
         int cellWidth = 35, cellHeight; // ширина и высота ячеек
-        bool symmetrized = false; // является ли матрица симметричной
-
-        DataGridViewCell highlightedCell;
 
         FormatForm formatForm;
+
+        public bool IsSymmetric { get; private set; } // является ли матрица симметричной
 
         public ConstructorForm()
         {
@@ -54,6 +53,8 @@ namespace UI
 
         private void ConstructorForm_Load(object sender, EventArgs e)
         {
+            IsSymmetric = false;
+
             width = this.Width;
             height = this.Height;
             F.RowTemplate.Height = cellHeight = A.RowTemplate.Height;
@@ -160,12 +161,12 @@ namespace UI
                     A.Rows[i].Cells[j].Value = A.Rows[j].Cells[i].Value;
                 }
 
-            symmetrized = true;
+            IsSymmetric = true;
         }
         
         private void CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if (symmetrized)
+            if (IsSymmetric)
             {
                 int j = e.ColumnIndex;
                 int i = e.RowIndex;
@@ -223,7 +224,7 @@ namespace UI
 
         private void Unsymmetrize()
         {
-            symmetrized = false;
+            IsSymmetric = false;
 
             for (int i = 0; i < n; i++)
                 for (int j = i + 1; j < n; j++)
@@ -294,11 +295,6 @@ namespace UI
             }
         }
 
-        private void timerCellHighlight_Tick(object sender, EventArgs e)
-        {
-            highlightedCell.Style.BackColor = Color.White;
-        }
-
         private void CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             forwardToolStripMenuItem1.Enabled = false;
@@ -311,9 +307,8 @@ namespace UI
             h = cellHeight * (n - 2);
         }
 
-        public void GetSLAEParams(out int _n, /*out IMatrix _A,*/ out IVector _b, out IVector _x0)
+        public void GetSLAE(out CoordinationalMatrix _A, out IVector _b, out IVector _x0)
         {
-            _n = n;
             _b = new Vector(n);
             _x0 = new Vector(n);
             
@@ -322,6 +317,8 @@ namespace UI
                 _b[i] = double.Parse(F.Rows[i].Cells[0].Value.ToString());
                 _x0[i] = double.Parse(x0.Rows[0].Cells[i].Value.ToString());
             }
+
+            _A = MatrixVisualRepresentation.GridViewToCoordinational(A);
         }
     }
 }

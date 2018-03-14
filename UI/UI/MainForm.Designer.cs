@@ -28,8 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.iterBox = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             this.methodCheckedImg = new System.Windows.Forms.PictureBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -49,7 +52,7 @@
             this.Start = new System.Windows.Forms.Button();
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuOpenOutput = new System.Windows.Forms.ToolStripMenuItem();
-            this.протоколРешенияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resultsFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.outputCheckedImg = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -57,9 +60,9 @@
             this.progressBar2 = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.iterBox = new System.Windows.Forms.TextBox();
+            this.timerHightlight = new System.Windows.Forms.Timer(this.components);
             this.groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
             this.inputData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).BeginInit();
@@ -71,8 +74,8 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.iterBox);
+            this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.methodCheckedImg);
             this.groupBox2.Controls.Add(this.checkedListBox1);
             this.groupBox2.Controls.Add(this.label2);
@@ -84,7 +87,43 @@
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Выбор методов решения";
-            this.groupBox2.Enter += new System.EventHandler(this.groupBox2_Enter_1);
+            // 
+            // iterBox
+            // 
+            this.iterBox.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.iterBox.Location = new System.Drawing.Point(49, 22);
+            this.iterBox.Maximum = new decimal(new int[] {
+            1000000000,
+            0,
+            0,
+            0});
+            this.iterBox.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.iterBox.Name = "iterBox";
+            this.iterBox.Size = new System.Drawing.Size(50, 20);
+            this.iterBox.TabIndex = 30;
+            this.iterBox.ThousandsSeparator = true;
+            this.iterBox.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 25);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(43, 13);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "maxiter:";
             // 
             // methodCheckedImg
             // 
@@ -135,8 +174,7 @@
             this.epsBox.Size = new System.Drawing.Size(55, 20);
             this.epsBox.TabIndex = 8;
             this.epsBox.Text = "1e-10";
-            this.epsBox.TextChanged += new System.EventHandler(this.epsBox_TextChanged);
-            this.epsBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.epsBox_KeyPress);
+            this.epsBox.Validating += new System.ComponentModel.CancelEventHandler(this.epsBox_Validating);
             // 
             // inputData
             // 
@@ -178,7 +216,6 @@
             this.manualInputBtn.TabStop = true;
             this.manualInputBtn.Text = "Открыть конструктор...";
             this.manualInputBtn.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.manualInputBtn.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.manualInputBtn_LinkClicked);
             this.manualInputBtn.Click += new System.EventHandler(this.ManualEntry_Click);
             // 
             // manualInpitRadioBtn
@@ -262,16 +299,10 @@
             // 
             this.formatBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.formatBox.FormattingEnabled = true;
-            this.formatBox.Items.AddRange(new object[] {
-            "Плотный ",
-            "Строчный разреженный без выделенной диагонали",
-            "Строчно-столбцовый",
-            "Координатный"});
             this.formatBox.Location = new System.Drawing.Point(14, 41);
             this.formatBox.Name = "formatBox";
             this.formatBox.Size = new System.Drawing.Size(197, 21);
             this.formatBox.TabIndex = 3;
-            this.formatBox.SelectedIndexChanged += new System.EventHandler(this.formatBox_SelectedIndexChanged);
             // 
             // progressBar1
             // 
@@ -297,7 +328,7 @@
             this.menuStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuOpenOutput,
-            this.протоколРешенияToolStripMenuItem});
+            this.resultsFormToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 324);
             this.menuStrip2.Name = "menuStrip2";
             this.menuStrip2.Size = new System.Drawing.Size(519, 24);
@@ -307,19 +338,19 @@
             // toolStripMenuOpenOutput
             // 
             this.toolStripMenuOpenOutput.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripMenuOpenOutput.Enabled = false;
             this.toolStripMenuOpenOutput.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripMenuOpenOutput.Name = "toolStripMenuOpenOutput";
-            this.toolStripMenuOpenOutput.Size = new System.Drawing.Size(179, 20);
-            this.toolStripMenuOpenOutput.Text = "Открыть файл с результатом";
+            this.toolStripMenuOpenOutput.Size = new System.Drawing.Size(188, 20);
+            this.toolStripMenuOpenOutput.Text = "Открыть папку с результатами";
+            this.toolStripMenuOpenOutput.Click += new System.EventHandler(this.toolStripMenuOpenOutput_Click);
             // 
-            // протоколРешенияToolStripMenuItem
+            // resultsFormToolStripMenuItem
             // 
-            this.протоколРешенияToolStripMenuItem.Enabled = false;
-            this.протоколРешенияToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.протоколРешенияToolStripMenuItem.Name = "протоколРешенияToolStripMenuItem";
-            this.протоколРешенияToolStripMenuItem.Size = new System.Drawing.Size(127, 20);
-            this.протоколРешенияToolStripMenuItem.Text = "Протокол решения";
+            this.resultsFormToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.resultsFormToolStripMenuItem.Name = "resultsFormToolStripMenuItem";
+            this.resultsFormToolStripMenuItem.Size = new System.Drawing.Size(112, 20);
+            this.resultsFormToolStripMenuItem.Text = "Сводные данные";
+            this.resultsFormToolStripMenuItem.Click += new System.EventHandler(this.resultsFormToolStripMenuItem_Click);
             // 
             // groupBox3
             // 
@@ -332,7 +363,6 @@
             this.groupBox3.TabIndex = 20;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Выходные данные";
-            this.groupBox3.Enter += new System.EventHandler(this.groupBox3_Enter);
             // 
             // outputCheckedImg
             // 
@@ -364,7 +394,6 @@
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Обзор...";
             this.linkLabel1.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.linkLabel1.Click += new System.EventHandler(this.ChoseOutput_Click);
             // 
             // progressBar2
             // 
@@ -392,22 +421,9 @@
             this.label5.Text = "1 из 4";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
-            // label7
+            // timerHightlight
             // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 25);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(43, 13);
-            this.label7.TabIndex = 29;
-            this.label7.Text = "maxiter:";
-            // 
-            // iterBox
-            // 
-            this.iterBox.Location = new System.Drawing.Point(51, 22);
-            this.iterBox.Name = "iterBox";
-            this.iterBox.Size = new System.Drawing.Size(44, 20);
-            this.iterBox.TabIndex = 28;
-            this.iterBox.Text = "100";
+            this.timerHightlight.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // MainForm
             // 
@@ -430,6 +446,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.iterBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).EndInit();
             this.inputData.ResumeLayout(false);
             this.inputData.PerformLayout();
@@ -475,14 +492,15 @@
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.ProgressBar progressBar2;
-        private System.Windows.Forms.ToolStripMenuItem протоколРешенияToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem resultsFormToolStripMenuItem;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox inputCheckedImg;
         private System.Windows.Forms.PictureBox methodCheckedImg;
         private System.Windows.Forms.PictureBox outputCheckedImg;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox iterBox;
+        private System.Windows.Forms.NumericUpDown iterBox;
+        private System.Windows.Forms.Timer timerHightlight;
     }
 }
 

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using SolverCore;
 
 namespace UI
 {
@@ -15,23 +16,14 @@ namespace UI
         int n = 2; // размерность матрицы
         int width, height; // базовые ширина и высота формы
         int cellWidth = 35, cellHeight; // ширина и высота ячеек
-        bool symmetrized = false; // является ли матрица симметричной
 
         FormatForm formatForm;
+
+        public bool IsSymmetric { get; private set; } // является ли матрица симметричной
 
         public ConstructorForm()
         {
             InitializeComponent();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void sizePanel_Paint(object sender, PaintEventArgs e)
-        {
-
         }
 
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -61,6 +53,8 @@ namespace UI
 
         private void ConstructorForm_Load(object sender, EventArgs e)
         {
+            IsSymmetric = false;
+
             width = this.Width;
             height = this.Height;
             F.RowTemplate.Height = cellHeight = A.RowTemplate.Height;
@@ -112,7 +106,7 @@ namespace UI
             // если размерность уменьшилась
             else
             {
-                for (int j = n; j < n - diff; ++j)
+                for (int j = n - diff - 1; j >= n; --j)
                 {
                     A.Columns.RemoveAt(j);
                     A.Rows.RemoveAt(j);
@@ -157,10 +151,6 @@ namespace UI
                 Unsymmetrize();
         }
 
-        private void A_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
         private void Symmetrize()
         {
             for (int i = 0; i < n; i++)
@@ -171,23 +161,20 @@ namespace UI
                     A.Rows[i].Cells[j].Value = A.Rows[j].Cells[i].Value;
                 }
 
-            symmetrized = true;
+            IsSymmetric = true;
         }
-
-        private void label3_Click(object sender, EventArgs e)
+        
+        private void CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-
-        }
-
-        private void A_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            if (symmetrized)
+            if (IsSymmetric)
             {
                 int j = e.ColumnIndex;
                 int i = e.RowIndex;
 
                 A.Rows[j].Cells[i].Value = A.Rows[i].Cells[j].Value;
             }
+
+            forwardToolStripMenuItem1.Enabled = true;
         }
 
         private void CleanMatrix_Btn_Click(object sender, EventArgs e)
@@ -207,8 +194,22 @@ namespace UI
 
         private void cancelToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            abortEdit(A);
+            abortEdit(F);
+            abortEdit(x0);
+
             Owner.Show();
             this.Hide();
+        }
+
+        private void abortEdit(DataGridView dataGridView)
+        {
+            if (dataGridView.IsCurrentCellInEditMode)
+            {
+                var old = dataGridView.CurrentCell.FormattedValue;
+                dataGridView.EndEdit();
+                dataGridView.CurrentCell.Value = old;
+            }
         }
 
         private void forwardToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -223,7 +224,7 @@ namespace UI
 
         private void Unsymmetrize()
         {
-            symmetrized = false;
+            IsSymmetric = false;
 
             for (int i = 0; i < n; i++)
                 for (int j = i + 1; j < n; j++)
@@ -249,6 +250,33 @@ namespace UI
             Location = Owner.Location;
         }
 
+        private void A_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (!Double.TryParse(e.FormattedValue.ToString(), out double result))
+            {
+                MessageBox.Show("Введите корректное значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                A.EditingControl.Text = "0";
+            }
+        }
+
+        private void F_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (!Double.TryParse(e.FormattedValue.ToString(), out double result))
+            {
+                MessageBox.Show("Введите корректное значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                F.EditingControl.Text = "0";
+            }
+        }
+
+        private void x0_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (!Double.TryParse(e.FormattedValue.ToString(), out double result))
+            {
+                MessageBox.Show("Введите корректное значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                x0.EditingControl.Text = "0";
+            }
+        }
+
         private void A_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             // Если ячейка read-only, принудительный TAB 
@@ -258,11 +286,39 @@ namespace UI
             }
         }
 
-        public void GetSLAEParams(ref DataGridView mat, ref int w, ref int h)
+        private void CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
+        {
+            if (!double.TryParse(e.FormattedValue.ToString(), out double res))
+            {
+                e.Cancel = true;
+                //((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "Введенное значение не является вещественным числом.";
+            }
+        }
+
+        private void CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            forwardToolStripMenuItem1.Enabled = false;
+        }
+
+        public void GetGridParams(ref DataGridView mat, ref int w, ref int h)
         {
             mat = A;
             w = cellWidth * (n - 2);
             h = cellHeight * (n - 2);
+        }
+
+        public void GetSLAE(out CoordinationalMatrix _A, out IVector _b, out IVector _x0)
+        {
+            _b = new Vector(n);
+            _x0 = new Vector(n);
+            
+            for (int i = 0; i < n; i++)
+            {
+                _b[i] = double.Parse(F.Rows[i].Cells[0].Value.ToString());
+                _x0[i] = double.Parse(x0.Rows[0].Cells[i].Value.ToString());
+            }
+
+            _A = MatrixVisualRepresentation.GridViewToCoordinational(A);
         }
     }
 }

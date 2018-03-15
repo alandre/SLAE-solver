@@ -27,6 +27,8 @@ namespace UI
         private IVector b;
         private IVector x0;
         static List<String> Types = null;
+
+        private string path;
         ConstructorForm constructorForm;
 
         public MainForm()
@@ -40,6 +42,10 @@ namespace UI
                 formatBox.Items.Add(keyList[i]);
             }
             formatBox.Text = formatBox.Items[0].ToString();
+
+            var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   //get path with .exe file
+            path = Path.GetDirectoryName(location);
+            textBox1.Text = path;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -201,6 +207,25 @@ namespace UI
         public void write()
         {
             return;
+        }
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FolderBrowserDialog FBD = new FolderBrowserDialog();
+            if (FBD.ShowDialog() == DialogResult.OK)
+            {
+                path = FBD.SelectedPath;
+                textBox1.Text = path;
+            }
+        }
+
+        private void Start_Click(object sender, EventArgs e)
+        {
+            var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
+            string full_directory_name = path + uniqueDirectoryName;
+            Directory.CreateDirectory(@full_directory_name);
+
+            //TODO: different file names (depending on the choosen methods)
+            System.IO.File.Create(full_directory_name + "\\result.txt");
         }
     }
 }

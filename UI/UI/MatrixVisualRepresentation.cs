@@ -21,22 +21,6 @@ namespace UI
         public static int CellWidth { get; } = 35;
         public static int CellHeight { get; } = 22;
 
-        public static void GenerateInitialPattern(ref DataGridView gridView)
-        {
-            foreach (DataGridViewRow row in gridView.Rows)
-                foreach (DataGridViewCell cell in row.Cells)
-                {
-                    DataGridViewCell scell = gridView.Rows[cell.ColumnIndex].Cells[cell.RowIndex];
-                    if (cell.Value.ToString() != "0" || scell.Value.ToString() != "0")
-                    {
-                        cell.Tag = CellTag.ForcedSignficant;
-                        scell.Tag = CellTag.ForcedSignficant;
-                    }
-                    else
-                        cell.Tag = CellTag.Nonsignificant;
-                }
-        }
-
         private static void AddElementToPattern(ref DataGridView gridView, int i, int j)
         {
             gridView.Rows[i].Cells[j].Tag = CellTag.Significant;
@@ -89,7 +73,7 @@ namespace UI
                 return new CoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
         }
 
-        public static DataGridView CoordinationalToGridView(IMatrix mat)
+        public static DataGridView CoordinationalToGridView(IMatrix mat, bool symmetric)
         {
             DataGridView gridView = new DataGridView();
             int n = mat.Size;
@@ -107,7 +91,25 @@ namespace UI
 
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++)
-                    gridView.Rows[i].Cells[j].Value = mat[i, j];
+                {
+                    gridView.Rows[i].Cells[j].Value = 0;
+                    gridView.Rows[i].Cells[j].Tag = CellTag.Nonsignificant;
+                }
+
+            foreach (var item in mat)
+            {
+                int i = item.row;
+                int j = item.col;
+                double val = item.value;
+
+                gridView.Rows[i].Cells[j].Value = val;
+                gridView.Rows[i].Cells[j].Tag = CellTag.ForcedSignficant;
+                if (symmetric)
+                {
+                    gridView.Rows[j].Cells[i].Value = val;
+                    gridView.Rows[j].Cells[i].Tag = CellTag.ForcedSignficant;
+                }
+            }
 
             return gridView;
         }

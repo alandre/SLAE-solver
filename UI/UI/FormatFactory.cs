@@ -100,8 +100,7 @@ namespace UI
                 case "Строчный без выделенной диагонали":
                     return new SparseRowMatrix(mat);
                 case "Строчно-стобцовый":
-                    //return new SparseRowColumnMatrix(mat);
-                    return mat;
+                    return new SparseRowColumnMatrix(mat);
                 default:
                     // Должны вызываться конвертеры!!!!!!!!!!!!!!!!!!!!
                     return mat;
@@ -122,8 +121,7 @@ namespace UI
                 case "Строчный без выделенной диагонали":
                     return new SymmetricSparseRowMatrix(mat);
                 case "Строчно-стобцовый":
-                    //return new SymmetricSparseRowColumnMatrix(mat);
-                    return mat;
+                    return new SymmetricSparseRowColumnMatrix(mat);
                 default:
                     // Должны вызываться конвертеры!!!!!!!!!!!!!!!!!!!!
                     return mat;

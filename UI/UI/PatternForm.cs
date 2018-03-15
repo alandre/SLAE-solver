@@ -102,7 +102,7 @@ namespace UI
 
             DataGridView mat = new DataGridView();
 
-            mat = MatrixVisualRepresentation.CoordinationalToGridView(MatrixExtensions.ConvertToCoordinationalMatrix(matrix));
+            mat = MatrixVisualRepresentation.CoordinationalToGridView(MatrixExtensions.ConvertToCoordinationalMatrix(matrix), SLAESource.IsSymmetric);
             MatrixVisualRepresentation.CopyDataGridView(mat, ref A);
 
             width = cellWidth * (n - 2);
@@ -113,7 +113,6 @@ namespace UI
             MinimumSize = size;
             Size = size;
             A.ReadOnly = true;
-            MatrixVisualRepresentation.GenerateInitialPattern(ref A);
             MatrixVisualRepresentation.PaintPattern(ref A, Color.SteelBlue);
         }
     }

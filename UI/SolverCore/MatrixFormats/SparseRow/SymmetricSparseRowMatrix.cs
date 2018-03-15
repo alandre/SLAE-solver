@@ -7,9 +7,9 @@ namespace SolverCore
 {
     public class SymmetricSparseRowMatrix : IMatrix, ILinearOperator
     {
-        private double[] a;//значения
-        private int[] ja;//положение ненулевых элементов в строке(индекс j)
-        private int[] ia;//количество ненулевых элементов в строк
+        private double[] a; //значения
+        private int[] ja;   //положение ненулевых элементов в строке(индекс j)
+        private int[] ia;   //количество ненулевых элементов в строк
 
         //ia1- первый элемент в строке
         //ia2 - последний элемент в строке или первый элемент следующий строки

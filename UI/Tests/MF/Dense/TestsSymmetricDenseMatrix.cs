@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 using SolverCore;
+using System.Collections.Generic;
 
 namespace MF.SymmetricDense
 {
@@ -41,15 +42,13 @@ namespace MF.SymmetricDense
         [Fact]
         public void DenseSymmetricMatrix_Foreach()
         {
-            var res = denseSymmetricMatrix.Multiply(new Vector(new double[] { 1, 1, 1 }));
-            Vector resVector = new Vector(new double[] { 5, 12, 11 });
 
-            int i = 0;
-            foreach (var el in res)
-            {
-                Assert.Equal(el, resVector[i]);
-                i++;
-            }
+            var matrix = new double[3, 3] { { 1, 2, 2 },
+                                            { 2, 5, 5 }, 
+                                            { 2, 5, 4 } };
+            DenseMatrix denseMatrix = new DenseMatrix(matrix);
+
+            Assert.True(new HashSet<(double,int,int)>(denseSymmetricMatrix).SetEquals(denseMatrix));
         }
 
         [Fact]

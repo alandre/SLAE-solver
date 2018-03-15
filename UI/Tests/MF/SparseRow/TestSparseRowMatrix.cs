@@ -11,27 +11,25 @@ namespace MF.SparseRow
 {
     public class TestSparseRowMatrix
     {
-        private double[] _a;
-        private int[] _ia;
-        private int[] _ja;
+        private static double[] _a;
+        private static int[] _ia;
+        private static int[] _ja;
         private IVector vector;
 
-        private SparseRowMatrix sparseRowMatrix;
-
+        public static SparseRowMatrix sparseRowMatrix;
 
         public TestSparseRowMatrix()
         {
             _a = new double[] { 1, 8, 2, 7, 2, 3, 6, 4 };
             _ia = new int[] { 0, 2, 4, 6, 8 };
             _ja = new int[] { 0, 2, 1, 3, 0, 2, 1, 3 };
-
             vector = new Vector(new double[] { 2, 1, 1, 1 });
 
             sparseRowMatrix = new SparseRowMatrix(_a, _ja, _ia);
         }
 
         [Fact]
-        public void SparseRowMatrix_TestLMult()
+        private void SparseRowMatrix_TestLMult()
         {
             var resultTrueDiag = sparseRowMatrix.LMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 2, 2, 7, 10 });

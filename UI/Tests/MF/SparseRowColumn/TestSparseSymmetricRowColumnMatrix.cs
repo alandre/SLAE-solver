@@ -102,6 +102,19 @@ namespace MF.SymmetricSparseRowColumn
                 Assert.Equal(result[i], resultActual[i], 8);
         }
 
-        
+        [Fact]
+        public void SparseRowColumnMatrix_Foreach()
+        {
+            var di = new double[] { 1, 2, 3 };
+            var al = new double[] { 3, 2, 1 };
+            var au = new double[] { 3, 2, 1 };
+            var ja = new int[] { 1, 1, 2 };
+            var ia = new int[] { 1, 1, 2, 4 };
+
+            SparseRowColumnMatrix sparseRowColumnMatrix = new SparseRowColumnMatrix(di, al, au, ia, ja);
+
+            Assert.True(new HashSet<(double, int, int)>(sparseSymmetricRowColumnMatrix).SetEquals(sparseRowColumnMatrix));
+        }
+
     }
 }

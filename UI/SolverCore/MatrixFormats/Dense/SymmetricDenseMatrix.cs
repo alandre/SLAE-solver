@@ -65,7 +65,7 @@ namespace SolverCore
             {
                 if(matrix[i] == null)
                 {
-                    throw new ArgumentException("one of the lines is null", nameof(matrix));
+                    throw new ArgumentException("One of the lines is null", nameof(matrix));
                 }
 
                 if (matrix[i].Length != i + 1)

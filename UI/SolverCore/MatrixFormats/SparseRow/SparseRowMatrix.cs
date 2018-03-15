@@ -104,27 +104,32 @@ namespace SolverCore
             if (matrix == null)
             {
                 throw new ArgumentNullException(nameof(matrix));
-            }  
-           IEnumerable elems = matrix.OrderBy(key => key.row).ThenBy(key => key.col);
+            }
+            
+            var elems = matrix.OrderBy(key => key.row).ThenBy(key => key.col);
+
             ia = new int[matrix.Size + 1];
             ja = new int[matrix.Count()];
             a = new double[ja.Length];
             int i = 0, j = 0;
             ia[i] = 0;
             ia[i + 1] = 0;
-            foreach (KeyValuePair<(int row, int col), double> item in elems)
+
+            foreach (var item in elems)
             {
-                ja[j] = item.Key.col;
-                a[j] = item.Value;
+                ja[j] = item.col;
+                a[j] = item.value;
                 j++;
-                if (item.Key.row != i)
+
+                if (item.row != i)
                 {
                     i++;
                     ia[i + 1] = ia[i];
-
                 }
                 else
-                ia[i + 1]++;
+                {
+                    ia[i + 1]++;
+                }
             }
         }
 
@@ -140,7 +145,6 @@ namespace SolverCore
                     var m = Array.IndexOf(ja, j, ia1, ia2 - ia1);
 
                     return m == -1 ? 0.0 : a[m];
-
                 }
                 catch (IndexOutOfRangeException)
                 {

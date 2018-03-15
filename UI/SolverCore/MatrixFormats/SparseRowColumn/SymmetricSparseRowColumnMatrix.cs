@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SolverCore
 {
@@ -33,6 +34,45 @@ namespace SolverCore
         public IVector Diagonal => new Vector(di);
 
         public ILinearOperator Transpose => this;
+
+        public SymmetricSparseRowColumnMatrix(SymmetricCoordinationalMatrix coordinationalMatrix)
+        {
+            if (coordinationalMatrix == null)
+            {
+                throw new ArgumentNullException(nameof(coordinationalMatrix));
+            }
+
+            var orderedItems = coordinationalMatrix.OrderBy(x => x.row).ThenBy(x => x.col);
+            var count = orderedItems.Count();
+
+            var size = coordinationalMatrix.Size;
+            ia = new int[size + 1];
+            ja = new int[count];
+            di = new double[size];
+            aa = new double[count];
+
+            int k = 0;
+
+            foreach (var item in orderedItems)
+            {
+                if (item.row != item.col)
+                {
+                    ja[k] = item.col;
+                    aa[k] = item.value;
+
+                    ia[item.row + 1]++;
+                    k++;
+                    continue;
+                }
+
+                di[item.row] = item.value;
+            }
+
+            for (int i = 0; i < size; i++)
+            {
+                ia[i + 1] += ia[i];
+            }
+        }
 
         public SymmetricSparseRowColumnMatrix(
             double[] di,
@@ -70,9 +110,10 @@ namespace SolverCore
                 }
             }
 
-            for (int i = 0; i < Size; i++)
+            for(int i = 0; i < Size; i++)
             {
-                Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
+                Sorter.QuickSort(this.ja, this.ia[i], this.ia[i + 1] - 1, this.aa);
+                //Array.Sort(this.ja, this.aa, this.ia[i], this.ia[i + 1] - this.ia[i]);
             }
         }
 

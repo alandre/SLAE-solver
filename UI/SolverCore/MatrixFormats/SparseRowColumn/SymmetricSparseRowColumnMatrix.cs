@@ -13,6 +13,67 @@ namespace SolverCore
         private double[] di;
         private double[] aa;
 
+        public double this[int i, int j]
+        {
+            get
+            {
+                if (i < 0 || j < 0 || i >= Size || j >= Size) throw new IndexOutOfRangeException();
+
+                if (i == j) return di[i];
+
+                (int start, int end, int minIJ) = i > j ? (ia[i], ia[i + 1], j) : (ia[j], ia[j + 1], i);
+                var rowElementsCount = end - start;
+                var number = Array.BinarySearch(ja, minIJ, start, rowElementsCount);
+
+                return number >= 0 ? aa[number] : 0;
+            }
+        }
+
+        public int Size => di.Length;
+
+        public IVector Diagonal => new Vector(di);
+
+        public ILinearOperator Transpose => this;
+
+        public SymmetricSparseRowColumnMatrix(SymmetricCoordinationalMatrix coordinationalMatrix)
+        {
+            if (coordinationalMatrix == null)
+            {
+                throw new ArgumentNullException(nameof(coordinationalMatrix));
+            }
+
+            var orderedItems = coordinationalMatrix.OrderBy(x => x.row).ThenBy(x => x.col);
+            var count = orderedItems.Count();
+
+            var size = coordinationalMatrix.Size;
+            ia = new int[size + 1];
+            ja = new int[count];
+            di = new double[size];
+            aa = new double[count];
+
+            int k = 0;
+
+            foreach (var item in orderedItems)
+            {
+                if (item.row != item.col)
+                {
+                    ja[k] = item.col;
+                    aa[k] = item.value;
+
+                    ia[item.row + 1]++;
+                    k++;
+                    continue;
+                }
+
+                di[item.row] = item.value;
+            }
+
+            for (int i = 0; i < size; i++)
+            {
+                ia[i + 1] += ia[i];
+            }
+        }
+
         public SymmetricSparseRowColumnMatrix(
             double[] di,
             double[] aa,
@@ -49,9 +110,10 @@ namespace SolverCore
                 }
             }
 
-            for (int i = 0; i < Size; i++)
+            for(int i = 0; i < Size; i++)
             {
-                Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
+                Sorter.QuickSort(this.ja, this.ia[i], this.ia[i + 1] - 1, this.aa);
+                //Array.Sort(this.ja, this.aa, this.ia[i], this.ia[i + 1] - this.ia[i]);
             }
         }
 
@@ -90,28 +152,6 @@ namespace SolverCore
                 Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
             }
         }
-
-        public double this[int i, int j]
-        {
-            get
-            {
-                if (i < 0 || j < 0 || i >= Size || j >= Size) throw new IndexOutOfRangeException();
-
-                if (i == j) return di[i];
-
-                (int start, int end, int minIJ) = i > j ? (ia[i], ia[i + 1], j) : (ia[j], ia[j + 1], i);
-                var rowElementsCount = end - start;
-                var number = Array.BinarySearch(ja, minIJ, start, rowElementsCount);
-
-                return number >= 0 ? aa[number] : 0;
-            }
-        }
-
-        public int Size => di.Length;
-
-        public IVector Diagonal => new Vector(di);
-
-        public ILinearOperator Transpose => this;
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

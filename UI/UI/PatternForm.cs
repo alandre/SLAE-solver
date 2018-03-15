@@ -15,9 +15,14 @@ namespace UI
     {
         int width, heigth;
         string format;
+        int cellWidth = MatrixVisualRepresentation.CellWidth;
+        int cellHeight = MatrixVisualRepresentation.CellHeight;
 
         ConstructorForm SLAESource;
         MainForm mainForm;
+
+        IMatrix matrix;
+        IVector x0, b;
 
         public PatternForm()
         {
@@ -40,6 +45,7 @@ namespace UI
             SLAESource = (ConstructorForm)(Owner.Owner);
             mainForm = (MainForm)(Owner.Owner.Owner);
 
+
             infoTextBox.Width = Width - 40;
         }
 
@@ -55,11 +61,14 @@ namespace UI
 
         private void forwardToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            IVector b, x0;
-            CoordinationalMatrix tmp;
-            SLAESource.GetSLAE(out tmp, out b, out x0);
-            IMatrix mat = FormatFactory.Convert(MatrixVisualRepresentation.GridViewToCoordinational(A), format);
-            mainForm.SetSLAE(mat, b, x0);
+            bool symmetric = SLAESource.IsSymmetric;
+            if (symmetric)
+                matrix = FormatFactory.Convert((SymmetricCoordinationalMatrix)MatrixVisualRepresentation.GridViewToCoordinational(A, symmetric), format);
+            else
+                            if (symmetric)
+                matrix = FormatFactory.Convert((CoordinationalMatrix)MatrixVisualRepresentation.GridViewToCoordinational(A, symmetric), format);
+
+            mainForm.SetSLAE(matrix, b, x0);
             Close();
         }
 
@@ -85,13 +94,19 @@ namespace UI
 
         public void Update(string type)
         {
+            SLAESource.GetSLAE(out matrix, type, out b, out x0);
+            int n = matrix.Size;
+
             Location = Owner.Location;
             format = type;
 
             DataGridView mat = new DataGridView();
 
-            SLAESource.GetGridParams(ref mat, ref width, ref heigth);
+            mat = MatrixVisualRepresentation.CoordinationalToGridView(MatrixExtensions.ConvertToCoordinationalMatrix(matrix));
             MatrixVisualRepresentation.CopyDataGridView(mat, ref A);
+
+            width = cellWidth * (n - 2);
+            heigth = cellHeight * (n - 2);
 
             Size size = new Size(Width > 115 + width ? Width : 115 + width, 190 + heigth);
             MaximumSize = size;

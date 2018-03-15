@@ -17,7 +17,7 @@ namespace UI
             formats.Add("Координатный", "Coordinational");
             formats.Add("Плотный", "Dense");
             formats.Add("Профильный", "Skyline");
-            formats.Add("Строчно-столбцовый без выделенной диагонали", "SparseRow");
+            formats.Add("Строчный без выделенной диагонали", "SparseRow");
             formats.Add("Строчно-стобцовый", "SparseRowColumn");
         }
         public Dictionary<string, string> formats = new Dictionary<string, string>();
@@ -93,9 +93,15 @@ namespace UI
                 case "Координатный":
                     return mat;
                 case "Плотный":
+                    return new DenseMatrix(mat);
                 case "Профильный":
-                case "Строчно-столбцовый без выделенной диагонали":
+                    //return new SkylineMatrix(mat);
+                    return mat;
+                case "Строчный без выделенной диагонали":
+                    return new SparseRowMatrix(mat);
                 case "Строчно-стобцовый":
+                    //return new SparseRowColumnMatrix(mat);
+                    return mat;
                 default:
                     // Должны вызываться конвертеры!!!!!!!!!!!!!!!!!!!!
                     return mat;
@@ -109,9 +115,15 @@ namespace UI
                 case "Координатный":
                     return mat;
                 case "Плотный":
+                    return new SymmetricDenseMatrix(mat);
                 case "Профильный":
-                case "Строчно-столбцовый без выделенной диагонали":
+                    //return new SymmetricSkylineMatrix(mat);
+                    return mat;
+                case "Строчный без выделенной диагонали":
+                    return new SymmetricSparseRowMatrix(mat);
                 case "Строчно-стобцовый":
+                    //return new SymmetricSparseRowColumnMatrix(mat);
+                    return mat;
                 default:
                     // Должны вызываться конвертеры!!!!!!!!!!!!!!!!!!!!
                     return mat;

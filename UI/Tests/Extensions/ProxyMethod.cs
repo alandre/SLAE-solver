@@ -24,10 +24,12 @@ namespace Extensions
 
         public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
+            Counters.Mult.ResetCount();
+
             var result = method.InitMethod(A, x0, b, false);
 
             MultCount[0] = Counters.Mult.count;
-            Counters.Mult.ResetCount();
+            Counters.ResetAll();
 
             return result;
         }
@@ -40,7 +42,6 @@ namespace Extensions
         }
     }
 
-    // TODO засекать время 
 
 }
 

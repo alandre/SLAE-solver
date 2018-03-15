@@ -28,6 +28,7 @@ namespace Extensions
 
         public IVector LMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
+            Counters.LMult.Inc();
             return linear.LMult(x, UseDiagonal, diagonalElement);
         }
 
@@ -44,6 +45,7 @@ namespace Extensions
 
         public IVector UMult(IVector x, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
+            Counters.UMult.Inc();
             return linear.UMult(x, UseDiagonal, diagonalElement);
         }
 

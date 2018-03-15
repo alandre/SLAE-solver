@@ -177,7 +177,7 @@ namespace SolverCore
         }
 
         //транспонирование
-        public ILinearOperator Transpose => new TransposeMatrix<SparseRowMatrix>();
+        public ILinearOperator Transpose => new TransposeMatrix<SparseRowMatrix>() { Matrix = this };
 
         //заполнение
         public void Fill(FillFunc elems)

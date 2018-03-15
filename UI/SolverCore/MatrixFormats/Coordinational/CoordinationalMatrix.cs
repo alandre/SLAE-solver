@@ -9,28 +9,49 @@ namespace SolverCore
     {
         private Dictionary<(int row, int column), double> matrix;
 
-        public CoordinationalMatrix(IEnumerable<(int i, int j, double value)> items, int size)
+        public CoordinationalMatrix(int[] rows, int[] columns, double[] values, int size)
         {
-            if (items == null)
-            {
-                throw new ArgumentNullException(nameof(items));
-            }
-
-            if (size < 0)
-            {
-                throw new ArgumentOutOfRangeException("Size must be nonnegative", nameof(size));
-            }
+            if (rows == null) throw new ArgumentNullException(nameof(rows));
+            if (columns == null) throw new ArgumentNullException(nameof(columns));
+            if (values == null) throw new ArgumentNullException(nameof(values));
+            if (size < 0) throw new ArgumentException("Size must be nonnegative", nameof(size));
+            if (rows.Length != columns.Length || rows.Length != values.Length) throw new RankException();
 
             Size = size;
-            matrix = items.ToDictionary(item => (item.i, item.j), item => item.value);
+            matrix = new Dictionary<(int row, int column), double>();
+
+            for(int i = 0; i < rows.Length; i++)
+            {
+                matrix[(rows[i], columns[i])] = values[i];
+            }
+        }
+
+        public CoordinationalMatrix(Dictionary<(int i, int j), double> items, int size)
+        {
+            if (items == null) throw new ArgumentNullException(nameof(items));
+            if (size < 0) throw new ArgumentException("Size must be nonnegative", nameof(size));
+
+            Size = size;
+            matrix = items.ToDictionary(item => item.Key, item => item.Value);
+        }
+
+        public CoordinationalMatrix(IEnumerable<(int i, int j, double value)> items, int size)
+        {
+            if (items == null) throw new ArgumentNullException(nameof(items));
+            if (size < 0) throw new ArgumentOutOfRangeException("Size must be nonnegative", nameof(size));
+
+            Size = size;
+            matrix = new Dictionary<(int row, int column), double>();
+
+            foreach(var item in items)
+            {
+                matrix[(item.i, item.j)] = item.value;
+            }
         }
 
         public CoordinationalMatrix(int size)
         {
-            if (size < 0)
-            {
-                throw new ArgumentOutOfRangeException("Size must be nonnegative", nameof(size));
-            }
+            if (size < 0) throw new ArgumentException("Size must be nonnegative", nameof(size));
 
             Size = size;
             matrix = new Dictionary<(int row, int column), double>();

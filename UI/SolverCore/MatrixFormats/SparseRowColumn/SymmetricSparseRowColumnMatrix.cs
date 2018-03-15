@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SolverCore
 {
@@ -12,6 +11,28 @@ namespace SolverCore
 
         private double[] di;
         private double[] aa;
+
+        public double this[int i, int j]
+        {
+            get
+            {
+                if (i < 0 || j < 0 || i >= Size || j >= Size) throw new IndexOutOfRangeException();
+
+                if (i == j) return di[i];
+
+                (int start, int end, int minIJ) = i > j ? (ia[i], ia[i + 1], j) : (ia[j], ia[j + 1], i);
+                var rowElementsCount = end - start;
+                var number = Array.BinarySearch(ja, minIJ, start, rowElementsCount);
+
+                return number >= 0 ? aa[number] : 0;
+            }
+        }
+
+        public int Size => di.Length;
+
+        public IVector Diagonal => new Vector(di);
+
+        public ILinearOperator Transpose => this;
 
         public SymmetricSparseRowColumnMatrix(
             double[] di,
@@ -90,28 +111,6 @@ namespace SolverCore
                 Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
             }
         }
-
-        public double this[int i, int j]
-        {
-            get
-            {
-                if (i < 0 || j < 0 || i >= Size || j >= Size) throw new IndexOutOfRangeException();
-
-                if (i == j) return di[i];
-
-                (int start, int end, int minIJ) = i > j ? (ia[i], ia[i + 1], j) : (ia[j], ia[j + 1], i);
-                var rowElementsCount = end - start;
-                var number = Array.BinarySearch(ja, minIJ, start, rowElementsCount);
-
-                return number >= 0 ? aa[number] : 0;
-            }
-        }
-
-        public int Size => di.Length;
-
-        public IVector Diagonal => new Vector(di);
-
-        public ILinearOperator Transpose => this;
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 

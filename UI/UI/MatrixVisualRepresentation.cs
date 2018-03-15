@@ -18,6 +18,9 @@ namespace UI
             Nonsignificant
         }
 
+        public static int CellWidth { get; } = 35;
+        public static int CellHeight { get; } = 22;
+
         public static void GenerateInitialPattern(ref DataGridView gridView)
         {
             foreach (DataGridViewRow row in gridView.Rows)
@@ -54,7 +57,7 @@ namespace UI
                 RemoveElementFromPattern(ref gridView, i, j);
         }
 
-        public static CoordinationalMatrix GridViewToCoordinational(DataGridView gridView)
+        public static IMatrix GridViewToCoordinational(DataGridView gridView, bool symmetric)
         {
             Dictionary<(int row, int column), double> matrix = new Dictionary<(int row, int column), double>();
             int n = gridView.ColumnCount;
@@ -64,10 +67,13 @@ namespace UI
                     if (cell.Value.ToString() != "0")
                         matrix.Add((cell.RowIndex, cell.ColumnIndex), Double.Parse(cell.Value.ToString()));
 
-            return new CoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
+            if (symmetric)
+                return new SymmetricCoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
+            else
+                return new CoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
         }
 
-        public static CoordinationalMatrix PatternedGridViewToCoordinational(DataGridView gridView)
+        public static IMatrix PatternedGridViewToCoordinational(DataGridView gridView, bool symmetric)
         {
             Dictionary<(int row, int column), double> matrix = new Dictionary<(int row, int column), double>();
             int n = gridView.ColumnCount;
@@ -77,7 +83,33 @@ namespace UI
                     if ((CellTag)cell.Tag == CellTag.ForcedSignficant || (CellTag)cell.Tag == CellTag.Significant)
                         matrix.Add((cell.RowIndex, cell.ColumnIndex), Double.Parse(cell.Value.ToString()));
 
-            return new CoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
+            if (symmetric)
+                return new SymmetricCoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
+            else
+                return new CoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
+        }
+
+        public static DataGridView CoordinationalToGridView(IMatrix mat)
+        {
+            DataGridView gridView = new DataGridView();
+            int n = mat.Size;
+
+            gridView.Height = n * CellHeight + 2;
+            gridView.Width = n * CellWidth + 1;
+
+            for (int j = 0; j < n; j++)
+            {
+                gridView.Columns.Add("Column" + (j + 1).ToString(), "");
+                gridView.Columns[j].Width = CellWidth;
+            }
+
+            gridView.Rows.Add(n - 1);
+
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    gridView.Rows[i].Cells[j].Value = mat[i, j];
+
+            return gridView;
         }
 
         public static void PaintPattern(ref DataGridView gridView, Color color)

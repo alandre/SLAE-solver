@@ -131,5 +131,21 @@ namespace UI
             ResultsForm resultsForm = new ResultsForm();
             resultsForm.Show();
         }
+
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            //if (checkedListBox1.CheckedItems.Count > 0)
+            //    methodCheckedImg.Image = Resources.CheckMark;
+            //else
+            //    methodCheckedImg.Image = Resources.UnabledCheckMark;
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (checkedListBox1.CheckedItems.Count > 0)
+                methodCheckedImg.Image = Resources.CheckMark;
+            else
+                methodCheckedImg.Image = Resources.UnabledCheckMark;
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace UI
     {
         int n = 2; // размерность матрицы
         int width, height; // базовые ширина и высота формы
-        int cellWidth = 35, cellHeight; // ширина и высота ячеек
+        int cellWidth, cellHeight; // ширина и высота ячеек
 
         FormatForm formatForm;
 
@@ -57,7 +57,9 @@ namespace UI
 
             width = this.Width;
             height = this.Height;
-            F.RowTemplate.Height = cellHeight = A.RowTemplate.Height;
+            cellWidth = MatrixVisualRepresentation.CellWidth;
+            cellHeight = MatrixVisualRepresentation.CellHeight;
+            F.RowTemplate.Height = A.RowTemplate.Height = MatrixVisualRepresentation.CellHeight;
 
             toolTip1.SetToolTip(CleanX0_Btn, "Очистить");
             toolTip2.SetToolTip(CleanF_Btn, "Очистить");
@@ -300,14 +302,7 @@ namespace UI
             forwardToolStripMenuItem1.Enabled = false;
         }
 
-        public void GetGridParams(ref DataGridView mat, ref int w, ref int h)
-        {
-            mat = A;
-            w = cellWidth * (n - 2);
-            h = cellHeight * (n - 2);
-        }
-
-        public void GetSLAE(out CoordinationalMatrix _A, out IVector _b, out IVector _x0)
+        public void GetSLAE(out IMatrix _A, string type, out IVector _b, out IVector _x0)
         {
             _b = new Vector(n);
             _x0 = new Vector(n);
@@ -318,7 +313,12 @@ namespace UI
                 _x0[i] = double.Parse(x0.Rows[0].Cells[i].Value.ToString());
             }
 
-            _A = MatrixVisualRepresentation.GridViewToCoordinational(A);
+            IMatrix matrix = MatrixVisualRepresentation.GridViewToCoordinational(A, IsSymmetric);
+
+            if (IsSymmetric)
+                _A = FormatFactory.Convert((SymmetricCoordinationalMatrix)matrix, type);
+            else
+                _A = FormatFactory.Convert((CoordinationalMatrix)matrix, type);
         }
     }
 }

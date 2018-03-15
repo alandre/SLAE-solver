@@ -60,12 +60,12 @@ namespace UI
             }
             else
             {
-                CoordinationalMatrix A;
+                IMatrix A;
                 IVector x0, b;
                 constructorForm = (ConstructorForm)Owner;
-                constructorForm.GetSLAE(out A, out b, out x0);
-                IMatrix mat = FormatFactory.Convert(A, formatBox.Text);
-                mainForm.SetSLAE(mat, b, x0);
+                constructorForm.GetSLAE(out A, formatBox.Text, out b, out x0);
+
+                mainForm.SetSLAE(A, b, x0);
                 mainForm.Show();
                 Hide();
             }

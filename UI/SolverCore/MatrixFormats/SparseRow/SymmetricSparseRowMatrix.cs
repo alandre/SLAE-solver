@@ -75,7 +75,6 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(ia));
             }
-
             if (ja.Length != ia[ia.Length - 1])
             {
                 throw new ArgumentNullException("wrong count of elements");

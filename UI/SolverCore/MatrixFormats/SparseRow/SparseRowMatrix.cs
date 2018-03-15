@@ -91,7 +91,6 @@ namespace SolverCore
                     this.ja[j]--;
                 }
             }
-
             for (int i = 0; i < Size; i++)
             {
                 Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);

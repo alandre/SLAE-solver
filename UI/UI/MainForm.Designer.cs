@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.iterBox = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
@@ -54,7 +53,6 @@
             this.toolStripMenuOpenOutput = new System.Windows.Forms.ToolStripMenuItem();
             this.resultsFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.outputCheckedImg = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.progressBar2 = new System.Windows.Forms.ProgressBar();
@@ -69,7 +67,6 @@
             this.fileInputPanel.SuspendLayout();
             this.menuStrip2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.outputCheckedImg)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox2
@@ -128,7 +125,7 @@
             // methodCheckedImg
             // 
             this.methodCheckedImg.Enabled = false;
-            this.methodCheckedImg.Image = ((System.Drawing.Image)(resources.GetObject("methodCheckedImg.Image")));
+            this.methodCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
             this.methodCheckedImg.Location = new System.Drawing.Point(220, 11);
             this.methodCheckedImg.Name = "methodCheckedImg";
             this.methodCheckedImg.Size = new System.Drawing.Size(20, 20);
@@ -157,6 +154,8 @@
             this.checkedListBox1.Size = new System.Drawing.Size(230, 60);
             this.checkedListBox1.Sorted = true;
             this.checkedListBox1.TabIndex = 27;
+            this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
+            this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -354,7 +353,6 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.outputCheckedImg);
             this.groupBox3.Controls.Add(this.textBox1);
             this.groupBox3.Controls.Add(this.linkLabel1);
             this.groupBox3.Location = new System.Drawing.Point(260, 147);
@@ -364,22 +362,11 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Выходные данные";
             // 
-            // outputCheckedImg
-            // 
-            this.outputCheckedImg.Enabled = false;
-            this.outputCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
-            this.outputCheckedImg.Location = new System.Drawing.Point(220, 12);
-            this.outputCheckedImg.Name = "outputCheckedImg";
-            this.outputCheckedImg.Size = new System.Drawing.Size(20, 20);
-            this.outputCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.outputCheckedImg.TabIndex = 28;
-            this.outputCheckedImg.TabStop = false;
-            // 
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(8, 21);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(150, 20);
+            this.textBox1.Size = new System.Drawing.Size(171, 20);
             this.textBox1.TabIndex = 20;
             // 
             // linkLabel1
@@ -387,7 +374,7 @@
             this.linkLabel1.ActiveLinkColor = System.Drawing.Color.Maroon;
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.LinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.linkLabel1.Location = new System.Drawing.Point(164, 25);
+            this.linkLabel1.Location = new System.Drawing.Point(185, 25);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(48, 13);
             this.linkLabel1.TabIndex = 19;
@@ -457,7 +444,6 @@
             this.menuStrip2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.outputCheckedImg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -497,7 +483,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox inputCheckedImg;
         private System.Windows.Forms.PictureBox methodCheckedImg;
-        private System.Windows.Forms.PictureBox outputCheckedImg;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown iterBox;
         private System.Windows.Forms.Timer timerHightlight;

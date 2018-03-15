@@ -320,6 +320,7 @@
             this.Start.TabIndex = 5;
             this.Start.Text = "Найти решение";
             this.Start.UseVisualStyleBackColor = true;
+            this.Start.Click += new System.EventHandler(this.Start_Click);
             // 
             // menuStrip2
             // 

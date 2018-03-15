@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using SolverCore;
+using SolverCore.Solvers;
+using SolverCore.Methods;
 using UI.Properties;
 
 namespace UI
@@ -24,14 +26,15 @@ namespace UI
         private IMatrix matrix;
         private IVector b;
         private IVector x0;
-        
+        static List<String> Types = null;
         ConstructorForm constructorForm;
 
         public MainForm()
         {
             InitializeComponent();
-            var tmp = new FormatFactory();            
+            var tmp = new FormatFactory();
             var keyList = new List<string>(tmp.formats.Keys);
+            Types = new List<string>();
             for (int i = 0; i < keyList.Count; i++)
             {
                 formatBox.Items.Add(keyList[i]);
@@ -69,7 +72,7 @@ namespace UI
             {
                 MessageBox.Show("Неправильный формат входного файла.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
         }
 
         private void ManualEntry_Click(object sender, EventArgs e)
@@ -142,10 +145,62 @@ namespace UI
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //методы на форму должны добавляться из фабрики решателей
+            string a = (string)checkedListBox1.SelectedItem;
+            if (Types.Contains(a)) Types.Remove(a);
+            else Types.Add(a);
             if (checkedListBox1.CheckedItems.Count > 0)
                 methodCheckedImg.Image = Resources.CheckMark;
             else
                 methodCheckedImg.Image = Resources.UnabledCheckMark;
+        }
+
+        private void Start_Click(object sender, EventArgs e)
+        {
+            SolveAsync();
+        }
+        private async void SolveAsync()
+        {
+            /*
+            foreach (string Method in Types)
+            {
+                ILogger Logger = new FakeLog();
+                LoggingSolver loggingSolver = Spawn(Method, Logger);
+                IVector result = await RunAsync(loggingSolver, matrix, x0, b);
+            }
+            */
+            //Необходима фабрика решателей, жду слияния главной ветки и ветки решателей
+            //временная мера для запуска программы
+            for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+            {
+                LoggingSolver loggingSolver;
+                IMethod Method = new JacobiMethod();
+                ILogger Logger = new FakeLog();
+                loggingSolver = new LoggingSolver(Method, Logger);
+                IVector result = await RunAsync(loggingSolver, matrix, x0, b);
+            }
+
+        }
+        private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
+        {
+            return Task.Run(() =>
+            {
+                return loggingSolver.Solve((ILinearOperator)matrix, x0, b);
+            });
+        }
+
+    }
+    //временная мера
+    internal class FakeLog : ILogger
+    {
+        public void read()
+        {
+            return;
+        }
+
+        public void write()
+        {
+            return;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SolverCore
 {
@@ -11,6 +10,40 @@ namespace SolverCore
     public class SymmetricDenseMatrix : IMatrix, ILinearOperator
     {
         private double[][] matrix;
+
+        public double this[int i, int j]
+        {
+            get
+            {
+                try
+                {
+                    return i > j ? matrix[i][j] : matrix[j][i];
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    throw new IndexOutOfRangeException();
+                }
+            }
+        }
+
+        public int Size => matrix.Length;
+
+        public IVector Diagonal
+        {
+            get
+            {
+                var result = new Vector(Size);
+
+                for (int i = 0; i < Size; i++)
+                {
+                    result[i] = matrix[i][i];
+                }
+
+                return result;
+            }
+        }
+
+        public ILinearOperator Transpose => this;
 
         /// <summary>
         /// конструктор
@@ -70,47 +103,16 @@ namespace SolverCore
             }
         }
 
-        public double this[int i, int j]
-        {
-            get
-            {
-                try
-                {
-                    return i > j ? matrix[i][j] : matrix[j][i];
-                }
-                catch(IndexOutOfRangeException)
-                {
-                    throw new IndexOutOfRangeException();
-                }
-            }
-        }
-
-        public int Size => matrix.Length;
-
-        public IVector Diagonal
-        {
-            get
-            {
-                var result = new Vector(Size);
-
-                for (int i = 0; i < Size; i++)
-                {
-                    result[i] = matrix[i][i];
-                }
-
-                return result;
-            }
-        }
-
-        public ILinearOperator Transpose => this;
-
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
             for (int i = 0; i < Size; i++)
             {
-                for (int j = 0; j <= i; j++)
+                yield return (matrix[i][i], i, i);
+
+                for (int j = 0; j < i; j++)
                 {
                     yield return (matrix[i][j], i, j);
+                    yield return (matrix[i][j], j, i);
                 }
             }
         }

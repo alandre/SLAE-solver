@@ -60,8 +60,10 @@ namespace SolverCore
                         itemsSymmetricProfile[(i, j)] = (al, item.value);
                     }
                 }
-
-                di[item.row] = item.value;
+                else
+                {
+                    di[item.row] = item.value;
+                }
             }
 
             var orderedItems = itemsSymmetricProfile.OrderBy(x => x.Key.i).ThenBy(x => x.Key.j);

@@ -33,61 +33,54 @@ namespace SolverCore
             }
 
             var size = coordinationalMatrix.Size;
+            var pattern = new SortedSet<int>[size];
 
-            ia = new int[size + 1];
-            di = new double[size];
-            var itemsSymmetricProfile = new Dictionary<(int i, int j), (double al, double au)>();
-
-            foreach (var item in coordinationalMatrix)
+            for(int i = 0; i < size; i++)
             {
-                if (item.row != item.col)
-                {
-                    (int i, int j) = item.row > item.col ? (item.row, item.col) : (item.col, item.row);
+                pattern[i] = new SortedSet<int>();
+            }
 
-                    if (!itemsSymmetricProfile.ContainsKey((i, j)))
-                    {
-                        itemsSymmetricProfile[(i, j)] = (0, 0);
-                    }
+            foreach(var item in coordinationalMatrix)
+            {
+                (int i, int j) = item.row > item.col ? (item.row, item.col) : (item.col, item.row);
 
-                    if (item.row > item.col)
-                    {
-                        var au = itemsSymmetricProfile[(i, j)].au;
-                        itemsSymmetricProfile[(i, j)] = (item.value, au);
-                    }
-                    else
-                    {
-                        var al = itemsSymmetricProfile[(i, j)].al;
-                        itemsSymmetricProfile[(i, j)] = (al, item.value);
-                    }
-                }
-                else
-                {
-                    di[item.row] = item.value;
+                if (i != j)
+                { 
+                    pattern[i].Add(j);
                 }
             }
 
-            var orderedItems = itemsSymmetricProfile.OrderBy(x => x.Key.i).ThenBy(x => x.Key.j);
-            var count = orderedItems.Count();
+            ia = new int[size + 1];
 
+            for (int i = 0; i < size; i++)
+            {
+                ia[i + 1] = ia[i] + pattern[i].Count;
+            }
+
+            var count = ia[size];
+
+            di = new double[size];
             ja = new int[count];
             al = new double[count];
             au = new double[count];
 
-            int k = 0;
+            var orderedItems = coordinationalMatrix.OrderBy(x => x.row).ThenBy(x => x.col);
 
-            foreach (var item in orderedItems)
+            for (int i = 0, k = 0; i < Size; i++)
             {
-                ja[k] = item.Key.j;
-                al[k] = item.Value.al;
-                au[k] = item.Value.au;
+                di[i] = coordinationalMatrix[i, i];
 
-                ia[item.Key.i + 1]++;
-                k++;
-            }
+                foreach(var col in pattern[i])
+                {
+                    ja[k++] = col;
+                }
 
-            for(int i = 0; i < size; i++)
-            {
-                ia[i + 1] += ia[i];
+                for (int j = ia[i]; j < ia[i + 1]; j++)
+                {
+                    var column = ja[j];
+                    al[j] = coordinationalMatrix[i, column];
+                    au[j] = coordinationalMatrix[column, i];
+                }
             }
         }
 

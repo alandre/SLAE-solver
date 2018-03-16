@@ -314,8 +314,7 @@ namespace SolverCore
             return result;
         }
 
-
-        public IVector LSolve(IVector x, bool UseDiagonal)
+        public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
             throw new NotImplementedException();
         }

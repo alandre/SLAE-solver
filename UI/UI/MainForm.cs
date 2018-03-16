@@ -203,6 +203,15 @@ namespace UI
         private void Start_Click(object sender, EventArgs e)
         {
             SolveAsync();
+
+            var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
+            string full_directory_name = path + uniqueDirectoryName;
+            Directory.CreateDirectory(@full_directory_name);
+
+            //TODO: different file names (depending on the choosen methods)
+            System.IO.File.Create(full_directory_name + "\\result.txt");
+            MessageBox.Show("Результат был записан");
+
         }
         private async void SolveAsync()
         {
@@ -233,6 +242,15 @@ namespace UI
                 return loggingSolver.Solve((ILinearOperator)matrix, x0, b);
             });
         }
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FolderBrowserDialog FBD = new FolderBrowserDialog();
+            if (FBD.ShowDialog() == DialogResult.OK)
+            {
+                path = FBD.SelectedPath;
+                textBox1.Text = path;
+            }
+        }
 
     }
     //временная мера
@@ -246,25 +264,6 @@ namespace UI
         public void write()
         {
             return;
-        }
-        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            FolderBrowserDialog FBD = new FolderBrowserDialog();
-            if (FBD.ShowDialog() == DialogResult.OK)
-            {
-                path = FBD.SelectedPath;
-                textBox1.Text = path;
-            }
-        }
-
-        private void Start_Click(object sender, EventArgs e)
-        {
-            var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
-            string full_directory_name = path + uniqueDirectoryName;
-            Directory.CreateDirectory(@full_directory_name);
-
-            //TODO: different file names (depending on the choosen methods)
-            System.IO.File.Create(full_directory_name + "\\result.txt");
         }
     }
 }

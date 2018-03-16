@@ -312,7 +312,6 @@
             // 
             // startBtn
             // 
-            this.startBtn.Enabled = false;
             this.startBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.startBtn.Location = new System.Drawing.Point(12, 206);
             this.startBtn.Name = "startBtn";

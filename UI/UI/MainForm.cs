@@ -9,33 +9,37 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using SolverCore;
+using UI.Properties;
 
 namespace UI
 {
     public partial class MainForm : Form
     {
         private MatrixInitialazer Input = new MatrixInitialazer();
+
+        bool inputChecked = false;
+        bool methodChecked = false;
+        bool outputChecked = false;
+
+        private IMatrix matrix;
+        private IVector b;
+        private IVector x0;
+        
+        ConstructorForm constructorForm;
+
         public MainForm()
         {
             InitializeComponent();
-        }
-
-        private void groupBox2_Enter(object sender, EventArgs e)
-        {
-
+            var tmp = new FormatFactory();            
+            var keyList = new List<string>(tmp.formats.Keys);
+            for (int i = 0; i < keyList.Count; i++)
+            {
+                formatBox.Items.Add(keyList[i]);
+            }
+            formatBox.Text = formatBox.Items[0].ToString();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox1_CheckedChanged_1(object sender, EventArgs e)
         {
 
         }
@@ -44,7 +48,7 @@ namespace UI
         {
             try
             {
-                OpenFileDialog file = new OpenFileDialog();
+                var file = new OpenFileDialog();
                 file.Filter = "Text file|*.txt";
                 if (file.ShowDialog() == DialogResult.OK)
                 {
@@ -54,55 +58,94 @@ namespace UI
 
                     Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
                     epsBox.Enabled = true;
-                    timeBox.Enabled = true;
+                    iterBox.Enabled = true;
+                    var tmp = new FormatFactory();
+                    var value = tmp.formats[formatBox.SelectedItem.ToString()];
+                    matrix = FormatFactory.Init(value, Input, Input.symmetry);
+                    var a = FormatFactory.PatternRequired(formatBox.SelectedItem.ToString());
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show(ex.Message, "Ошбика", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Неправильный формат входного файла.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             
         }
 
-        private void ChoseOutput_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void ManualEntry_Click(object sender, EventArgs e)
         {
-            ConstructorForm form = new ConstructorForm();
-            form.Show();
+            if (constructorForm == null || constructorForm.IsDisposed)
+                constructorForm = new ConstructorForm();
+
+            constructorForm.Owner = this;
+            constructorForm.Show();
+            Hide();
         }
 
-        private void formatBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        {
+            fileInputPanel.Enabled = fileInputRadioBtn.Checked;
+            manualInpitRadioBtn.Checked = !fileInputRadioBtn.Checked;
+        }
+
+        private void manualInpitRadioBtn_CheckedChanged(object sender, EventArgs e)
+        {
+            manualInputBtn.Enabled = manualInpitRadioBtn.Checked;
+            fileInputRadioBtn.Checked = !manualInpitRadioBtn.Checked;
+        }
+
+        public void SetSLAE(IMatrix _mat, IVector _b, IVector _x0)
+        {
+            matrix = _mat;
+            b = _b;
+            x0 = _x0;
+
+            inputCheckedImg.Image = Resources.CheckMark;
+        }
+
+        private void epsBox_Validating(object sender, CancelEventArgs e)
+        {
+            if (!double.TryParse(epsBox.Text, out double res))
+            {
+                ((TextBox)sender).Undo();
+                ((TextBox)sender).BackColor = Color.Red;
+                timerHightlight.Start();
+            }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (epsBox.BackColor.G < 255)
+                epsBox.BackColor = Color.FromArgb(255, (255 + epsBox.BackColor.G) / 2 + 1, (255 + epsBox.BackColor.B) / 2 + 1);
+            else
+                timerHightlight.Stop();
+        }
+
+        private void toolStripMenuOpenOutput_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void sim_Click(object sender, EventArgs e)
+        private void resultsFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ResultsForm resultsForm = new ResultsForm();
+            resultsForm.Show();
         }
 
-        private void Notsim_Click(object sender, EventArgs e)
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
         {
+            //if (checkedListBox1.CheckedItems.Count > 0)
+            //    methodCheckedImg.Image = Resources.CheckMark;
+            //else
+            //    methodCheckedImg.Image = Resources.UnabledCheckMark;
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-        }
-
-        private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void epsBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-        }
-
-        private void epsBox_TextChanged(object sender, EventArgs e)
-        {
+            if (checkedListBox1.CheckedItems.Count > 0)
+                methodCheckedImg.Image = Resources.CheckMark;
+            else
+                methodCheckedImg.Image = Resources.UnabledCheckMark;
         }
     }
 }

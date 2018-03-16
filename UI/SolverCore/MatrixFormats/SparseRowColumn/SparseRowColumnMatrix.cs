@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SolverCore
 {
@@ -23,6 +24,72 @@ namespace SolverCore
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         public int Size => di.Length;
+
+        public SparseRowColumnMatrix(CoordinationalMatrix coordinationalMatrix)
+        {
+            if (coordinationalMatrix == null)
+            {
+                throw new ArgumentNullException(nameof(coordinationalMatrix));
+            }
+
+            var size = coordinationalMatrix.Size;
+
+            ia = new int[size + 1];
+            di = new double[size];
+            var itemsSymmetricProfile = new Dictionary<(int i, int j), (double al, double au)>();
+
+            foreach (var item in coordinationalMatrix)
+            {
+                if (item.row != item.col)
+                {
+                    (int i, int j) = item.row > item.col ? (item.row, item.col) : (item.col, item.row);
+
+                    if (!itemsSymmetricProfile.ContainsKey((i, j)))
+                    {
+                        itemsSymmetricProfile[(i, j)] = (0, 0);
+                    }
+
+                    if (item.row > item.col)
+                    {
+                        var au = itemsSymmetricProfile[(i, j)].au;
+                        itemsSymmetricProfile[(i, j)] = (item.value, au);
+                    }
+                    else
+                    {
+                        var al = itemsSymmetricProfile[(i, j)].al;
+                        itemsSymmetricProfile[(i, j)] = (al, item.value);
+                    }
+                }
+                else
+                {
+                    di[item.row] = item.value;
+                }
+            }
+
+            var orderedItems = itemsSymmetricProfile.OrderBy(x => x.Key.i).ThenBy(x => x.Key.j);
+            var count = orderedItems.Count();
+
+            ja = new int[count];
+            al = new double[count];
+            au = new double[count];
+
+            int k = 0;
+
+            foreach (var item in orderedItems)
+            {
+                ja[k] = item.Key.j;
+                al[k] = item.Value.al;
+                au[k] = item.Value.au;
+
+                ia[item.Key.i + 1]++;
+                k++;
+            }
+
+            for(int i = 0; i < size; i++)
+            {
+                ia[i + 1] += ia[i];
+            }
+        }
 
         public SparseRowColumnMatrix(
             double[] di,
@@ -66,7 +133,8 @@ namespace SolverCore
 
             for (int i = 0; i < Size; i++)
             {
-                Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
+                Sorter.QuickSort(this.ja, this.ia[i], this.ia[i + 1] - 1, this.al, this.au);
+                //Array.Sort(this.ja, this.aa, this.ia[i], this.ia[i + 1] - this.ia[i]);
             }
         }
 
@@ -443,11 +511,6 @@ namespace SolverCore
             }
 
             return result;
-        }
-
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            throw new NotImplementedException();
         }
     }
 }

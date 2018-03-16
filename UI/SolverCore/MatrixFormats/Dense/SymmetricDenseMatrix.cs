@@ -11,54 +11,6 @@ namespace SolverCore
     {
         private double[][] matrix;
 
-        /// <summary>
-        /// конструктор
-        /// </summary>
-        /// <param name="matrix"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="RankException"></exception>
-        public SymmetricDenseMatrix(double[][] matrix)
-        {
-            if(matrix == null)
-            {
-                throw new ArgumentNullException(nameof(matrix));
-            }
-            
-            int size = matrix.Length;
-            this.matrix = new double[size][];
-
-            for(int i = 0; i < size; i++)
-            {
-                if(matrix[i] == null)
-                {
-                    throw new ArgumentException("one of the lines is null", nameof(matrix));
-                }
-
-                if (matrix[i].Length != i + 1)
-                {
-                    throw new RankException(nameof(matrix));
-                }
-
-                this.matrix[i] = new double[i + 1];
-                matrix[i].CopyTo(this.matrix[i], 0);
-            }
-        }
-
-        public SymmetricDenseMatrix(int size)
-        {
-            if(size < 0)
-            {
-                throw new ArgumentException($"{nameof(size)} must be nonnegative");
-            }
-
-            matrix = new double[size][];
-
-            for(int i = 0; i < size; i++)
-            {
-                matrix[i] = new double[i + 1];
-            }
-        }
-
         public double this[int i, int j]
         {
             get
@@ -67,7 +19,7 @@ namespace SolverCore
                 {
                     return i > j ? matrix[i][j] : matrix[j][i];
                 }
-                catch(IndexOutOfRangeException)
+                catch (IndexOutOfRangeException)
                 {
                     throw new IndexOutOfRangeException();
                 }
@@ -93,13 +45,74 @@ namespace SolverCore
 
         public ILinearOperator Transpose => this;
 
+        /// <summary>
+        /// конструктор
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="RankException"></exception>
+        public SymmetricDenseMatrix(double[][] matrix)
+        {
+            if(matrix == null)
+            {
+                throw new ArgumentNullException(nameof(matrix));
+            }
+            
+            int size = matrix.Length;
+            this.matrix = new double[size][];
+
+            for(int i = 0; i < size; i++)
+            {
+                if(matrix[i] == null)
+                {
+                    throw new ArgumentException("One of the lines is null", nameof(matrix));
+                }
+
+                if (matrix[i].Length != i + 1)
+                {
+                    throw new RankException(nameof(matrix));
+                }
+
+                this.matrix[i] = new double[i + 1];
+                matrix[i].CopyTo(this.matrix[i], 0);
+            }
+        }
+
+        public SymmetricDenseMatrix(int size)
+        {
+            if(size < 0)
+            {
+                throw new ArgumentException($"{nameof(size)} must be nonnegative");
+            }
+
+            AllocateMemory(size);
+        }
+
+        public SymmetricDenseMatrix(SymmetricCoordinationalMatrix coordinationalMatrix)
+        {
+            if(coordinationalMatrix == null)
+            {
+                throw new ArgumentNullException(nameof(coordinationalMatrix));
+            }
+
+            AllocateMemory(coordinationalMatrix.Size);
+
+            foreach(var item in coordinationalMatrix)
+            {
+                matrix[item.row][item.col] = item.value;
+            }
+        }
+
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
             for (int i = 0; i < Size; i++)
             {
-                for (int j = 0; j <= i; j++)
+                yield return (matrix[i][i], i, i);
+
+                for (int j = 0; j < i; j++)
                 {
                     yield return (matrix[i][j], i, j);
+                    yield return (matrix[i][j], j, i);
                 }
             }
         }
@@ -259,9 +272,14 @@ namespace SolverCore
             return result;
         }
 
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
+        private void AllocateMemory(int size)
         {
-            throw new NotImplementedException();
+            matrix = new double[size][];
+
+            for (int i = 0; i < size; i++)
+            {
+                matrix[i] = new double[i + 1];
+            }
         }
     }
 }

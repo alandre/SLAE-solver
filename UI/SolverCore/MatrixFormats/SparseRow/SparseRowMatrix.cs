@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,36 +27,107 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(ja));
             }
 
+            if (a.Length != ja.Length)
+            {
+                throw new ArgumentException("a and ja must be equal size");
+            }
+
+            if (a.Length != ia[ia.Length - 1])
+            {
+                throw new ArgumentException("wrong count of elements");
+            }
+            this.ia = (int[])ia.Clone();
+            this.ja = (int[])ja.Clone();
+            this.a = (double[])a.Clone();
+
+            if (this.ia[0] == 1)
+            {
+                for (int i = 0; i < this.ia.Length; i++)
+                {
+                    this.ia[i]--;
+                }
+
+                for (int j = 0; j < this.ja.Length; j++)
+                {
+                    this.ja[j]--;
+                }
+            }
+            for (int i = 0; i < Size; i++)
+            {
+                Sorter.QuickSort(this.ja, this.ia[i], this.ia[i + 1] - 1, this.a);
+
+            }
+        }
+
+        public SparseRowMatrix(int[] ja,int[] ia )
+        {
+            if (ja == null)
+            {
+                throw new ArgumentNullException(nameof(ja));
+            }
+
             if (ia == null)
             {
                 throw new ArgumentNullException(nameof(ia));
             }
 
-            if (a.Length != ja.Length)
-            {
-                throw new ArgumentNullException("a.size != ja.size", nameof(a));
-            }
 
-            if (a.Length != ia[ia.Length - 1])
+            if (ja.Length != ia[ia.Length - 1])
             {
-                throw new ArgumentNullException("a.size != ia.[size_matrix]", nameof(ia));
+                throw new ArgumentException("wrong count of elements");
             }
-            var size = ia.Length;
-            this.ia = new int[size];
-            ia.CopyTo(this.ia,0);
+            this.ia = (int[])ia.Clone();
+            this.ja = (int[])ja.Clone();
+            this.a = new double[ja.Length];
 
-            size = ja.Length;
-            this.ja = new int[size];
-            this.a = new double[size];
-            a.CopyTo(this.a,0);
-            ja.CopyTo(this.ja,0);
+            if (this.ia[0] == 1)
+            {
+                for (int i = 0; i < this.ia.Length; i++)
+                {
+                    this.ia[i]--;
+                }
+
+                for (int j = 0; j < this.ja.Length; j++)
+                {
+                    this.ja[j]--;
+                }
+            }
+            for (int i = 0; i < Size; i++)
+            {
+                Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
+            }
         }
 
-        public SparseRowMatrix(int size, int size_a)
+
+        public SparseRowMatrix(CoordinationalMatrix matrix)
         {
-            ia = new int[size+1];
-            ja = new int[size_a];
-            a = new double[size_a];
+            if (matrix == null)
+            {
+                throw new ArgumentNullException(nameof(matrix));
+            }
+            
+            var elems = matrix.OrderBy(key => key.row).ThenBy(key => key.col);
+
+            ia = new int[matrix.Size + 1];
+            ja = new int[matrix.Count()];
+            a = new double[ja.Length];
+            int i = 0, j = 0;
+            ia[i] = 0;
+            ia[i + 1] = 0;
+
+            foreach (var item in elems)
+            {
+                ja[j] = item.col;
+                a[j] = item.value;
+                j++;
+                ia[item.row+1]++;
+             
+            }
+            for (int k = 0; k < Size; k++)
+            {
+                ia[k + 1] += ia[k];
+            }
+
         }
 
         //получение элемента по индексу(добавить try catch
@@ -70,7 +142,6 @@ namespace SolverCore
                     var m = Array.IndexOf(ja, j, ia1, ia2 - ia1);
 
                     return m == -1 ? 0.0 : a[m];
-
                 }
                 catch (IndexOutOfRangeException)
                 {
@@ -107,12 +178,8 @@ namespace SolverCore
         }
 
         //транспонирование
-        public ILinearOperator Transpose => new TransposeMatrix<SparseRowMatrix>();
+        public ILinearOperator Transpose => new TransposeMatrix<SparseRowMatrix>() { Matrix = this };
 
-        public CoordinationalMatrix ConvertToCoordinationalMatrix()
-        {
-            throw new NotImplementedException();
-        }
         //заполнение
         public void Fill(FillFunc elems)
         {
@@ -120,20 +187,14 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(elems));
             }
-            int i = 0, j = 0;
-            ia[i] = 0;
-            ia[i + 1] = 0;
-            foreach (var item in this)
+            for (int i=0;i<=Size;i++)
             {
-                ja[j] = item.col <= Size ? item.col : throw new ArgumentNullException("col>size, i=" + i.ToString() + " j=" + j.ToString(), nameof(elems));
-                a[j] = elems(item.row, item.col);
-                j++;
-                if (item.row != i)
+                int ia1 = ia[i];
+                int ia2 = ia[i+1];
+                for (; ia1 < ia2; ia1++)
                 {
-                    i++;
-                    ia[i] = item.row - i == 0 && i < Size ? ia[i - 1] : throw new ArgumentNullException("matrix[i,_]=0 || i>size, i=" + i.ToString() + " j=" + j.ToString(), nameof(elems));
+                    a[ia1] = elems(i,ja[ia1]);
                 }
-                ia[i + 1]++;
             }
         }
 
@@ -200,17 +261,17 @@ namespace SolverCore
             for (int i = Size - 1; i >= 0; i--)
             {
                 var ia1 = ia[i];//1ый элемент строки 
-                var ia2 = ia[i + 1] - 1;//последний элемент строки
+                var ia2 = ia[i + 1];//последний элемент строки
                 int j;
-                for (; ja[ia2] > i && ia1 <= ia2; ia2--)
+                for (; ja[ia1] < i && ia1 < ia2; ia1++)
                 {
-                    j = ja[ia2];
-                    result[j] += a[ia2] * vector[i];
+                    j = ja[ia1];
+                    result[j] += a[ia1] * vector[i];
                 }
-                j = ja[ia2];
-                if (j == i && ia1 <= ia2)
+                j = ja[ia1];
+                if (j == i && ia1 < ia2)
                 {
-                    result[j] += UseDiagonal? a[ia2] * vector[j]: (double)diagonalElement * vector[j];
+                    result[j] += UseDiagonal? a[ia1] * vector[j]: (double)diagonalElement * vector[j];
                 }
             }
             return result;
@@ -245,7 +306,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0, i = "+i.ToString(), nameof(a));
+                    throw new ArgumentNullException(nameof(a));
                 }
             }
             return result;
@@ -281,7 +342,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0, i = " + i.ToString(), nameof(a));
+                    throw new ArgumentNullException( nameof(a));
                 }
             }
             return result;
@@ -431,7 +492,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0, i = "+i.ToString(), nameof(a));
+                    throw new ArgumentNullException(nameof(a));
                 }
             }
             return result;
@@ -467,7 +528,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException("matrix[i,i]=0,i = " + i.ToString(), nameof(a));
+                    throw new ArgumentNullException();
                 }
             }
             return result;

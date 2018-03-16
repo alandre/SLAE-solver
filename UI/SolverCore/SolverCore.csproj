@@ -43,11 +43,13 @@
   <ItemGroup>
     <Compile Include="Fabrics\LoggingSolversFabric.cs" />
     <Compile Include="Interfaces\IFactorization.cs" />
+    <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Interfaces\ILogger.cs" />
     <Compile Include="Interfaces\IMethod.cs" />
     <Compile Include="Interfaces\ISolver.cs" />
     <Compile Include="Interfaces\MatrixFormats\ITransposeLinearOperator.cs" />
     <Compile Include="Loggers\SaveBufferLogger.cs" />
+    <Compile Include="MatrixFormats\Sorter.cs" />
     <Compile Include="MatrixFormats\Coordinational\CoordinationalMatrix.cs" />
     <Compile Include="MatrixFormats\Dense\DenseMatrix.cs" />
     <Compile Include="Interfaces\MatrixFormats\IMatrix.cs" />
@@ -55,7 +57,6 @@
     <Compile Include="Interfaces\MatrixFormats\IVector.cs" />
     <Compile Include="MatrixFormats\DiagonalElement.cs" />
     <Compile Include="MatrixFormats\TransposeMatrix.cs" />
-    <Compile Include="Methods\BCGStab.cs" />
     <Compile Include="Methods\CGM.cs" />
     <Compile Include="Methods\GaussianSeidelMethod.cs" />
     <Compile Include="Methods\JacobiMethod.cs" />

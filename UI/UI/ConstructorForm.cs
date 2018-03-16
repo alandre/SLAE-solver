@@ -216,6 +216,19 @@ namespace UI
 
         private void forwardToolStripMenuItem1_Click(object sender, EventArgs e)
         {
+            foreach (DataGridViewRow row in A.Rows)
+            {
+                bool filled = false;
+                foreach (DataGridViewCell cell in row.Cells)
+                    if (double.Parse(cell.Value.ToString()) != 0.0)
+                        filled = true;
+                if (!filled)
+                {
+                    MessageBox.Show("В матрице не должно быть нулевых строк.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
+
             if (formatForm == null || formatForm.IsDisposed)
                 formatForm = new FormatForm();
             

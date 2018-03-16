@@ -202,6 +202,7 @@ namespace UI
 
         private void Start_Click(object sender, EventArgs e)
         {
+            currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
             SolveAsync();
 
             var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
@@ -264,6 +265,11 @@ namespace UI
         public void write()
         {
             return;
+        }
+
+        public void Write(int Iter, double Residual)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -336,8 +336,7 @@ namespace SolverCore
                 {
                     continue;
                 }
-
-                if (key.column == key.row)
+                else if (key.column == key.row)
                 {
                     result[key.row] = isUseDiagonal ? (vector[key.row]-sum[key.row])/elem.Value: vector[key.row] - sum[key.row] ;
                 }
@@ -371,8 +370,7 @@ namespace SolverCore
                 {
                     continue;
                 }
-
-                if (key.column == key.row)
+                else if (key.column == key.row)
                 {
                     result[key.row] = isUseDiagonal ? (vector[key.row] - sum[key.row]) / elem.Value : vector[key.row] - sum[key.row];
                 }
@@ -383,7 +381,6 @@ namespace SolverCore
             }
 
             return result;
-
         }
 
         public IVector USolve(IVector vector, bool isUseDiagonal)
@@ -407,21 +404,17 @@ namespace SolverCore
                 {
                     continue;
                 }
-
-                if (key.column == key.row)
+                else if (key.column == key.row)
                 {
                     result[key.row] = isUseDiagonal ? (vector[key.row] - sum[key.row]) / elem.Value : vector[key.row] - sum[key.row];
                 }
                 else
                 {
-
-                      sum[key.row] += elem.Value * result[key.column];
+                    sum[key.row] += elem.Value * result[key.column];
                 }
-                }
+            }
 
-                return result;
-
-
+            return result;
         }
 
         public IVector USolveTranspose(IVector vector, bool isUseDiagonal)
@@ -445,8 +438,7 @@ namespace SolverCore
                 {
                     continue;
                 }
-
-                if (key.column == key.row)
+                else if (key.column == key.row)
                 {
                     result[key.row] = isUseDiagonal ? (vector[key.row] - sum[key.row]) / elem.Value : vector[key.row] - sum[key.row];
                 }

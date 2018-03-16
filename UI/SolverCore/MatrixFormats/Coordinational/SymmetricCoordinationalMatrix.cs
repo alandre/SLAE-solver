@@ -215,14 +215,73 @@ namespace SolverCore
             return result;
         }
 
-        public IVector LSolve(IVector x, bool UseDiagonal)
+        public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
-            throw new NotImplementedException();
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = vector.Clone();
+            var sum = new Vector(vector.Size);
+            foreach (var elem in matrix.OrderBy(x => x.Key.row).ThenBy(x => x.Key.column))
+            {
+                var key = elem.Key;
+
+                //if (key.row < key.column)
+                //{
+                //    continue;
+                //}
+
+                if (key.column == key.row)
+                {
+                    result[key.row] = isUseDiagonal ? (vector[key.row] - sum[key.row]) / elem.Value : vector[key.row] - sum[key.row];
+                }
+                else
+                {
+                    sum[key.row] += elem.Value * result[key.column];
+                }
+            }
+
+            return result;
+
         }
 
-        public IVector USolve(IVector x, bool UseDiagonal)
+        public IVector USolve(IVector vector, bool isUseDiagonal)
         {
-            throw new NotImplementedException();
+
+            if (vector == null)
+            {
+                throw new ArgumentNullException(nameof(vector));
+            }
+            if (vector.Size != Size)
+            {
+                throw new RankException();
+            }
+
+            var result = vector.Clone();
+            var sum = new Vector(vector.Size);
+            foreach (var elem in matrix.OrderByDescending(x => x.Key.row).ThenByDescending(x => x.Key.column))
+            {
+                var key = elem.Key;
+
+
+                if (key.column == key.row)
+                {
+                    result[key.row] = isUseDiagonal ? (vector[key.row] - sum[key.row]) / elem.Value : vector[key.row] - sum[key.row];
+                }
+                else
+                {
+                    sum[key.column] += elem.Value * result[key.row];
+                }
+            }
+
+            return result;
+
         }
     }
 }

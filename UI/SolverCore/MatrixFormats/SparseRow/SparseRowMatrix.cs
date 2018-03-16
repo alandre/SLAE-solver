@@ -54,7 +54,8 @@ namespace SolverCore
             }
             for (int i = 0; i < Size; i++)
             {
-                Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
+                Sorter.QuickSort(this.ja, this.ia[i], this.ia[i + 1] - 1, this.a);
+
             }
         }
 
@@ -119,17 +120,14 @@ namespace SolverCore
                 ja[j] = item.col;
                 a[j] = item.value;
                 j++;
-
-                if (item.row != i)
-                {
-                    i++;
-                    ia[i + 1] = ia[i];
-                }
-                else
-                {
-                    ia[i + 1]++;
-                }
+                ia[item.row+1]++;
+             
             }
+            for (int k = 0; k < Size; k++)
+            {
+                ia[k + 1] += ia[k];
+            }
+
         }
 
         //получение элемента по индексу(добавить try catch

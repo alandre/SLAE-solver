@@ -9,7 +9,7 @@ using SolverCore.Methods;
 using Extensions;
 
 using Xunit;
-
+using Xunit.Abstractions;
 
 
 
@@ -20,17 +20,18 @@ namespace Methods
 
     /*public class TestBCGStabMethod
     {
-       
+       private readonly ITestOutputHelper _testOutputHelper;
         IMethod Method;
         ILogger Logger;
         private double[,] _matrix;
         LoggingSolver loggingSolver;
 
-        public TestBCGStabMethod()
+        public TestBCGStabMethod(ITestOutputHelper testOutputHelper)
         {
             Method = new BCGStab();
             Logger = new FakeLog();
             loggingSolver = new LoggingSolver(Method, Logger); 
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
@@ -92,7 +93,8 @@ namespace Methods
             var result = loggingSolver.Solve(proxyMatrix, x0, b);
             var MultCount = proxyMethod.MultCount;
 
-            // сравнивать количество вызовов
+            _testOutputHelper.WriteLine(MultCount[0].ToString());
+            _testOutputHelper.WriteLine(MultCount[1].ToString());
 
             for (int i = 0; i < resultActual.Size; i++)
                 Assert.Equal(result[i], resultActual[i], 8);

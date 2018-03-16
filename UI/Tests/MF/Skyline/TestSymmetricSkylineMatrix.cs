@@ -51,6 +51,20 @@ namespace MF.SymmetricSkyline
             }
         }
 
+        [Fact]
+        public void SymmetricSkylineMatrix_Foreach()
+        {
+            var di = new double[] { 1, 2, 3 };
+            var al = new double[] { 1, 2, 3 };
+            var au = new double[] { 1, 2, 3 };
+            var ia = new int[] { 1, 1, 2, 4 };
+
+            SkylineMatrix skylineMatrix = new SkylineMatrix(di, ia, al, au);
+
+            Assert.True(new HashSet<(double, int, int)>(symmetricSkylineMatrix).SetEquals(skylineMatrix));
+        }
+
+
         //[Fact]
         //public void DenseMatrix_TestUMultExeptions()
         //{

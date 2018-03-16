@@ -59,7 +59,7 @@ namespace SolverCore
 
             for (int i = 1; i < Size; i++)
             {
-                Array.Sort(this.ja, this.ia[i], this.ia[i + 1] - this.ia[i]);
+                Sorter.QuickSort(this.ja, this.ia[i], this.ia[i + 1] - 1, this.a);
             }
         }
 
@@ -109,27 +109,28 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(matrix));
             }
-            IEnumerable elems = matrix.OrderBy(key => key.row).ThenBy(key => key.col);
+            var elems = matrix.OrderBy(key => key.row).ThenBy(key => key.col);
             ia = new int[matrix.Size + 1];
             List<int> list_ja=new List<int>();
             List<double> list_a = new List<double>();
-            foreach (KeyValuePair<(int row, int col), double> item in elems)
+            foreach (var item in elems)
             {
-                if (item.Key.row>=item.Key.col)
+                if (item.row>=item.col)
                 {
-                    ia[item.Key.col + 1]++;
-                    list_ja.Add(item.Key.col);
-                    list_a.Add(item.Value);
+                    ia[item.row + 1]++;
+                    list_ja.Add(item.col);
+                    list_a.Add(item.value);
                 }
             }
-            ja = new int[ia[Size+1]];
-            a = new double[ja.Length];
-            ja = list_ja.ToArray();
-            a = list_a.ToArray();
             for (int i = 1; i < Size; i++)
             {
                 ia[i + 1] += ia[i];
             }
+            ja = new int[ia[Size]];
+            a = new double[ja.Length];
+            ja = list_ja.ToArray();
+            a = list_a.ToArray();
+
         }
 
 

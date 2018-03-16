@@ -144,7 +144,7 @@ namespace SolverCore
 
                 if (key.row < key.column)
                 {
-                    break;
+                    continue;
                 }
 
                 if (key.column == key.row)
@@ -180,7 +180,7 @@ namespace SolverCore
 
                 if (key.row < key.column)
                 {
-                    break;
+                    continue;
                 }
 
                 if (key.column == key.row)
@@ -216,7 +216,7 @@ namespace SolverCore
 
                 if (key.row > key.column)
                 {
-                    break;
+                    continue;
                 }
 
                 if (key.column == key.row)
@@ -252,7 +252,7 @@ namespace SolverCore
 
                 if (key.row > key.column)
                 {
-                    break;
+                    continue;
                 }
 
                 if (key.column == key.row)

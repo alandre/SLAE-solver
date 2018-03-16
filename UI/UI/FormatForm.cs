@@ -23,8 +23,7 @@ namespace UI
         public FormatForm()
         {
             InitializeComponent();
-            var tmp = new FormatFactory();
-            var keyList = new List<string>(tmp.formats.Keys);
+            var keyList = new List<string>(FormatFactory.FormatsDictionary.Keys);
             for (int i = 0; i < keyList.Count; i++)
             {
                 formatBox.Items.Add(keyList[i]);
@@ -48,7 +47,7 @@ namespace UI
 
         private void forwardItem_Click(object sender, EventArgs e)
         {
-            if (FormatFactory.PatternRequired(formatBox.Text))
+            if (FormatFactory.PatternRequired(FormatFactory.FormatsDictionary[formatBox.Text]))
             {
                 if (patternForm == null || patternForm.IsDisposed)
                     patternForm = new PatternForm();

@@ -50,8 +50,7 @@ namespace UI
         public MainForm()
         {
             InitializeComponent();
-            var tmp = new FormatFactory();
-            var keyList = new List<string>(tmp.formats.Keys);
+            var keyList = new List<string>(FormatFactory.FormatsDictionary.Keys);
             Types = new List<string>();
             for (int i = 0; i < keyList.Count; i++)
             {
@@ -84,10 +83,8 @@ namespace UI
                     Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
-                    var tmp = new FormatFactory();
-                    var value = tmp.formats[formatBox.SelectedItem.ToString()];
-                    fileInputedSLAE.matrix = FormatFactory.Init(value, Input, Input.symmetry);
-                    var a = FormatFactory.PatternRequired(formatBox.SelectedItem.ToString());
+                    fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], Input, Input.symmetry);
+                    var a = FormatFactory.PatternRequired(FormatFactory.FormatsDictionary[formatBox.SelectedItem.ToString()]);
 
                     fileInputBtn.Text = file.FileName;
                     fileInputNotNull = true;

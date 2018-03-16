@@ -8,40 +8,37 @@ using SolverCore;
 
 namespace UI
 {
-    // public enum Formats { Coordinational = 0, Dense = 1, Skyline = 2, SparseRow = 3, SparseRowColumn = 4}
-
+    
+    
     public class FormatFactory
     {
-        public FormatFactory()
-        {
-            formats.Add("Координатный", "Coordinational");
-            formats.Add("Плотный", "Dense");
-            formats.Add("Профильный", "Skyline");
-            formats.Add("Строчный без выделенной диагонали", "SparseRow");
-            formats.Add("Строчно-стобцовый", "SparseRowColumn");
-        }
-        public Dictionary<string, string> formats = new Dictionary<string, string>();
+        public enum Formats { Coordinational = 0, Dense = 1, Skyline = 2, SparseRow = 3, SparseRowColumn = 4 }
 
-        public static IMatrix Init(string type, MatrixInitialazer initialazer, bool symmetry)
+        public static Dictionary<string, Formats> FormatsDictionary { get; } = new Dictionary<string, Formats>
         {
+            {"Координатный", Formats.Coordinational},
+            {"Плотный", Formats.Dense},
+            {"Профильный", Formats.Skyline},
+            {"Строчный без выделенной диагонали", Formats.SparseRow},
+            {"Строчно-стобцовый", Formats.SparseRowColumn}
+        };
 
+        public static IMatrix Init(Formats type, MatrixInitialazer initialazer, bool symmetry)
+        {
             try
             {
                 if (symmetry)
                     switch (type)
                     {
-                        case "Coordinational":
-                            {
-                                // SymmetricCoordinationalMatrix matrix = new SymmetricCoordinationalMatrix();
-                            }
-                            break;
-                        case "Dense":
+                        case Formats.Coordinational:
+                            return new SymmetricCoordinationalMatrix(initialazer.row, initialazer.column, initialazer.gg, initialazer.size);
+                        case Formats.Dense:
                             return new SymmetricDenseMatrix(initialazer.denseL);
-                        case "Skyline":
+                        case Formats.Skyline:
                             return new SymmetricSkylineMatrix(initialazer.di, initialazer.ig, initialazer.gg);
-                        case "SparseRow":
+                        case Formats.SparseRow:
                             return new SymmetricSparseRowMatrix(initialazer.gg, initialazer.jg, initialazer.ig);
-                        case "SparseRowColumn":
+                        case Formats.SparseRowColumn:
                             return new SymmetricSparseRowColumnMatrix(initialazer.di, initialazer.gg, initialazer.ig, initialazer.ig);
                         default:
                             break;
@@ -49,18 +46,17 @@ namespace UI
                 else
                     switch (type)
                     {
-                        case "Coordinational":
+                        case Formats.Coordinational:
                             {
-                                var list = initialazer.column.Select((c, i) => (c, initialazer.row[i], initialazer.gg[i])).ToList();
-                                return new CoordinationalMatrix(list, initialazer.size);
+                                return new CoordinationalMatrix(initialazer.row, initialazer.column, initialazer.gg, initialazer.size);
                             }
-                        case "Dense":
+                        case Formats.Dense:
                             return new DenseMatrix(initialazer.dense);
-                        case "Skyline":
+                        case Formats.Skyline:
                             return new SkylineMatrix(initialazer.di, initialazer.ig, initialazer.gl, initialazer.gl);
-                        case "SparseRow":
+                        case Formats.SparseRow:
                             return new SparseRowMatrix(initialazer.gg, initialazer.jg, initialazer.ig);
-                        case "SparseRowColumn":
+                        case Formats.SparseRowColumn:
                             return new SparseRowColumnMatrix(initialazer.di, initialazer.gl, initialazer.gu, initialazer.ig, initialazer.jg);
                         default:
                             break;
@@ -73,58 +69,57 @@ namespace UI
             return null;
         }
 
-        public static bool PatternRequired(string type)
+        public static bool PatternRequired(Formats type)
         {
             switch (type)
             {
-                case "Координатный":
-                case "Плотный":
+                case Formats.Coordinational:
+                case Formats.Dense:
                     return false;
                 default:
-                    break;
+                    return true;
             }
-            return true;
         }
 
-        public static IMatrix Convert(CoordinationalMatrix mat, string type)
+        public static IMatrix Convert(CoordinationalMatrix matrix, Formats type)
         {
             switch (type)
             {
-                case "Координатный":
-                    return mat;
-                case "Плотный":
-                    return new DenseMatrix(mat);
-                case "Профильный":
+                case Formats.Coordinational:
+                    return matrix;
+                case Formats.Dense:
+                    return new DenseMatrix(matrix);
+                case Formats.Skyline:
                     //return new SkylineMatrix(mat);
-                    return mat;
-                case "Строчный без выделенной диагонали":
-                    return new SparseRowMatrix(mat);
-                case "Строчно-стобцовый":
-                    return new SparseRowColumnMatrix(mat);
+                    return matrix;
+                case Formats.SparseRow:
+                    return new SparseRowMatrix(matrix);
+                case Formats.SparseRowColumn:
+                    return new SparseRowColumnMatrix(matrix);
                 default:
                     // Должны вызываться конвертеры!!!!!!!!!!!!!!!!!!!!
-                    return mat;
+                    return matrix;
             }
         }
 
-        public static IMatrix Convert(SymmetricCoordinationalMatrix mat, string type)
+        public static IMatrix Convert(SymmetricCoordinationalMatrix matrix, Formats type)
         {
             switch (type)
             {
-                case "Координатный":
-                    return mat;
-                case "Плотный":
-                    return new SymmetricDenseMatrix(mat);
-                case "Профильный":
+                case Formats.Coordinational:
+                    return matrix;
+                case Formats.Dense:
+                    return new SymmetricDenseMatrix(matrix);
+                case Formats.Skyline:
                     //return new SymmetricSkylineMatrix(mat);
-                    return mat;
-                case "Строчный без выделенной диагонали":
-                    return new SymmetricSparseRowMatrix(mat);
-                case "Строчно-стобцовый":
-                    return new SymmetricSparseRowColumnMatrix(mat);
+                    return matrix;
+                case Formats.SparseRow:
+                    return new SymmetricSparseRowMatrix(matrix);
+                case Formats.SparseRowColumn:
+                    return new SymmetricSparseRowColumnMatrix(matrix);
                 default:
                     // Должны вызываться конвертеры!!!!!!!!!!!!!!!!!!!!
-                    return mat;
+                    return matrix;
             }
         }
     }

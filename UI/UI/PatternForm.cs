@@ -65,10 +65,13 @@ namespace UI
         private void forwardToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             bool symmetric = SLAESource.IsSymmetric;
+            var tmp = new FormatFactory();
             if (symmetric)
-                matrix = FormatFactory.Convert((SymmetricCoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), format);
+                matrix = FormatFactory.Convert((SymmetricCoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), 
+                    FormatFactory.FormatsDictionary[format]);
             else
-                matrix = FormatFactory.Convert((CoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), format);
+                matrix = FormatFactory.Convert((CoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), 
+                    FormatFactory.FormatsDictionary[format]);
 
             if (patternChanged)
             {

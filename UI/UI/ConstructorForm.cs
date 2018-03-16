@@ -314,11 +314,10 @@ namespace UI
             }
 
             IMatrix matrix = MatrixVisualRepresentation.GridViewToCoordinational(A, IsSymmetric);
-
             if (IsSymmetric)
-                _A = FormatFactory.Convert((SymmetricCoordinationalMatrix)matrix, type);
+                _A = FormatFactory.Convert((SymmetricCoordinationalMatrix)matrix, FormatFactory.FormatsDictionary[type]);
             else
-                _A = FormatFactory.Convert((CoordinationalMatrix)matrix, type);
+                _A = FormatFactory.Convert((CoordinationalMatrix)matrix, FormatFactory.FormatsDictionary[type]);
         }
     }
 }

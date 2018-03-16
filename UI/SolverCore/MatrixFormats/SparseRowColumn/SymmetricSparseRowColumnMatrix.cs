@@ -62,10 +62,11 @@ namespace SolverCore
 
                     ia[item.row + 1]++;
                     k++;
-                    continue;
                 }
-
-                di[item.row] = item.value;
+                else
+                {
+                    di[item.row] = item.value;
+                }
             }
 
             for (int i = 0; i < size; i++)
@@ -110,7 +111,7 @@ namespace SolverCore
                 }
             }
 
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
                 Sorter.QuickSort(this.ja, this.ia[i], this.ia[i + 1] - 1, this.aa);
                 //Array.Sort(this.ja, this.aa, this.ia[i], this.ia[i + 1] - this.ia[i]);

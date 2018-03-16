@@ -52,9 +52,9 @@ namespace UI
                         matrix.Add((cell.RowIndex, cell.ColumnIndex), Double.Parse(cell.Value.ToString()));
 
             if (symmetric)
-                return new SymmetricCoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
+                return new SymmetricCoordinationalMatrix(matrix, n);
             else
-                return new CoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
+                return new CoordinationalMatrix(matrix, n);
         }
 
         public static IMatrix PatternedGridViewToCoordinational(DataGridView gridView, bool symmetric)
@@ -68,9 +68,9 @@ namespace UI
                         matrix.Add((cell.RowIndex, cell.ColumnIndex), Double.Parse(cell.Value.ToString()));
 
             if (symmetric)
-                return new SymmetricCoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
+                return new SymmetricCoordinationalMatrix(matrix, n);
             else
-                return new CoordinationalMatrix(matrix.Select(x => (x.Key.row, x.Key.column, x.Value)), n);
+                return new CoordinationalMatrix(matrix, n);
         }
 
         public static DataGridView CoordinationalToGridView(IMatrix mat, bool symmetric)
@@ -104,11 +104,9 @@ namespace UI
 
                 gridView.Rows[i].Cells[j].Value = val;
                 gridView.Rows[i].Cells[j].Tag = CellTag.ForcedSignficant;
+                gridView.Rows[j].Cells[i].Tag = CellTag.ForcedSignficant;
                 if (symmetric)
-                {
                     gridView.Rows[j].Cells[i].Value = val;
-                    gridView.Rows[j].Cells[i].Tag = CellTag.ForcedSignficant;
-                }
             }
 
             return gridView;

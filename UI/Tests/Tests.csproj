@@ -67,6 +67,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Extensions\Comparer.cs" />
     <Compile Include="Extensions\Counters.cs" />
     <Compile Include="Extensions\DenseMatrixGen.cs" />
     <Compile Include="Extensions\FakeLog.cs" />
@@ -77,6 +78,8 @@
     <Compile Include="Methods\TestsCGMMethod.cs" />
     <Compile Include="Methods\TestsLOSMethod.cs" />
     <Compile Include="Methods\TestsGaussianSeidelMethod.cs" />
+    <Compile Include="MF\Coordinational\CoordinationalMatrix.cs" />
+    <Compile Include="MF\Coordinational\SymmetricCoordinationalMatrix.cs" />
     <Compile Include="MF\Dense\TestsSymmetricDenseMatrix.cs" />
     <Compile Include="MF\Skyline\TestSkylineMatrix.cs" />
     <Compile Include="MF\Skyline\TestSymmetricSkylineMatrix.cs" />

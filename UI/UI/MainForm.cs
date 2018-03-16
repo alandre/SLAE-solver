@@ -21,11 +21,27 @@ namespace UI
 
         bool inputChecked = false;
         bool methodChecked = false;
-        bool outputChecked = false;
+        bool manualInputNotNull = false;
+        bool fileInputNotNull = false;
 
-        private IMatrix matrix;
-        private IVector b;
-        private IVector x0;
+        struct SLAE
+        {
+            public IMatrix matrix;
+            public IVector b;
+            public IVector x0;
+
+            public SLAE(IMatrix _matrix, IVector _b, IVector _x0)
+            {
+                matrix = _matrix;
+                b = _b;
+                x0 = _x0;
+            }
+        }
+
+        SLAE currentSLAE;
+        SLAE manualInputedSLAE;
+        SLAE fileInputedSLAE;
+
         static List<String> Types = null;
         ConstructorForm constructorForm;
 
@@ -64,8 +80,12 @@ namespace UI
                     iterBox.Enabled = true;
                     var tmp = new FormatFactory();
                     var value = tmp.formats[formatBox.SelectedItem.ToString()];
-                    matrix = FormatFactory.Init(value, Input, Input.symmetry);
+                    fileInputedSLAE.matrix = FormatFactory.Init(value, Input, Input.symmetry);
                     var a = FormatFactory.PatternRequired(formatBox.SelectedItem.ToString());
+
+                    fileInputBtn.Text = file.FileName;
+                    fileInputNotNull = true;
+                    CheckedChanged(inputCheckedImg, inputChecked = true);
                 }
             }
             catch (Exception)
@@ -85,25 +105,36 @@ namespace UI
             Hide();
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void fileInputRadioBtn_CheckedChanged(object sender, EventArgs e)
         {
             fileInputPanel.Enabled = fileInputRadioBtn.Checked;
             manualInpitRadioBtn.Checked = !fileInputRadioBtn.Checked;
+            inputChecked = fileInputRadioBtn.Checked && fileInputNotNull;
+
+            CheckedChanged(inputCheckedImg, inputChecked);
         }
 
         private void manualInpitRadioBtn_CheckedChanged(object sender, EventArgs e)
         {
             manualInputBtn.Enabled = manualInpitRadioBtn.Checked;
             fileInputRadioBtn.Checked = !manualInpitRadioBtn.Checked;
+            inputChecked = manualInpitRadioBtn.Checked && manualInputNotNull;
+
+            CheckedChanged(inputCheckedImg, inputChecked);
         }
 
         public void SetSLAE(IMatrix _mat, IVector _b, IVector _x0)
         {
-            matrix = _mat;
-            b = _b;
-            x0 = _x0;
+            manualInputedSLAE = new SLAE(_mat, _b, _x0);
 
-            inputCheckedImg.Image = Resources.CheckMark;
+            manualInputNotNull = true;
+            CheckedChanged(inputCheckedImg, inputChecked = true);
+        }
+
+        private void CheckedChanged(PictureBox pictureBox, bool check)
+        {
+            pictureBox.Image = check ? Resources.CheckMark : Resources.UnabledCheckMark;
+            startBtn.Enabled = inputChecked && methodChecked;
         }
 
         private void epsBox_Validating(object sender, CancelEventArgs e)
@@ -150,9 +181,17 @@ namespace UI
             if (Types.Contains(a)) Types.Remove(a);
             else Types.Add(a);
             if (checkedListBox1.CheckedItems.Count > 0)
+            {
                 methodCheckedImg.Image = Resources.CheckMark;
+                methodChecked = true;
+            }
             else
+            {
                 methodCheckedImg.Image = Resources.UnabledCheckMark;
+                methodChecked = false;
+            }
+
+            startBtn.Enabled = inputChecked && methodChecked;
         }
 
         private void Start_Click(object sender, EventArgs e)
@@ -177,7 +216,7 @@ namespace UI
                 IMethod Method = new JacobiMethod();
                 ILogger Logger = new FakeLog();
                 loggingSolver = new LoggingSolver(Method, Logger);
-                IVector result = await RunAsync(loggingSolver, matrix, x0, b);
+                IVector result = await RunAsync(loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
             }
 
         }

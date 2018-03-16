@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using SolverCore;
+using SolverCore.Solvers;
+using SolverCore.Methods;
 using UI.Properties;
 
 namespace UI
@@ -19,24 +21,47 @@ namespace UI
 
         bool inputChecked = false;
         bool methodChecked = false;
-        bool outputChecked = false;
+        bool manualInputNotNull = false;
+        bool fileInputNotNull = false;
 
-        private IMatrix matrix;
-        private IVector b;
-        private IVector x0;
-        
+        struct SLAE
+        {
+            public IMatrix matrix;
+            public IVector b;
+            public IVector x0;
+
+            public SLAE(IMatrix _matrix, IVector _b, IVector _x0)
+            {
+                matrix = _matrix;
+                b = _b;
+                x0 = _x0;
+            }
+        }
+
+        SLAE currentSLAE;
+        SLAE manualInputedSLAE;
+        SLAE fileInputedSLAE;
+
+        static List<String> Types = null;
+
+        private string path;
         ConstructorForm constructorForm;
 
         public MainForm()
         {
             InitializeComponent();
-            var tmp = new FormatFactory();            
+            var tmp = new FormatFactory();
             var keyList = new List<string>(tmp.formats.Keys);
+            Types = new List<string>();
             for (int i = 0; i < keyList.Count; i++)
             {
                 formatBox.Items.Add(keyList[i]);
             }
             formatBox.Text = formatBox.Items[0].ToString();
+
+            var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   //get path with .exe file
+            path = Path.GetDirectoryName(location);
+            textBox1.Text = path;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -61,15 +86,19 @@ namespace UI
                     iterBox.Enabled = true;
                     var tmp = new FormatFactory();
                     var value = tmp.formats[formatBox.SelectedItem.ToString()];
-                    matrix = FormatFactory.Init(value, Input, Input.symmetry);
+                    fileInputedSLAE.matrix = FormatFactory.Init(value, Input, Input.symmetry);
                     var a = FormatFactory.PatternRequired(formatBox.SelectedItem.ToString());
+
+                    fileInputBtn.Text = file.FileName;
+                    fileInputNotNull = true;
+                    CheckedChanged(inputCheckedImg, inputChecked = true);
                 }
             }
             catch (Exception)
             {
                 MessageBox.Show("Неправильный формат входного файла.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
+
         }
 
         private void ManualEntry_Click(object sender, EventArgs e)
@@ -82,25 +111,36 @@ namespace UI
             Hide();
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
+        private void fileInputRadioBtn_CheckedChanged(object sender, EventArgs e)
         {
             fileInputPanel.Enabled = fileInputRadioBtn.Checked;
             manualInpitRadioBtn.Checked = !fileInputRadioBtn.Checked;
+            inputChecked = fileInputRadioBtn.Checked && fileInputNotNull;
+
+            CheckedChanged(inputCheckedImg, inputChecked);
         }
 
         private void manualInpitRadioBtn_CheckedChanged(object sender, EventArgs e)
         {
             manualInputBtn.Enabled = manualInpitRadioBtn.Checked;
             fileInputRadioBtn.Checked = !manualInpitRadioBtn.Checked;
+            inputChecked = manualInpitRadioBtn.Checked && manualInputNotNull;
+
+            CheckedChanged(inputCheckedImg, inputChecked);
         }
 
         public void SetSLAE(IMatrix _mat, IVector _b, IVector _x0)
         {
-            matrix = _mat;
-            b = _b;
-            x0 = _x0;
+            manualInputedSLAE = new SLAE(_mat, _b, _x0);
 
-            inputCheckedImg.Image = Resources.CheckMark;
+            manualInputNotNull = true;
+            CheckedChanged(inputCheckedImg, inputChecked = true);
+        }
+
+        private void CheckedChanged(PictureBox pictureBox, bool check)
+        {
+            pictureBox.Image = check ? Resources.CheckMark : Resources.UnabledCheckMark;
+            startBtn.Enabled = inputChecked && methodChecked;
         }
 
         private void epsBox_Validating(object sender, CancelEventArgs e)
@@ -142,10 +182,88 @@ namespace UI
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            //методы на форму должны добавляться из фабрики решателей
+            string a = (string)checkedListBox1.SelectedItem;
+            if (Types.Contains(a)) Types.Remove(a);
+            else Types.Add(a);
             if (checkedListBox1.CheckedItems.Count > 0)
+            {
                 methodCheckedImg.Image = Resources.CheckMark;
+                methodChecked = true;
+            }
             else
+            {
                 methodCheckedImg.Image = Resources.UnabledCheckMark;
+                methodChecked = false;
+            }
+
+            startBtn.Enabled = inputChecked && methodChecked;
+        }
+
+        private void Start_Click(object sender, EventArgs e)
+        {
+            SolveAsync();
+
+            var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
+            string full_directory_name = path + uniqueDirectoryName;
+            Directory.CreateDirectory(@full_directory_name);
+
+            //TODO: different file names (depending on the choosen methods)
+            System.IO.File.Create(full_directory_name + "\\result.txt");
+            MessageBox.Show("Результат был записан");
+
+        }
+        private async void SolveAsync()
+        {
+            /*
+            foreach (string Method in Types)
+            {
+                ILogger Logger = new FakeLog();
+                LoggingSolver loggingSolver = Spawn(Method, Logger);
+                IVector result = await RunAsync(loggingSolver, matrix, x0, b);
+            }
+            */
+            //Необходима фабрика решателей, жду слияния главной ветки и ветки решателей
+            //временная мера для запуска программы
+            for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+            {
+                LoggingSolver loggingSolver;
+                IMethod Method = new JacobiMethod();
+                ILogger Logger = new FakeLog();
+                loggingSolver = new LoggingSolver(Method, Logger);
+                IVector result = await RunAsync(loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+            }
+
+        }
+        private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
+        {
+            return Task.Run(() =>
+            {
+                return loggingSolver.Solve((ILinearOperator)matrix, x0, b);
+            });
+        }
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            FolderBrowserDialog FBD = new FolderBrowserDialog();
+            if (FBD.ShowDialog() == DialogResult.OK)
+            {
+                path = FBD.SelectedPath;
+                textBox1.Text = path;
+            }
+        }
+
+    }
+    //временная мера
+    internal class FakeLog : ILogger
+    {
+        public void read()
+        {
+            return;
+        }
+
+        public void write()
+        {
+            return;
         }
     }
 }

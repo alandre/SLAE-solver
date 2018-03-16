@@ -48,7 +48,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.formatBox = new System.Windows.Forms.ComboBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.Start = new System.Windows.Forms.Button();
+            this.startBtn = new System.Windows.Forms.Button();
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuOpenOutput = new System.Windows.Forms.ToolStripMenuItem();
             this.resultsFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -248,7 +248,7 @@
             this.fileInputRadioBtn.TabStop = true;
             this.fileInputRadioBtn.Text = "Из файла";
             this.fileInputRadioBtn.UseVisualStyleBackColor = true;
-            this.fileInputRadioBtn.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.fileInputRadioBtn.CheckedChanged += new System.EventHandler(this.fileInputRadioBtn_CheckedChanged);
             // 
             // fileInputPanel
             // 
@@ -310,16 +310,16 @@
             this.progressBar1.Size = new System.Drawing.Size(494, 19);
             this.progressBar1.TabIndex = 4;
             // 
-            // Start
+            // startBtn
             // 
-            this.Start.Enabled = false;
-            this.Start.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Start.Location = new System.Drawing.Point(12, 206);
-            this.Start.Name = "Start";
-            this.Start.Size = new System.Drawing.Size(494, 26);
-            this.Start.TabIndex = 5;
-            this.Start.Text = "Найти решение";
-            this.Start.UseVisualStyleBackColor = true;
+            this.startBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.startBtn.Location = new System.Drawing.Point(12, 206);
+            this.startBtn.Name = "startBtn";
+            this.startBtn.Size = new System.Drawing.Size(494, 26);
+            this.startBtn.TabIndex = 5;
+            this.startBtn.Text = "Найти решение";
+            this.startBtn.UseVisualStyleBackColor = true;
+            this.startBtn.Click += new System.EventHandler(this.Start_Click);
             // 
             // menuStrip2
             // 
@@ -381,6 +381,7 @@
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Обзор...";
             this.linkLabel1.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // progressBar2
             // 
@@ -421,7 +422,7 @@
             this.Controls.Add(this.label4);
             this.Controls.Add(this.progressBar2);
             this.Controls.Add(this.menuStrip2);
-            this.Controls.Add(this.Start);
+            this.Controls.Add(this.startBtn);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.inputData);
             this.Controls.Add(this.groupBox2);
@@ -462,7 +463,7 @@
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.TextBox epsBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button Start;
+        private System.Windows.Forms.Button startBtn;
         private System.Windows.Forms.MenuStrip menuStrip2;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuOpenOutput;
         private System.Windows.Forms.Label label2;

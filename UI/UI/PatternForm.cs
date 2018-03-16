@@ -24,6 +24,8 @@ namespace UI
         IMatrix matrix;
         IVector x0, b;
 
+        bool patternChanged = false;
+
         public PatternForm()
         {
             InitializeComponent();
@@ -36,6 +38,7 @@ namespace UI
 
         private void A_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+            patternChanged = true;
             MatrixVisualRepresentation.InverseElementPatternStatus(ref A, e.RowIndex, e.ColumnIndex);
             MatrixVisualRepresentation.PaintPattern(ref A, Color.SteelBlue);
         }
@@ -63,11 +66,28 @@ namespace UI
         {
             bool symmetric = SLAESource.IsSymmetric;
             if (symmetric)
-                matrix = FormatFactory.Convert((SymmetricCoordinationalMatrix)MatrixVisualRepresentation.GridViewToCoordinational(A, symmetric), format);
+                matrix = FormatFactory.Convert((SymmetricCoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), format);
             else
-                            if (symmetric)
-                matrix = FormatFactory.Convert((CoordinationalMatrix)MatrixVisualRepresentation.GridViewToCoordinational(A, symmetric), format);
+                matrix = FormatFactory.Convert((CoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), format);
 
+            if (patternChanged)
+            {
+                CoordinationalMatrix user = (CoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric);
+                CoordinationalMatrix auto = MatrixExtensions.ConvertToCoordinationalMatrix(matrix);
+
+                foreach (var elem in auto)
+                    if (!user.Contains((elem.value, elem.row, elem.col)))
+                    {
+                        var res = MessageBox.Show("Заданный портрет не соответствует выбранному формату хранения. Портрет будет автоматически преобразован к корректному виду.", "Уведомление", MessageBoxButtons.OKCancel, MessageBoxIcon.Information);
+                        if (res == DialogResult.OK)
+                        {
+                            mainForm.SetSLAE(matrix, b, x0);
+                            Close();
+                        }
+                        return;
+                    }
+            }
+                       
             mainForm.SetSLAE(matrix, b, x0);
             Close();
         }

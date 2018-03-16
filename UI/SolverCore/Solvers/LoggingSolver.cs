@@ -40,9 +40,7 @@ namespace SolverCore.Solvers
             int iter;
             double residual;
 
-            result = Method.InitMethod(A, x0, b, malloc);
-
-            if (result == null)
+            if (!Method.InitMethod(A, x0, b, malloc))
                 return null;
 
             while (true)
@@ -56,11 +54,12 @@ namespace SolverCore.Solvers
                     return null;
                 }
 
-                Logger.write();
+                Logger.Write(iter, residual);
                 if (iter > maxIter || residual <= eps)
                     break;
             }
-            return result;
+
+            return Method.x;
         }
     }
 }

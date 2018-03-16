@@ -4,18 +4,18 @@ namespace SolverCore.Methods
 {
     public class LOS : IMethod
     {
-        IVector x, x0, b, p, z, r, Ar;
+        IVector x0, b, p, z, r, Ar;
         ILinearOperator A;
-        double norm_b,dotproduct_pp, coefficient;
+        double norm_b, dotproduct_pp, coefficient;
         int currentIter;
         bool init;
-
+        public IVector x { get; private set; }
         public LOS()
         {
             init = false;
         }
         //не предобусловленная система
-        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
+        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc)
             {
@@ -35,7 +35,7 @@ namespace SolverCore.Methods
             p = A.Multiply(r);
             dotproduct_pp = p.DotProduct(p);
             init = true;
-            return x;
+            return init;
         }
 
         public void MakeStep(out int iter, out double residual)

@@ -2,20 +2,22 @@
 
 namespace SolverCore.Methods
 {
-    class BCGStab : IMethod
+    public class BCGStab : IMethod
     {
-        IVector x, xk, b, z, r0, r, LAUz, LAUp, r_prev;
+        IVector xk, b, z, r0, r, LAUz, LAUp, r_prev;
         ILinearOperator A;
         double norm_b, dotproduct_rr, dotproduct_rkr0, dotproduct_rprevr0;
         int currentIter;
         bool init;
+
+        public IVector x { get; private set; }
 
         public BCGStab()
         {
             init = false;
         }
 
-        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
+        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc)
             {
@@ -26,7 +28,7 @@ namespace SolverCore.Methods
                 x = x0;
             }
 
-            xk = x0;
+            xk = x0.Clone();
             this.b = b;
             this.A = A;
             norm_b = b.Norm;
@@ -37,7 +39,7 @@ namespace SolverCore.Methods
             dotproduct_rr = r_prev.DotProduct(r_prev);
             dotproduct_rprevr0 = dotproduct_rr;
             init = true;
-            return x;
+            return init;
         }
 
         public void MakeStep(out int iter, out double residual)
@@ -60,25 +62,25 @@ namespace SolverCore.Methods
             iter = currentIter;
 
             LAUz = A.LSolve(A.Multiply(A.USolve(z, true)), true);
-            var alfa = dotproduct_rprevr0 / (LAUz.DotProduct(r0));
+            var alpha = dotproduct_rprevr0 / (LAUz.DotProduct(r0));
 
-            var p = r_prev.Add(LAUz, -alfa);
+            var p = r_prev.Add(LAUz, -alpha);
 
             LAUp = A.LSolve(A.Multiply(A.USolve(p, true)), true);
             var gamma = (LAUp.DotProduct(p)) / (LAUp.DotProduct(LAUp));
 
-            xk = xk.Add(z, alfa).Add(p, gamma);
+            xk = xk.Add(z, alpha).Add(p, gamma);
             r = p.Add(LAUp, -gamma);
 
             dotproduct_rkr0 = r.DotProduct(r0);
-            var betta = alfa * dotproduct_rkr0 / (gamma * dotproduct_rprevr0);
-            z = r.Add(z, betta).Add(LAUz, -betta * gamma);
+            var beta = alpha * dotproduct_rkr0 / (gamma * dotproduct_rprevr0);
+            z = r.Add(z, beta).Add(LAUz, -beta * gamma);
 
             dotproduct_rprevr0 = dotproduct_rkr0;
             r_prev = r;
             dotproduct_rr = r.DotProduct(r);
 
-            if (Double.IsNaN(alfa) || Double.IsNaN(betta) || Double.IsNaN(gamma))
+            if (Double.IsNaN(beta) || Double.IsInfinity(beta))
             {
                 residual = -1;
                 return;

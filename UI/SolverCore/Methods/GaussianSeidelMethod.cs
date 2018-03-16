@@ -8,7 +8,7 @@ namespace SolverCore.Methods
 {
     public class GaussianSeidelMethod : IMethod
     {
-        IVector x, x0, b;
+        IVector x0, b;
         ILinearOperator A;
         double norm_b;
         double lastResidual;
@@ -17,12 +17,14 @@ namespace SolverCore.Methods
         IVector x_temp;
         IVector Ux;
 
+        public IVector x { get; private set; }
+
         public GaussianSeidelMethod()
         {
             init = false;
         }
 
-        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
+        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc)
             {
@@ -44,12 +46,12 @@ namespace SolverCore.Methods
             }
             catch (DivideByZeroException e)
             {
-                return null;
+                return false;
             }
             init = true;
             x_temp = new Vector(x.Size);
             Ux = A.UMult(x0, false, 0);
-            return x;
+            return true;
         }
 
         public void MakeStep(out int iter, out double residual)

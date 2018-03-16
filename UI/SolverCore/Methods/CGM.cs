@@ -4,18 +4,18 @@ namespace SolverCore.Methods
 {
     public class CGM : IMethod
     {
-        IVector x, x0, b, z, r, Az;
+        IVector x0, b, z, r, Az;
         ILinearOperator A;
         double norm_b, dotproduct_rr, coefficient;
         int currentIter;
         bool init;
-
+        public IVector x { get; private set; }
         public CGM()
         {
             init = false;
         }
         //не предобусловленная система
-        public IVector InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
+        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc)
             {
@@ -35,9 +35,9 @@ namespace SolverCore.Methods
             z = r.Clone();
             dotproduct_rr = r.DotProduct(r);
             init = true;
-            return x;
+            return init;
         }
-        
+
         public void MakeStep(out int iter, out double residual)
         {
             if (!init)
@@ -48,7 +48,7 @@ namespace SolverCore.Methods
             iter = currentIter;
 
             Az = A.Multiply(z);
-            coefficient = dotproduct_rr / Az.DotProduct(z);  
+            coefficient = dotproduct_rr / Az.DotProduct(z);
             x = x.Add(z, coefficient);
             r = r.Add(Az, -coefficient);
             coefficient = dotproduct_rr;
@@ -61,7 +61,7 @@ namespace SolverCore.Methods
                 residual = -1;
                 return;
             }
-            residual = Math.Sqrt(dotproduct_rr) / norm_b; 
+            residual = Math.Sqrt(dotproduct_rr) / norm_b;
         }
     }
 }

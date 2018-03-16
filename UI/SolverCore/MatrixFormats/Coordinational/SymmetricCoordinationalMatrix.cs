@@ -232,11 +232,6 @@ namespace SolverCore
             {
                 var key = elem.Key;
 
-                //if (key.row < key.column)
-                //{
-                //    continue;
-                //}
-
                 if (key.column == key.row)
                 {
                     result[key.row] = isUseDiagonal ? (vector[key.row] - sum[key.row]) / elem.Value : vector[key.row] - sum[key.row];
@@ -248,7 +243,6 @@ namespace SolverCore
             }
 
             return result;
-
         }
 
         public IVector USolve(IVector vector, bool isUseDiagonal)
@@ -269,7 +263,6 @@ namespace SolverCore
             {
                 var key = elem.Key;
 
-
                 if (key.column == key.row)
                 {
                     result[key.row] = isUseDiagonal ? (vector[key.row] - sum[key.row]) / elem.Value : vector[key.row] - sum[key.row];
@@ -281,7 +274,6 @@ namespace SolverCore
             }
 
             return result;
-
         }
     }
 }

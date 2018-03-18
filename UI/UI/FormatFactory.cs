@@ -90,14 +90,12 @@ namespace UI
                 case Formats.Dense:
                     return new DenseMatrix(matrix);
                 case Formats.Skyline:
-                    //return new SkylineMatrix(mat);
-                    return matrix;
+                    return new SkylineMatrix(matrix);
                 case Formats.SparseRow:
                     return new SparseRowMatrix(matrix);
                 case Formats.SparseRowColumn:
                     return new SparseRowColumnMatrix(matrix);
                 default:
-                    // Должны вызываться конвертеры!!!!!!!!!!!!!!!!!!!!
                     return matrix;
             }
         }
@@ -111,14 +109,12 @@ namespace UI
                 case Formats.Dense:
                     return new SymmetricDenseMatrix(matrix);
                 case Formats.Skyline:
-                    //return new SymmetricSkylineMatrix(mat);
-                    return matrix;
+                    return new SymmetricSkylineMatrix(matrix);
                 case Formats.SparseRow:
                     return new SymmetricSparseRowMatrix(matrix);
                 case Formats.SparseRowColumn:
                     return new SymmetricSparseRowColumnMatrix(matrix);
                 default:
-                    // Должны вызываться конвертеры!!!!!!!!!!!!!!!!!!!!
                     return matrix;
             }
         }

@@ -178,6 +178,7 @@ namespace SolverCore
                 for ( ; ia1 < ia2; ia1++, k++)
                 {
                     yield return (al[ia1], i, k);
+                    yield return (al[ia1], k, i);
                 }
             }
         }

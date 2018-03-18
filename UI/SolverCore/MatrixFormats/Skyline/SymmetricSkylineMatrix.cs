@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SolverCore
 {
@@ -34,7 +35,7 @@ namespace SolverCore
             var size1 = ia.Length;
             if (size1 != size + 1)
             {
-                throw new ArgumentNullException("Array ia is not properly filled");
+                throw new RankException();
             }
             this.ia = (int[])ia.Clone();
             if (this.ia[0] == 1) //если массив начинается с 1, то уменьшаем значения всех элементов на 1
@@ -45,21 +46,90 @@ namespace SolverCore
             var size2 = al.Length;
             if(this.ia[size1 - 1] != size2)
             {
-                throw new ArgumentNullException("Array ia or al is not properly filled");
+                throw new RankException();
             }
             this.al = (double[])al.Clone();
         }
 
-        /// <summary>
-        /// конструктор
-        /// </summary>
-        /// <param name="dimension"> размерность матрицы</param>
-        /// <param name="elementCount">количество элементов в профиле одного треугольника без диагонали</param>
-        public SymmetricSkylineMatrix(int dimension, int elementCount)
+        public SymmetricSkylineMatrix(int[] ia)
         {
-            di = new double[dimension];
-            ia = new int[dimension + 1];
-            al = new double[elementCount];
+            if (ia == null)
+            {
+                throw new ArgumentNullException(nameof(ia));
+            }
+            
+            this.ia = (int[])ia.Clone();
+            this.di = new double[ia.Length - 1];
+            this.al = new double[ia[ia.Length - 1]];
+
+            if (this.ia[0] == 1)
+            {
+                for (int i = 0; i < this.ia.Length; i++)
+                {
+                    this.ia[i]--;
+                }
+            }
+        }
+
+        public SymmetricSkylineMatrix(SymmetricCoordinationalMatrix coordinationalMatrix)
+        {
+            if (coordinationalMatrix == null)
+            {
+                throw new ArgumentNullException(nameof(coordinationalMatrix));
+            }
+
+            var orderedItems = coordinationalMatrix.OrderBy(x => x.row).ThenBy(x => x.col);
+            
+            var size = coordinationalMatrix.Size;
+            ia = new int[size + 1];
+            di = new double[size];
+
+            var itemsProfile = new Dictionary<(int i, int j), double>();
+            int flag = 1, jj = 0;
+            
+            foreach (var item in orderedItems)
+            {
+                if (item.row == item.col)
+                {
+                    di[item.row] = item.value;
+                }
+                else
+                {
+                    (int i, int j) = (item.row, item.col);
+
+                    itemsProfile[(i,j)] = item.value;
+                    if (flag < i)
+                    {
+                        jj = j++;
+                        for (; jj < (i - j); jj++) //заполнеие нулями до диагонали
+                        {
+                            itemsProfile[(i,jj)] = 0; // заполнение нулей портрета по нижнему треугольнику
+                        }
+                        flag = i;
+                    }
+                } 
+            }
+            
+            var orderedItems2 = itemsProfile.OrderBy(x => x.Key.i).ThenBy(x => x.Key.j);
+            var count = orderedItems2.Count();
+            
+            al = new double[count];
+
+            int k = 0;
+            ia[0] = 0;
+            ia[1] = 0;
+
+            foreach (var item in orderedItems2)
+            {
+                al[k] = item.Value;
+                ia[item.Key.i + 1]++;
+                k++;
+            }
+
+            for(int i = 0; i < size; i++)
+            {
+                ia[i + 1] += ia[i];
+            }
         }
 
         //Получение значения по индексу
@@ -100,6 +170,8 @@ namespace SolverCore
         {
             for (int i = 1; i < Size; i++)
             {
+                yield return (di[i], i, i);
+
                 int ia1 = ia[i];
                 int ia2 = ia[i + 1];
                 int k = i - (ia2 - ia1);

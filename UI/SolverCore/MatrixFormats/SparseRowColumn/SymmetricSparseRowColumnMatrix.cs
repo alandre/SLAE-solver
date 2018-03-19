@@ -42,10 +42,14 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(coordinationalMatrix));
             }
 
-            var orderedItems = coordinationalMatrix.OrderBy(x => x.row).ThenBy(x => x.col);
-            var count = orderedItems.Count();
+            var orderedItems = coordinationalMatrix
+                                    .Where(x => x.row >= x.col)
+                                    .OrderBy(x => x.row)
+                                    .ThenBy(x => x.col);
 
             var size = coordinationalMatrix.Size;
+            var count = orderedItems.Count() - size;
+
             ia = new int[size + 1];
             ja = new int[count];
             di = new double[size];

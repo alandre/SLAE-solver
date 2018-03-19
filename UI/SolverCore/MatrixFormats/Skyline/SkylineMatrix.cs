@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SolverCore
 {
@@ -43,7 +44,7 @@ namespace SolverCore
             var size1 = ia.Length;
             if (size1 != size + 1)
             {
-                throw new ArgumentNullException("Array ia is not properly filled");
+                throw new RankException();
             }
             this.ia = (int[])ia.Clone();
             if (this.ia[0] == 1) //если массив начинается с 1, то уменьшаем значения всех элементов на 1
@@ -55,11 +56,11 @@ namespace SolverCore
             var size3 = au.Length;
             if(this.ia[size1 - 1] != size2)
             {
-                throw new ArgumentNullException("Arrays ia or al is not properly filled");
+                throw new RankException();
             }
             if (this.ia[size1 - 1] != size2 || this.ia[size1 - 1] != size3)
             {
-                throw new ArgumentNullException("Arrays ia or al or au is not properly filled");
+                throw new RankException();
             }
             this.al = (double[])al.Clone();
          
@@ -85,8 +86,8 @@ namespace SolverCore
                     {
                         if (ia[i + 1] - ia[i] == 0) return 0; // если данный элемент не содержится в профиле, значит, он нулевой
 
-                        int k = i - (ia[i + 1] - ia[i]); // индекс строки первого элемента в профиле
-                        return au[ia[i] + j - k];
+                        int k = j - (ia[j + 1] - ia[j]); // индекс строки первого элемента в профиле
+                        return au[ia[j] + i - k];
                     }
                 }
                 catch(IndexOutOfRangeException)
@@ -96,17 +97,106 @@ namespace SolverCore
             }
         }
 
-        /// <summary>
         /// конструктор
-        /// </summary>
-        /// <param name="dimension"> размерность матрицы</param>
-        /// <param name="elementCount">количество элементов в профиле одного треугольника без диагонали</param>
-        public SkylineMatrix(int dimension, int elementCount)
+        public SkylineMatrix(int[] ia)
         {
-            di = new double[dimension];
-            ia = new int[dimension + 1];
-            al = new double[elementCount];
-            au = new double[elementCount];
+            if (ia == null) 
+            {
+                throw new ArgumentNullException(nameof(ia));
+            }
+            
+            this.ia = (int[])ia.Clone();
+            this.di = new double[ia.Length - 1];
+            this.al = new double[ia[ia.Length - 1]];
+            this.au = new double[ia[ia.Length - 1]];
+            
+            if (this.ia[0] == 1)
+            {
+                for (int i = 0; i < ia.Length; i++)
+                {
+                    ia[i]--;
+                }
+            }
+        }
+
+        public SkylineMatrix(CoordinationalMatrix coordinationalMatrix)
+        {
+            if (coordinationalMatrix == null)
+            {
+                throw new ArgumentNullException(nameof(coordinationalMatrix));
+            }
+
+            var size = coordinationalMatrix.Size;
+            ia = new int[size + 1];
+            di = new double[size];
+
+            var orderedMatrix = coordinationalMatrix.OrderBy(key => key.row).ThenBy(key => key.col);
+            var itemsSymmetricProfile = new Dictionary<(int i, int j), (double al, double au)>();
+
+            int flag = 1, jj = 0; // флажок, обозначающий добавлены или нет нули в профиле (сохраняет номер строки/столбца, где добавлены)
+
+            // заполнение симметричного профиля
+            foreach (var item in orderedMatrix)
+            {
+                if (item.row == item.col)
+                {
+                    di[item.row] = item.value;
+                }
+                else
+                {
+                    (int i, int j) = item.row > item.col ? (item.row, item.col) : (item.col, item.row);
+
+                    if (!itemsSymmetricProfile.ContainsKey((i, j)))
+                    {
+                        itemsSymmetricProfile[(i, j)] = (0, 0);
+                    }
+
+                    if (item.row > item.col)
+                    {
+                        var au = itemsSymmetricProfile[(i, j)].au; 
+                        itemsSymmetricProfile[(i, j)] = (item.value, au); //добавление элемента в симметричный профиль (нижний)
+
+                        // добавление нулей, хранящихся в портрете матрицы
+                        if (flag < i)
+                        {
+                            jj = j++;
+                            for (; jj < (i - j); jj++) //заполнеие нулями до диагонали
+                            {
+                                itemsSymmetricProfile[(i, jj)] = (0, 0); // заполнение нулей портрета по нижнему и верхнему треугольнику одновременно
+                            }
+                            flag = i;
+                        }
+                    }
+                    else
+                    {
+                        var al = itemsSymmetricProfile[(i, j)].al;
+                        itemsSymmetricProfile[(i, j)] = (al, item.value); //добавление элемента в симметричный профиль (верхний)
+                    }
+                }
+            }
+            
+            var orderedItems = itemsSymmetricProfile.OrderBy(x => x.Key.i).ThenBy(x => x.Key.j);
+            var count = orderedItems.Count();
+            
+            al = new double[count];
+            au = new double[count];
+
+            int k = 0;
+            ia[0] = 0;
+            ia[1] = 0;
+
+            foreach (var item in orderedItems)
+            {
+                al[k] = item.Value.al;
+                au[k] = item.Value.au;
+                ia[item.Key.i + 1]++;
+                k++;
+            }
+
+            for(int i = 0; i < size; i++)
+            {
+                ia[i + 1] += ia[i];
+            }
         }
 
         public int Size => di.Length;
@@ -119,12 +209,15 @@ namespace SolverCore
         {
             for (int i = 1; i < Size; i++)
             {
+                yield return (di[i], i, i);
+
                 int ia1 = ia[i];
                 int ia2 = ia[i + 1];
                 int k = i - (ia2 - ia1);
                 for ( ; ia1 < ia2; ia1++, k++)
                 {
                     yield return (al[ia1], i, k);
+                    yield return (au[ia1], k, i);
                 }
             }
         }

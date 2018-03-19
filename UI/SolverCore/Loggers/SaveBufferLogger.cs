@@ -4,28 +4,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Concurrent;
+using System.Collections.Immutable;
+
 
 namespace SolverCore.Loggers
 {
-    class SaveBufferLogger : ILogger
+    public class SaveBufferLogger : ILogger
     {
-        ConcurrentDictionary<int, double> LogTable;
+        
+        
+        ImmutableList<double> LogList = ImmutableList.CreateRange(new double[0] { });
 
-        //Удалить
-        public void read()
+
+        public void read ()
+
         {
             throw new NotImplementedException();
         }
-
+        //Удалить
+        public KeyValuePair<int,double> Read()
+        {
+            if (!LogList.IsEmpty)
+            {
+                int Count = LogList.Count();
+                double r = LogList[Count-1];
+                var newEntry = new KeyValuePair<int, double>(Count-1, r);
+                return newEntry;
+            }
+            else
+            {
+                var newEntry = new KeyValuePair<int, double>(0, 0);
+                return newEntry;
+            }
+        }
+        public ImmutableList<double> GetList ()
+        {
+            return LogList;
+        }
         public void write()
         {
             throw new NotImplementedException();
         }
-
+        
         public void Write(int Iter, double Residual)
         {
-            LogTable.TryAdd(Iter, Residual);
-            throw new NotImplementedException();
+            LogList=LogList.Add(Residual);
+
+            // throw new NotImplementedException();
         }
 
     }

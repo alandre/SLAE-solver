@@ -47,7 +47,7 @@
             this.sim = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.formatBox = new System.Windows.Forms.ComboBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.IterProgressBar = new System.Windows.Forms.ProgressBar();
             this.startBtn = new System.Windows.Forms.Button();
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuOpenOutput = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,10 +55,11 @@
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.progressBar2 = new System.Windows.Forms.ProgressBar();
+            this.MethodProgressBar = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.timerHightlight = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
@@ -303,12 +304,12 @@
             this.formatBox.Size = new System.Drawing.Size(197, 21);
             this.formatBox.TabIndex = 3;
             // 
-            // progressBar1
+            // IterProgressBar
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 287);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(494, 19);
-            this.progressBar1.TabIndex = 4;
+            this.IterProgressBar.Location = new System.Drawing.Point(12, 287);
+            this.IterProgressBar.Name = "IterProgressBar";
+            this.IterProgressBar.Size = new System.Drawing.Size(494, 19);
+            this.IterProgressBar.TabIndex = 4;
             // 
             // startBtn
             // 
@@ -383,12 +384,12 @@
             this.linkLabel1.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // progressBar2
+            // MethodProgressBar
             // 
-            this.progressBar2.Location = new System.Drawing.Point(12, 262);
-            this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(494, 19);
-            this.progressBar2.TabIndex = 21;
+            this.MethodProgressBar.Location = new System.Drawing.Point(12, 262);
+            this.MethodProgressBar.Name = "MethodProgressBar";
+            this.MethodProgressBar.Size = new System.Drawing.Size(494, 19);
+            this.MethodProgressBar.TabIndex = 21;
             // 
             // label4
             // 
@@ -402,7 +403,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(472, 244);
+            this.label5.Location = new System.Drawing.Point(472, 245);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 13);
             this.label5.TabIndex = 22;
@@ -420,10 +421,10 @@
             this.ClientSize = new System.Drawing.Size(519, 348);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.progressBar2);
+            this.Controls.Add(this.MethodProgressBar);
             this.Controls.Add(this.menuStrip2);
             this.Controls.Add(this.startBtn);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.IterProgressBar);
             this.Controls.Add(this.inputData);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
@@ -460,7 +461,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox inputData;
         private System.Windows.Forms.ComboBox formatBox;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar IterProgressBar;
         private System.Windows.Forms.TextBox epsBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button startBtn;
@@ -478,7 +479,7 @@
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.ProgressBar progressBar2;
+        private System.Windows.Forms.ProgressBar MethodProgressBar;
         private System.Windows.Forms.ToolStripMenuItem resultsFormToolStripMenuItem;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
@@ -487,6 +488,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown iterBox;
         private System.Windows.Forms.Timer timerHightlight;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

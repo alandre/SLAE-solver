@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using SolverCore;
+using SolverCore.Loggers;
 using SolverCore.Solvers;
 using SolverCore.Methods;
+using System.Collections.Immutable;
 using UI.Properties;
 
 namespace UI
@@ -18,17 +20,20 @@ namespace UI
     public partial class MainForm : Form
     {
         private MatrixInitialazer Input = new MatrixInitialazer();
-
+        Timer timer = new Timer();
         bool inputChecked = false;
         bool methodChecked = false;
         bool manualInputNotNull = false;
         bool fileInputNotNull = false;
+        ILogger Logger;
+        IVector x0_tmp;
 
         struct SLAE
         {
             public IMatrix matrix;
             public IVector b;
             public IVector x0;
+
 
             public SLAE(IMatrix _matrix, IVector _b, IVector _x0)
             {
@@ -129,7 +134,7 @@ namespace UI
         public void SetSLAE(IMatrix _mat, IVector _b, IVector _x0)
         {
             manualInputedSLAE = new SLAE(_mat, _b, _x0);
-
+            x0_tmp = _x0;
             manualInputNotNull = true;
             CheckedChanged(inputCheckedImg, inputChecked = true);
         }
@@ -221,24 +226,49 @@ namespace UI
                 IVector result = await RunAsync(loggingSolver, matrix, x0, b);
             }
             */
-            //Необходима фабрика решателей, жду слияния главной ветки и ветки решателей
+            MethodProgressBar.Value = 0;
+           
+            MethodProgressBar.Maximum = checkedListBox1.CheckedItems.Count;
+            //временная мера 
+            IterProgressBar.Maximum = 10000;
+            //x0_tmp = currentSLAE.x0;
             //временная мера для запуска программы
             for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
             {
+                currentSLAE.x0= x0_tmp;
+                IterProgressBar.Value = 0;
                 LoggingSolver loggingSolver;
                 IMethod Method = new JacobiMethod();
-                ILogger Logger = new FakeLog();
+                Logger = new SaveBufferLogger();
                 loggingSolver = new LoggingSolver(Method, Logger);
+                timer.Tick += new EventHandler(timer_Tick);
+                timer.Interval = 1; //выбрать наилучшую 
+                timer.Enabled = true;
+                timer.Start();
                 IVector result = await RunAsync(loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                timer.Stop();
+                ImmutableList<double> LogList = ImmutableList.CreateRange(new double[0] { });
+                LogList = Logger.GetList();
+                MethodProgressBar.Increment(1);
+                //временно
+                IterProgressBar.Value = 10000; 
+                //var newEntry1 = new KeyValuePair<int, double>(Count, r);
+                //TODO: замеры времени для Task
+
             }
 
+        }
+        void timer_Tick(object sender, EventArgs e)
+        {
+            var newEntry = Logger.Read();
+            IterProgressBar.Value = newEntry.Key;
         }
         private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
         {
             return Task.Run(() =>
             {
                 return loggingSolver.Solve((ILinearOperator)matrix, x0, b);
-            });
+           });
         }
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
@@ -252,21 +282,5 @@ namespace UI
 
     }
     //временная мера
-    internal class FakeLog : ILogger
-    {
-        public void read()
-        {
-            return;
-        }
-
-        public void write()
-        {
-            return;
-        }
-
-        public void Write(int Iter, double Residual)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    
 }

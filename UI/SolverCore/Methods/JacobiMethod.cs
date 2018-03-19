@@ -41,14 +41,9 @@ namespace SolverCore.Methods
             currentIter = 0;
             norm_b = b.Norm;
 
-            try
-            {
-                lastResidual = A.Multiply(x0).Add(b, -1).Norm / norm_b;
-            }
-            catch (DivideByZeroException e)
-            {
+            lastResidual = A.Multiply(x0).Add(b, -1).Norm / norm_b;
+            if (Double.IsNaN(lastResidual) || Double.IsInfinity(lastResidual))
                 return false;
-            }
             init = true;
             x_temp = new Vector(x.Size);
             inverseDioganal = A.Diagonal.Clone();
@@ -68,7 +63,7 @@ namespace SolverCore.Methods
             }
 
             currentIter++;
-            
+
             //x_k = D^(-1)*(b-(L+U)x)
             var x_k = inverseDioganal.HadamardProduct(b.Add(L_Ux, -1));
 

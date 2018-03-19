@@ -8,6 +8,7 @@ namespace SolverCore
 {
     public interface IFactorization
     {
+        void Factorize(CoordinationalMatrix A);
         IVector LSolve(IVector x);
         IVector USolve(IVector x);
         IVector LMult(IVector x);

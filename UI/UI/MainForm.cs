@@ -265,5 +265,10 @@ namespace UI
         {
             return;
         }
+
+        public void Write(int Iter, double Residual)
+        {
+            return;
+        }
     }
 }

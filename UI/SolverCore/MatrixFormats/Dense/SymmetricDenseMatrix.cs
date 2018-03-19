@@ -97,9 +97,12 @@ namespace SolverCore
 
             AllocateMemory(coordinationalMatrix.Size);
 
-            foreach(var item in coordinationalMatrix)
+            foreach (var item in coordinationalMatrix)
             {
-                matrix[item.row][item.col] = item.value;
+                if (item.row >= item.col)
+                {
+                    matrix[item.row][item.col] = item.value;
+                }
             }
         }
 

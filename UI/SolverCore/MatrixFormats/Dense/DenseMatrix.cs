@@ -89,7 +89,7 @@ namespace SolverCore
 
         public DenseMatrix(CoordinationalMatrix coordinationalMatrix)
         {
-            if (matrix == null)
+            if (coordinationalMatrix == null)
             {
                 throw new ArgumentNullException(nameof(coordinationalMatrix));
             }

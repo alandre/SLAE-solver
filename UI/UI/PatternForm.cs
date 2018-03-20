@@ -109,6 +109,19 @@ namespace UI
         {
         }
 
+        private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                IMatrix A;
+                IVector x0, b;
+                SLAESource.GetSLAE(out A, format, out b, out x0);
+
+                IO.writeSLAE(new SLAE(A, b, x0), saveFileDialog.FileName);
+            }
+        }
+
         private void backwardToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Owner.Show();

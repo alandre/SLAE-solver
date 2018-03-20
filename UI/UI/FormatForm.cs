@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SolverCore;
+using System.IO;
 
 namespace UI
 {
@@ -43,6 +44,8 @@ namespace UI
         private void formatBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             forwardToolStripMenuItem.Enabled = formatBox.SelectedIndex > -1;
+            
+            saveToFileToolStripMenuItem.Enabled = !FormatFactory.PatternRequired(FormatFactory.FormatsDictionary[formatBox.Text]);
         }
 
         private void forwardItem_Click(object sender, EventArgs e)
@@ -89,6 +92,20 @@ namespace UI
         private void FormatForm_Shown(object sender, EventArgs e)
         {
             Location = Owner.Location;
+        }
+
+        private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog = new SaveFileDialog();
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                IMatrix A;
+                IVector x0, b;
+                constructorForm = (ConstructorForm)Owner;
+                constructorForm.GetSLAE(out A, formatBox.Text, out b, out x0);
+
+                IO.writeSLAE(new SLAE(A, b, x0), saveFileDialog.FileName);                
+            }
         }
 
         private void FormatForm_Load(object sender, EventArgs e)

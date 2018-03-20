@@ -45,7 +45,7 @@ namespace UI
             // изменение размера матрицы и векторов
             SizeChanged(diff);
 
-            if (inc && checkBox1.Checked)
+            if (inc && symCheckBox.Checked)
                 // если установлен режим симметричной матрицы, 
                 // добавленные элементы верхнего треугольника необходимо enable
                 Symmetrize();
@@ -129,9 +129,9 @@ namespace UI
                     sender.Rows[i].Cells[j].Value = 0.0;
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        private void symCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox1.Checked)
+            if (symCheckBox.Checked)
             {
                 bool conflicts = false;
 
@@ -145,7 +145,11 @@ namespace UI
                     if(MessageBox.Show("Введенная матрица не является симметричной. " +
                         "Заполнить верхний треугольник матрицы в соответствии с нижним?",
                         "Предупреждение", MessageBoxButtons.YesNo) == DialogResult.No)
+                    {
+                        symCheckBox.Checked = false;
                         return;
+                    }
+                        
 
                 Symmetrize();
             }
@@ -246,7 +250,7 @@ namespace UI
                 {
                     A.Rows[i].Cells[j].ReadOnly = false;
                     A.Rows[i].Cells[j].Style.BackColor = Color.White;
-                    A.Rows[i].Cells[j].Value = (double)0;
+                    //A.Rows[i].Cells[j].Value = (double)0;
                 }
         }
 
@@ -265,33 +269,6 @@ namespace UI
             Location = Owner.Location;
         }
 
-        private void A_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-            if (!Double.TryParse(e.FormattedValue.ToString(), out double result))
-            {
-                MessageBox.Show("Введите корректное значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                A.EditingControl.Text = "0";
-            }
-        }
-
-        private void F_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-            if (!Double.TryParse(e.FormattedValue.ToString(), out double result))
-            {
-                MessageBox.Show("Введите корректное значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                F.EditingControl.Text = "0";
-            }
-        }
-
-        private void x0_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
-        {
-            if (!Double.TryParse(e.FormattedValue.ToString(), out double result))
-            {
-                MessageBox.Show("Введите корректное значение.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                x0.EditingControl.Text = "0";
-            }
-        }
-
         private void A_CellEnter(object sender, DataGridViewCellEventArgs e)
         {
             // Если ячейка read-only, принудительный TAB 
@@ -306,7 +283,6 @@ namespace UI
             if (!double.TryParse(e.FormattedValue.ToString(), out double res))
             {
                 e.Cancel = true;
-                //((DataGridView)sender).Rows[e.RowIndex].Cells[e.ColumnIndex].ErrorText = "Введенное значение не является вещественным числом.";
             }
         }
 

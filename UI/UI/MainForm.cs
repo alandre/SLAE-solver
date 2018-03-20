@@ -14,6 +14,21 @@ using UI.Properties;
 
 namespace UI
 {
+    struct SLAE
+    {
+        public IMatrix matrix;
+        public IVector b;
+        public IVector x0;
+
+
+        public SLAE(IMatrix _matrix, IVector _b, IVector _x0)
+        {
+            matrix = _matrix;
+            b = _b;
+            x0 = _x0;
+        }
+    }
+
     public partial class MainForm : Form
     {
         private MatrixInitialazer Input = new MatrixInitialazer();
@@ -24,21 +39,6 @@ namespace UI
         bool fileInputNotNull = false;
         ILogger Logger;
         IVector x0_tmp;
-
-        struct SLAE
-        {
-            public IMatrix matrix;
-            public IVector b;
-            public IVector x0;
-
-
-            public SLAE(IMatrix _matrix, IVector _b, IVector _x0)
-            {
-                matrix = _matrix;
-                b = _b;
-                x0 = _x0;
-            }
-        }
 
         SLAE currentSLAE;
         SLAE manualInputedSLAE;
@@ -277,6 +277,11 @@ namespace UI
                 path = FBD.SelectedPath;
                 outPathBox.Text = path;
             }
+        }
+
+        private void fileInputBtn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
         }
     }
 }

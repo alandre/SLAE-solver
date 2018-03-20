@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SolverCore
 {
-    public class CoordinationalMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator
+    public class CoordinationalMatrix : IMatrix, ILinearOperator, ITransposeLinearOperator, ICloneable
     {
         private Dictionary<(int row, int column), double> matrix;
 
@@ -78,6 +78,26 @@ namespace SolverCore
         public int Size { get; }
 
         public int Count => matrix.Count;
+
+        /// <summary>
+        /// Устанавливает элемент в матрице, если он уже есть. Иначе -- игнорирует операцию.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        /// <returns>True если значение установилось, false иначе.</returns>
+        public bool Set(int row, int column, double value)
+        {
+            if (matrix.ContainsKey((row, column)))
+            {
+                matrix[(row, column)] = value;
+                return true;
+            }
+
+            return false;
+        }
+
+        public object Clone() => new CoordinationalMatrix(matrix, Size);
 
         public IVector Diagonal
         {

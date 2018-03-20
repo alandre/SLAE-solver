@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SolverCore
 {
-    public class SymmetricCoordinationalMatrix : IMatrix, ILinearOperator
+    public class SymmetricCoordinationalMatrix : IMatrix, ILinearOperator, ICloneable
     {
         private int count = -1;
         private Dictionary<(int row, int column), double> matrix;
@@ -79,7 +79,7 @@ namespace SolverCore
 
                 (int row, int column) = i > j ? (i, j) : (j, i);
 
-                if(matrix.TryGetValue((row,column), out var value))
+                if (matrix.TryGetValue((row, column), out var value))
                 {
                     return value;
                 }
@@ -100,6 +100,28 @@ namespace SolverCore
                 return count;
             }
         }
+
+        /// <summary>
+        /// Устанавливает элемент в матрице, если он уже есть. Иначе -- игнорирует операцию.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        /// <returns>True если значение установилось, false иначе.</returns>
+        public bool Set(int row, int column, double value)
+        {
+            (int i, int j) = row > column ? (row, column) : (column, row);
+
+            if (matrix.ContainsKey((i, j)))
+            {
+                matrix[(i, j)] = value;
+                return true;
+            }
+
+            return false;
+        }
+
+        public object Clone() => new SymmetricCoordinationalMatrix(matrix, Size);
 
         public IVector Diagonal
         {

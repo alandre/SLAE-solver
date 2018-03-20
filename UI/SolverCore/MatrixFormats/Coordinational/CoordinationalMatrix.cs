@@ -97,7 +97,7 @@ namespace SolverCore
             return false;
         }
 
-        public object Clone() => new SymmetricCoordinationalMatrix(matrix, Size);
+        public object Clone() => new CoordinationalMatrix(matrix, Size);
 
         public IVector Diagonal
         {

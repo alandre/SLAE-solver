@@ -54,7 +54,7 @@ namespace SolverCore.Solvers
                     return null;
                 }
 
-                Logger.Write(iter, residual);
+                Logger.Write(residual);
                 if (iter > maxIter || residual <= eps)
                     break;
             }

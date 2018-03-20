@@ -239,7 +239,7 @@ namespace UI
                 Logger = new SaveBufferLogger();
                 loggingSolver = new LoggingSolver(Method, Logger);
                 timer.Tick += new EventHandler(timer_Tick);
-                timer.Interval = 1; //выбрать наилучшую 
+                timer.Interval = 100; //выбрать наилучшую 
                 timer.Enabled = true;
                 timer.Start();
                 IVector result = await RunAsync(loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
@@ -257,9 +257,10 @@ namespace UI
         }
         void timer_Tick(object sender, EventArgs e)
         {
-            var newEntry = Logger.Read();
-            IterProgressBar.Value = newEntry.Key;
+            var (iter, residual) = Logger.GetCurrentState();
+            IterProgressBar.Value = iter;
         }
+
         private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
         {
             return Task.Run(() =>
@@ -267,6 +268,7 @@ namespace UI
                 return loggingSolver.Solve((ILinearOperator)matrix, x0, b);
            });
         }
+
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FolderBrowserDialog FBD = new FolderBrowserDialog();

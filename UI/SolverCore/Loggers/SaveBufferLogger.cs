@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Concurrent;
 using System.Collections.Immutable;
 
 
@@ -11,46 +10,28 @@ namespace SolverCore.Loggers
 {
     public class SaveBufferLogger : ILogger
     {
-        
-        
-        ImmutableList<double> LogList = ImmutableList.CreateRange(new double[0] { });
+        ImmutableList<double> logList = ImmutableList.CreateRange(new double[0] { });
 
-
-        public void read ()
-
+        public (int currentIter, double residual) GetCurrentState()
         {
-            throw new NotImplementedException();
-        }
-        //Удалить
-        public KeyValuePair<int,double> Read()
-        {
-            if (!LogList.IsEmpty)
+            if (!logList.IsEmpty)
             {
-                int Count = LogList.Count();
-                double r = LogList[Count-1];
-                var newEntry = new KeyValuePair<int, double>(Count-1, r);
-                return newEntry;
+                int iter = logList.Count() - 1;
+                double residual = logList[iter];
+                return (iter, residual);
             }
-            else
-            {
-                var newEntry = new KeyValuePair<int, double>(0, 0);
-                return newEntry;
-            }
-        }
-        public ImmutableList<double> GetList ()
-        {
-            return LogList;
-        }
-        public void write()
-        {
-            throw new NotImplementedException();
-        }
-        
-        public void Write(int Iter, double Residual)
-        {
-            LogList=LogList.Add(Residual);
 
-            // throw new NotImplementedException();
+            return (0, 0);
+        }
+
+        public ImmutableList<double> GetList()
+        {
+            return logList;
+        }
+
+        public void Write(double residual)
+        {
+            logList = logList.Add(residual);
         }
 
     }

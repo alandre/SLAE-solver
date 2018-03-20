@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Immutable;
+﻿using System.Collections.Immutable;
 
 namespace SolverCore
 {
     public interface ILogger
     {
-        //Наброски [УБРАТЬ Остались для сбоки проекта]
-        void write();
-        void read();
+        /// <summary>
+        /// Запись текущей невязки в лог. Производится ровно один раз за итерацию.
+        /// </summary>
+        /// <param name="residual">Текущая невязка</param>
+        void Write(double residual);
 
         /// <summary>
-        /// Запись в лог
+        /// Получает последние записанные итерацию и невязку.
         /// </summary>
-        /// <param name="Iter">текущая итерация</param>
-        /// <param name="Residual">текущая невязка</param>
-        void Write(int Iter, double Residual);
-        //void Read(int Iter, double Residual);
-        KeyValuePair<int, double> Read();
+        /// <returns>Возвращает текущую итерацию и невязку на ней.</returns>
+        (int currentIter, double residual) GetCurrentState();
+
+        /// <summary>
+        /// Получает полный список невязок, расположенных подряд поитерационно.
+        /// </summary>
+        /// <returns></returns>
         ImmutableList<double> GetList();
     }
 }

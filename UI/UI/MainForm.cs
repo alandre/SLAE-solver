@@ -276,6 +276,5 @@ namespace UI
                 outPathBox.Text = path;
             }
         }
-
     }
 }

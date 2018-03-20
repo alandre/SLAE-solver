@@ -11,14 +11,14 @@ using Extensions;
 using Xunit;
 using Xunit.Abstractions;
 
-
+//  TODO fill и foreach для методов
 
 
 namespace Methods
 {
     // TODO соглашение об именовании
 
-    /*public class TestBCGStabMethod
+    public class TestBCGStabMethod
     {
        private readonly ITestOutputHelper _testOutputHelper;
         IMethod Method;
@@ -102,5 +102,5 @@ namespace Methods
         }
         // ...
 
-    }*/
+    }
 }

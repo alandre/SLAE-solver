@@ -151,5 +151,22 @@ namespace MF.SparseRow
                 Assert.Equal(result[i], resultActual[i], 8);
         }
 
+        [Fact]
+        public void SparseRowMatrix_Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
+            
+            // лишняя итерация
+            sparseRowMatrix.Fill(fillFunc);
+
+            _a = new double[] { 2, 4, 4, 6, 4, 6, 6, 8 };
+            _ia = new int[] { 0, 2, 4, 6, 8 };
+            _ja = new int[] { 0, 2, 1, 3, 0, 2, 1, 3 };
+
+
+            SparseRowMatrix sparseRow = new SparseRowMatrix(_a, _ia, _ja);
+            Assert.True(new HashSet<(double, int, int)>(sparseRowMatrix).SetEquals(sparseRow));
+
+        }
     }
 }

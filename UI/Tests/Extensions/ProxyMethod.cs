@@ -17,7 +17,7 @@ namespace Extensions
         
         public int[] MultCount { get; private set; } = new int[2] { 0, 0 };
 
-        public IVector x => throw new NotImplementedException();
+        public IVector x => method.x;
 
         public ProxyMethod(IMethod method)
         {
@@ -33,7 +33,7 @@ namespace Extensions
             MultCount[0] = Counters.Mult.count;
             Counters.ResetAll();
 
-            return false;// result;
+            return result;
         }
 
         public void MakeStep(out int iter, out double residual)
@@ -41,6 +41,11 @@ namespace Extensions
             method.MakeStep(out iter, out residual);
             if(iter == 1)
                 MultCount[1] = Counters.Mult.count;
+        }
+
+        bool IMethod.InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc)
+        {
+            return method.InitMethod(A, x0, b, malloc);
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Xunit;
 using SolverCore;
+using System.Collections.Generic;
 
 namespace MF.Dense
 {
@@ -162,6 +163,21 @@ namespace MF.Dense
             Assert.Throws<RankException>(() => denseMatrix.Multiply(vector));
         }
 
+        [Fact]
+        public void DenseMatrix_Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); }; // TODO вынести надо куда-нибудь
 
+            denseMatrix.Fill(fillFunc);
+            _matrix = new double[3, 3] 
+            {
+                { 2, 3, 4 },
+                { 3, 4, 5 },
+                { 4, 5, 6 }
+            };
+            DenseMatrix dense = new DenseMatrix(_matrix);
+            Assert.True(new HashSet<(double, int, int)>(denseMatrix).SetEquals(dense));
+
+        }
     }
 }

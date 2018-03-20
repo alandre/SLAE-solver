@@ -8,17 +8,17 @@ namespace Extensions
     {
         public (int currentIter, double residual) GetCurrentState()
         {
-            throw new NotImplementedException();
+            return (0,0);
         }
 
         public ImmutableList<double> GetList()
         {
-            throw new NotImplementedException();
+            return ImmutableList.CreateRange(new double[0] { });
         }
 
         public void Write(double residual)
         {
-            throw new NotImplementedException();
+            return;
         }
     }
 }

@@ -18,5 +18,10 @@ namespace Extensions
         {
             return;
         }
+
+        public void Write(int Iter, double Residual)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -251,8 +251,8 @@ namespace UI
                 textBox1.Text = path;
             }
         }
-
     }
+
     //временная мера
     internal class FakeLog : ILogger
     {
@@ -264,6 +264,11 @@ namespace UI
         public void write()
         {
             return;
+        }
+
+        public void Write(int Iter, double Residual)
+        {
+            throw new NotImplementedException();
         }
     }
 }

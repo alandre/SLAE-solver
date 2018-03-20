@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
@@ -57,15 +54,17 @@ namespace UI
             InitializeComponent();
             var keyList = new List<string>(FormatFactory.FormatsDictionary.Keys);
             Types = new List<string>();
-            for (int i = 0; i < keyList.Count; i++)
+            foreach (var format in keyList)
             {
-                formatBox.Items.Add(keyList[i]);
+                formatBox.Items.Add(format);
             }
             formatBox.Text = formatBox.Items[0].ToString();
 
+            methodListBox.DataSource = Enum.GetValues(typeof(MethodsEnum));
+
             var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   //get path with .exe file
             path = Path.GetDirectoryName(location);
-            textBox1.Text = path;
+            outPathBox.Text = path;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -77,8 +76,7 @@ namespace UI
         {
             try
             {
-                var file = new OpenFileDialog();
-                file.Filter = "Text file|*.txt";
+                var file = new OpenFileDialog {Filter = "Text file|*.txt"};
                 if (file.ShowDialog() == DialogResult.OK)
                 {
                     StreamReader sr = new StreamReader(file.FileName);
@@ -184,11 +182,10 @@ namespace UI
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //методы на форму должны добавляться из фабрики решателей
-            string a = (string)checkedListBox1.SelectedItem;
-            if (Types.Contains(a)) Types.Remove(a);
-            else Types.Add(a);
-            if (checkedListBox1.CheckedItems.Count > 0)
+            string method = methodListBox.SelectedItem.ToString();
+            if (Types.Contains(method)) Types.Remove(method);
+            else Types.Add(method);
+            if (methodListBox.CheckedItems.Count > 0)
             {
                 methodCheckedImg.Image = Resources.CheckMark;
                 methodChecked = true;
@@ -207,7 +204,7 @@ namespace UI
             currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
             SolveAsync();
 
-            var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
+            var uniqueDirectoryName = $@"\{Guid.NewGuid()}";
             string full_directory_name = path + uniqueDirectoryName;
             Directory.CreateDirectory(@full_directory_name);
 
@@ -228,12 +225,12 @@ namespace UI
             */
             MethodProgressBar.Value = 0;
            
-            MethodProgressBar.Maximum = checkedListBox1.CheckedItems.Count;
+            MethodProgressBar.Maximum = methodListBox.CheckedItems.Count;
             //временная мера 
             IterProgressBar.Maximum = 10000;
             //x0_tmp = currentSLAE.x0;
             //временная мера для запуска программы
-            for (int i = 0; i < checkedListBox1.CheckedItems.Count; i++)
+            for (int i = 0; i < methodListBox.CheckedItems.Count; i++)
             {
                 currentSLAE.x0= x0_tmp;
                 IterProgressBar.Value = 0;
@@ -276,11 +273,9 @@ namespace UI
             if (FBD.ShowDialog() == DialogResult.OK)
             {
                 path = FBD.SelectedPath;
-                textBox1.Text = path;
+                outPathBox.Text = path;
             }
         }
 
     }
-    //временная мера
-    
 }

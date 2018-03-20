@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using SolverCore;
 
@@ -41,26 +38,23 @@ namespace UI
                         case Formats.SparseRowColumn:
                             return new SymmetricSparseRowColumnMatrix(initialazer.di, initialazer.gg, initialazer.ig, initialazer.ig);
                         default:
-                            break;
+                            throw new ArgumentOutOfRangeException(nameof(type), type, null);
                     }
-                else
-                    switch (type)
-                    {
-                        case Formats.Coordinational:
-                            {
-                                return new CoordinationalMatrix(initialazer.row, initialazer.column, initialazer.gg, initialazer.size);
-                            }
-                        case Formats.Dense:
-                            return new DenseMatrix(initialazer.dense);
-                        case Formats.Skyline:
-                            return new SkylineMatrix(initialazer.di, initialazer.ig, initialazer.gl, initialazer.gl);
-                        case Formats.SparseRow:
-                            return new SparseRowMatrix(initialazer.gg, initialazer.jg, initialazer.ig);
-                        case Formats.SparseRowColumn:
-                            return new SparseRowColumnMatrix(initialazer.di, initialazer.gl, initialazer.gu, initialazer.ig, initialazer.jg);
-                        default:
-                            break;
-                    }
+                switch (type)
+                {
+                    case Formats.Coordinational:
+                        return new CoordinationalMatrix(initialazer.row, initialazer.column, initialazer.gg, initialazer.size);
+                    case Formats.Dense:
+                        return new DenseMatrix(initialazer.dense);
+                    case Formats.Skyline:
+                        return new SkylineMatrix(initialazer.di, initialazer.ig, initialazer.gl, initialazer.gl);
+                    case Formats.SparseRow:
+                        return new SparseRowMatrix(initialazer.gg, initialazer.jg, initialazer.ig);
+                    case Formats.SparseRowColumn:
+                        return new SparseRowColumnMatrix(initialazer.di, initialazer.gl, initialazer.gu, initialazer.ig, initialazer.jg);
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(type), type, null);
+                }
             }
             catch (Exception ex)
             {

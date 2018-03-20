@@ -12,6 +12,10 @@ namespace SolverCore.Loggers
     {
         ImmutableList<double> logList = ImmutableList.CreateRange(new double[0] { });
 
+        /// <summary>
+        /// Получает последние записанные итерацию и невязку.
+        /// </summary>
+        /// <returns>Возвращает текущую итерацию и невязку на ней.</returns>
         public (int currentIter, double residual) GetCurrentState()
         {
             if (!logList.IsEmpty)
@@ -24,6 +28,10 @@ namespace SolverCore.Loggers
             return (0, 0);
         }
 
+        /// <summary>
+        /// Получает полный список невязок, расположенных подряд поитерационно.
+        /// </summary>
+        /// <returns></returns>
         public ImmutableList<double> GetList()
         {
             return logList;

@@ -177,6 +177,22 @@ namespace MF.SymmetricDense
             Assert.Throws<RankException>(() => denseSymmetricMatrix.Multiply(vector));
         }
 
+        [Fact]
+        public void DenseMatrix_Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
+            // косяк
+            // проходит по всем элементам, но вылетает, так как инициализация только нижнего треугольника
+            denseSymmetricMatrix.Fill(fillFunc);
+            _matrix = new double[][] { new double[] { 2 },
+                                       new double[] { 3, 4 },
+                                       new double[] { 4, 5, 6 } };
+          
+            SymmetricDenseMatrix dense = new SymmetricDenseMatrix(_matrix);
+            Assert.True(new HashSet<(double, int, int)>(denseSymmetricMatrix).SetEquals(dense));
+
+        }
+
     }
 }
 

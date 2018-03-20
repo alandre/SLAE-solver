@@ -116,5 +116,31 @@ namespace MF.SymmetricSparseRowColumn
             Assert.True(new HashSet<(double, int, int)>(sparseSymmetricRowColumnMatrix).SetEquals(sparseRowColumnMatrix));
         }
 
+
+        [Fact]
+        public void SparseRowColumnMatrix_Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
+
+
+            sparseSymmetricRowColumnMatrix.Fill(fillFunc);
+            //di = new double[] { 1, 2, 3 };
+            //al = new double[] { 1, 2, 3 };
+            //au = new double[] { 3, 2, 1 };
+            //ja = new int[] { 1, 1, 2 };
+            //ia = new int[] { 1, 1, 2, 4 };
+
+            di = new double[] { 2, 4, 6 };
+
+            aa = new double[] { 3, 4, 5 };
+            ja = new int[] { 1, 1, 2 };
+            ia = new int[] { 1, 1, 2, 4 };
+
+
+            SymmetricSparseRowColumnMatrix sparseRowCollumn = new SymmetricSparseRowColumnMatrix(di, aa, ia, ja);
+            Assert.True(new HashSet<(double, int, int)>(sparseSymmetricRowColumnMatrix).SetEquals(sparseRowCollumn));
+
+        }
+
     }
 }

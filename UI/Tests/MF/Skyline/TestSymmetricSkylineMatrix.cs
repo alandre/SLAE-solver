@@ -65,14 +65,7 @@ namespace MF.SymmetricSkyline
         }
 
 
-        //[Fact]
-        //public void DenseMatrix_TestUMultExeptions()
-        //{
-        //    Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
-
-        //    Assert.Throws<ArgumentNullException>(() => denseMatrix.UMult(null, false, DiagonalElement.One));
-        //    Assert.Throws<RankException>(() => denseMatrix.UMult(exampleVector, false, DiagonalElement.One));
-        //}
+     
 
         [Fact]
         public void SymmetricSkylineMatrix_TestUMult()
@@ -92,14 +85,7 @@ namespace MF.SymmetricSkyline
             }
         }
 
-        //[Fact]
-        //public void DenseMatrix_TestLSolveExeptions()
-        //{
-        //    Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
-
-        //    Assert.Throws<ArgumentNullException>(() => denseMatrix.LSolve(null, false));
-        //    Assert.Throws<RankException>(() => denseMatrix.LSolve(exampleVector, false));
-        //}
+      
 
         [Fact]
         public void SymmetricSkylineMatrix_TestLSolve()
@@ -120,20 +106,10 @@ namespace MF.SymmetricSkyline
                 Assert.Equal(result[i], resultActual[i], 8);
         }
 
-        //[Fact]
-        //public void DenseMatrix_TestUSolveExeptions()
-        //{
-        //    _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
-        //    DenseMatrix denseMatrix = new DenseMatrix(_matrix);
-
-        //    Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
-
-        //    Assert.Throws<ArgumentNullException>(() => denseMatrix.USolve(null, false));
-        //    Assert.Throws<RankException>(() => denseMatrix.USolve(exampleVector, false));
-        //}
+     
 
         [Fact]
-        public void DenseMatrix_TestUSolve()
+        public void SymmetricSkylineMatrix_TestUSolve()
         {
             di = new double[] { 1, 2, 3 };
             al = new double[] { 1, 2, 3 };
@@ -149,15 +125,26 @@ namespace MF.SymmetricSkyline
                 Assert.Equal(result[i], resultActual[i], 8);
         }
 
-        //[Fact]
-        //public void DenseMatrix_TestMultyplyExceptions()
-        //{
-        //    Vector vector = new Vector(new double[] { 1, 0 });
+       
 
-        //    Assert.Throws<ArgumentNullException>(() => denseMatrix.Multiply(null));
-        //    Assert.Throws<RankException>(() => denseMatrix.Multiply(vector));
-        //}
+        [Fact]
+        public void SymmetricSkylineMatrix_Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 
+            
+            symmetricSkylineMatrix.Fill(fillFunc);
+
+            //di = new double[] { 1, 2, 3 };
+            //al = new double[] { 1, 2, 3 };
+            //ia = new int[] { 1, 1, 2, 4 };
+            di = new double[] { 2, 4, 6 };
+            al = new double[] { 3, 4, 5 };
+            ia = new int[] { 1, 1, 2, 4 };
+            SymmetricSkylineMatrix skyline = new SymmetricSkylineMatrix(di,ia,al);
+            Assert.True(new HashSet<(double, int, int)>(symmetricSkylineMatrix).SetEquals(skyline));
+
+        }
 
     }
 }

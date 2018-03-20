@@ -11,6 +11,7 @@ using SolverCore.Solvers;
 using SolverCore.Methods;
 using System.Collections.Immutable;
 using UI.Properties;
+using System.Text;
 
 namespace UI
 {
@@ -203,58 +204,80 @@ namespace UI
         {
             currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
             SolveAsync();
-
-            var uniqueDirectoryName = $@"\{Guid.NewGuid()}";
-            string full_directory_name = path + uniqueDirectoryName;
-            Directory.CreateDirectory(@full_directory_name);
-
-            //TODO: different file names (depending on the choosen methods)
-            System.IO.File.Create(full_directory_name + "\\result.txt");
-            MessageBox.Show("Результат был записан");
-
         }
         private async void SolveAsync()
         {
-            /*
-            foreach (string Method in Types)
-            {
-                ILogger Logger = new FakeLog();
-                LoggingSolver loggingSolver = Spawn(Method, Logger);
-                IVector result = await RunAsync(loggingSolver, matrix, x0, b);
-            }
-            */
+            var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
+            string fullDirectoryName = path + uniqueDirectoryName;
+
+            Directory.CreateDirectory(fullDirectoryName);
+
             MethodProgressBar.Value = 0;
-           
             MethodProgressBar.Maximum = methodListBox.CheckedItems.Count;
+
             //временная мера 
             IterProgressBar.Maximum = 10000;
-            //x0_tmp = currentSLAE.x0;
-            //временная мера для запуска программы
-            for (int i = 0; i < methodListBox.CheckedItems.Count; i++)
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = 1; //выбрать наилучшую 
+            timer.Enabled = true;
+
+            foreach (var methodName in methodListBox.CheckedItems)
             {
-                currentSLAE.x0= x0_tmp;
+                currentSLAE.x0 = x0_tmp;
                 IterProgressBar.Value = 0;
-                LoggingSolver loggingSolver;
-                IMethod Method = new JacobiMethod();
+
+                IMethod method = new JacobiMethod();
                 Logger = new SaveBufferLogger();
-                loggingSolver = new LoggingSolver(Method, Logger);
-                timer.Tick += new EventHandler(timer_Tick);
-                timer.Interval = 100; //выбрать наилучшую 
-                timer.Enabled = true;
+                var loggingSolver = new LoggingSolver(method, Logger);
+
                 timer.Start();
                 IVector result = await RunAsync(loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 timer.Stop();
-                ImmutableList<double> LogList = ImmutableList.CreateRange(new double[0] { });
-                LogList = Logger.GetList();
+
+                var LogList = Logger.GetList();
+
                 MethodProgressBar.Increment(1);
                 //временно
-                IterProgressBar.Value = 10000; 
+                IterProgressBar.Value = 10000;
                 //var newEntry1 = new KeyValuePair<int, double>(Count, r);
                 //TODO: замеры времени для Task
 
+                WriteResultToFile(result, methodName.ToString(), LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
             }
 
         }
+
+        private void WriteResultToFile(
+          IVector result,
+          string method,
+          int iterationCount,
+          double residual,
+          string pathToDirectory)
+        {
+            var directory = $"{pathToDirectory}\\{method}";
+            Directory.CreateDirectory(directory);
+
+            var pathToTotalFile = $"{directory}\\Total.txt";
+            var pathToSolveFile = $"{directory}\\Solve.txt";
+            var pathToResidualFile = $"{directory}\\Residual.txt";
+            var pathToIterationsFile = $"{directory}\\Iterations.txt";
+
+            var resultText = new StringBuilder();
+
+            var solve = string.Join(" ", result);
+
+            resultText
+                .AppendLine($"X: {solve}")
+                .AppendLine($"Iteration: {iterationCount}")
+                .AppendLine($"Residual: {residual}");
+
+            File.WriteAllText(pathToTotalFile, resultText.ToString());
+            File.WriteAllText(pathToSolveFile, solve);
+            File.WriteAllText(pathToIterationsFile, iterationCount.ToString());
+            File.WriteAllText(pathToResidualFile, residual.ToString());
+        }
+
+
         void timer_Tick(object sender, EventArgs e)
         {
             var (iter, residual) = Logger.GetCurrentState();

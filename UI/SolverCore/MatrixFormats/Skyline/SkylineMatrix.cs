@@ -84,7 +84,7 @@ namespace SolverCore
                     }
                     else
                     {
-                        if (ia[i + 1] - ia[i] == 0) return 0; // если данный элемент не содержится в профиле, значит, он нулевой
+                        if (ia[j + 1] - ia[j] == 0) return 0; // если данный элемент не содержится в профиле, значит, он нулевой
 
                         int k = j - (ia[j + 1] - ia[j]); // индекс строки первого элемента в профиле
                         return au[ia[j] + i - k];
@@ -207,6 +207,8 @@ namespace SolverCore
 
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
+            yield return (di[0], 0, 0);
+
             for (int i = 1; i < Size; i++)
             {
                 yield return (di[i], i, i);

@@ -1,22 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Immutable;
 using SolverCore;
 
 namespace Extensions
 {
     internal class FakeLog : ILogger
     {
-        public void read()
+        public (int currentIter, double residual) GetCurrentState()
         {
-            return;
+            throw new NotImplementedException();
         }
 
-        public void write()
+        public ImmutableList<double> GetList()
         {
-            return;
+            throw new NotImplementedException();
+        }
+
+        public void Write(double residual)
+        {
+            throw new NotImplementedException();
         }
     }
 }

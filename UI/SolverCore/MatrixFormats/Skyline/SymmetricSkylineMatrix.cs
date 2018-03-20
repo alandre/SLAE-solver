@@ -168,6 +168,8 @@ namespace SolverCore
 
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
+            yield return (di[0], 0, 0);
+
             for (int i = 1; i < Size; i++)
             {
                 yield return (di[i], i, i);
@@ -178,6 +180,7 @@ namespace SolverCore
                 for ( ; ia1 < ia2; ia1++, k++)
                 {
                     yield return (al[ia1], i, k);
+                    yield return (al[ia1], k, i);
                 }
             }
         }
@@ -191,9 +194,11 @@ namespace SolverCore
             { 
                 throw new ArgumentNullException(nameof(elems)); 
             } 
+
             int i = 0, j = 0, k = 0; 
             ia[0] = 0; 
             ia[1] = 0; 
+
             foreach (var elem in this) 
             {
                 if (elem.col == elem.row)

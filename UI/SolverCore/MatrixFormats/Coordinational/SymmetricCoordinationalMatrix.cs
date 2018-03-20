@@ -139,7 +139,11 @@ namespace SolverCore
             foreach (var item in matrix)
             {
                 yield return (item.Value, item.Key.row, item.Key.column);
-                yield return (item.Value, item.Key.column, item.Key.row);
+
+                if (item.Key.column != item.Key.row)
+                {
+                    yield return (item.Value, item.Key.column, item.Key.row);
+                }
             }
         }
 

@@ -168,6 +168,8 @@ namespace SolverCore
 
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
+            yield return (di[0], 0, 0);
+
             for (int i = 1; i < Size; i++)
             {
                 yield return (di[i], i, i);

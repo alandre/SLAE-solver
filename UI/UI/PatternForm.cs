@@ -65,15 +65,18 @@ namespace UI
         private void forwardToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             bool symmetric = SLAESource.IsSymmetric;
+            var tmp = new FormatFactory();
             if (symmetric)
-                matrix = FormatFactory.Convert((SymmetricCoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), format);
+                matrix = FormatFactory.Convert((SymmetricCoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), 
+                    FormatFactory.FormatsDictionary[format]);
             else
-                matrix = FormatFactory.Convert((CoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), format);
+                matrix = FormatFactory.Convert((CoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric), 
+                    FormatFactory.FormatsDictionary[format]);
 
             if (patternChanged)
             {
                 CoordinationalMatrix user = (CoordinationalMatrix)MatrixVisualRepresentation.PatternedGridViewToCoordinational(A, symmetric);
-                CoordinationalMatrix auto = MatrixExtensions.ConvertToCoordinationalMatrix(matrix);
+                CoordinationalMatrix auto = matrix.ConvertToCoordinationalMatrix();
 
                 foreach (var elem in auto)
                     if (!user.Contains((elem.value, elem.row, elem.col)))
@@ -114,16 +117,16 @@ namespace UI
 
         public void Update(string type)
         {
-            SLAESource.GetSLAE(out matrix, type, out b, out x0);
-            int n = matrix.Size;
+            SLAESource.GetSLAE(out this.matrix, type, out b, out x0);
+            int n = this.matrix.Size;
 
             Location = Owner.Location;
             format = type;
 
-            DataGridView mat = new DataGridView();
+            DataGridView matrix = new DataGridView();
 
-            mat = MatrixVisualRepresentation.CoordinationalToGridView(MatrixExtensions.ConvertToCoordinationalMatrix(matrix), SLAESource.IsSymmetric);
-            MatrixVisualRepresentation.CopyDataGridView(mat, ref A);
+            matrix = MatrixVisualRepresentation.CoordinationalToGridView(this.matrix.ConvertToCoordinationalMatrix(), SLAESource.IsSymmetric);
+            MatrixVisualRepresentation.CopyDataGridView(matrix, ref A);
 
             width = cellWidth * (n - 2);
             heigth = cellHeight * (n - 2);

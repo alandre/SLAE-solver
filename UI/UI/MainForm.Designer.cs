@@ -33,7 +33,7 @@
             this.iterBox = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.methodCheckedImg = new System.Windows.Forms.PictureBox();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.methodListBox = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.epsBox = new System.Windows.Forms.TextBox();
             this.inputData = new System.Windows.Forms.GroupBox();
@@ -47,18 +47,19 @@
             this.sim = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.formatBox = new System.Windows.Forms.ComboBox();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.IterProgressBar = new System.Windows.Forms.ProgressBar();
             this.startBtn = new System.Windows.Forms.Button();
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuOpenOutput = new System.Windows.Forms.ToolStripMenuItem();
             this.resultsFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.progressBar2 = new System.Windows.Forms.ProgressBar();
+            this.outPathBox = new System.Windows.Forms.TextBox();
+            this.fileOutputLink = new System.Windows.Forms.LinkLabel();
+            this.MethodProgressBar = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.timerHightlight = new System.Windows.Forms.Timer(this.components);
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
@@ -74,7 +75,7 @@
             this.groupBox2.Controls.Add(this.iterBox);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.methodCheckedImg);
-            this.groupBox2.Controls.Add(this.checkedListBox1);
+            this.groupBox2.Controls.Add(this.methodListBox);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.epsBox);
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -133,29 +134,21 @@
             this.methodCheckedImg.TabIndex = 21;
             this.methodCheckedImg.TabStop = false;
             // 
-            // checkedListBox1
+            // methodListBox
             // 
-            this.checkedListBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.checkedListBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.checkedListBox1.CheckOnClick = true;
-            this.checkedListBox1.ColumnWidth = 115;
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
-            "BiCGStab",
-            "CGM",
-            "GMRes",
-            "Jacoby",
-            "LOS",
-            "Pardiso",
-            "Seidel"});
-            this.checkedListBox1.Location = new System.Drawing.Point(8, 53);
-            this.checkedListBox1.MultiColumn = true;
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(230, 60);
-            this.checkedListBox1.Sorted = true;
-            this.checkedListBox1.TabIndex = 27;
-            this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
-            this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
+            this.methodListBox.BackColor = System.Drawing.SystemColors.Control;
+            this.methodListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.methodListBox.CheckOnClick = true;
+            this.methodListBox.ColumnWidth = 115;
+            this.methodListBox.FormattingEnabled = true;
+            this.methodListBox.Location = new System.Drawing.Point(8, 53);
+            this.methodListBox.MultiColumn = true;
+            this.methodListBox.Name = "methodListBox";
+            this.methodListBox.Size = new System.Drawing.Size(230, 60);
+            this.methodListBox.Sorted = true;
+            this.methodListBox.TabIndex = 27;
+            this.methodListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
+            this.methodListBox.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -303,12 +296,12 @@
             this.formatBox.Size = new System.Drawing.Size(197, 21);
             this.formatBox.TabIndex = 3;
             // 
-            // progressBar1
+            // IterProgressBar
             // 
-            this.progressBar1.Location = new System.Drawing.Point(12, 287);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(494, 19);
-            this.progressBar1.TabIndex = 4;
+            this.IterProgressBar.Location = new System.Drawing.Point(12, 287);
+            this.IterProgressBar.Name = "IterProgressBar";
+            this.IterProgressBar.Size = new System.Drawing.Size(494, 19);
+            this.IterProgressBar.TabIndex = 4;
             // 
             // startBtn
             // 
@@ -353,8 +346,8 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Controls.Add(this.linkLabel1);
+            this.groupBox3.Controls.Add(this.outPathBox);
+            this.groupBox3.Controls.Add(this.fileOutputLink);
             this.groupBox3.Location = new System.Drawing.Point(260, 147);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(246, 53);
@@ -362,33 +355,34 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Выходные данные";
             // 
-            // textBox1
+            // outPathBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(8, 21);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(171, 20);
-            this.textBox1.TabIndex = 20;
+            this.outPathBox.Location = new System.Drawing.Point(8, 21);
+            this.outPathBox.Name = "outPathBox";
+            this.outPathBox.ReadOnly = true;
+            this.outPathBox.Size = new System.Drawing.Size(171, 20);
+            this.outPathBox.TabIndex = 20;
             // 
-            // linkLabel1
+            // fileOutputLink
             // 
-            this.linkLabel1.ActiveLinkColor = System.Drawing.Color.Maroon;
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.LinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.linkLabel1.Location = new System.Drawing.Point(185, 25);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(48, 13);
-            this.linkLabel1.TabIndex = 19;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Обзор...";
-            this.linkLabel1.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.fileOutputLink.ActiveLinkColor = System.Drawing.Color.Maroon;
+            this.fileOutputLink.AutoSize = true;
+            this.fileOutputLink.LinkColor = System.Drawing.SystemColors.MenuHighlight;
+            this.fileOutputLink.Location = new System.Drawing.Point(185, 25);
+            this.fileOutputLink.Name = "fileOutputLink";
+            this.fileOutputLink.Size = new System.Drawing.Size(48, 13);
+            this.fileOutputLink.TabIndex = 19;
+            this.fileOutputLink.TabStop = true;
+            this.fileOutputLink.Text = "Обзор...";
+            this.fileOutputLink.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
+            this.fileOutputLink.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // progressBar2
+            // MethodProgressBar
             // 
-            this.progressBar2.Location = new System.Drawing.Point(12, 262);
-            this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(494, 19);
-            this.progressBar2.TabIndex = 21;
+            this.MethodProgressBar.Location = new System.Drawing.Point(12, 262);
+            this.MethodProgressBar.Name = "MethodProgressBar";
+            this.MethodProgressBar.Size = new System.Drawing.Size(494, 19);
+            this.MethodProgressBar.TabIndex = 21;
             // 
             // label4
             // 
@@ -402,7 +396,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(472, 244);
+            this.label5.Location = new System.Drawing.Point(472, 245);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(37, 13);
             this.label5.TabIndex = 22;
@@ -420,10 +414,10 @@
             this.ClientSize = new System.Drawing.Size(519, 348);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.progressBar2);
+            this.Controls.Add(this.MethodProgressBar);
             this.Controls.Add(this.menuStrip2);
             this.Controls.Add(this.startBtn);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.IterProgressBar);
             this.Controls.Add(this.inputData);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
@@ -460,7 +454,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.GroupBox inputData;
         private System.Windows.Forms.ComboBox formatBox;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.ProgressBar IterProgressBar;
         private System.Windows.Forms.TextBox epsBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button startBtn;
@@ -474,11 +468,11 @@
         private System.Windows.Forms.CheckBox sim;
         private System.Windows.Forms.LinkLabel fileInputBtn;
         private System.Windows.Forms.LinkLabel manualInputBtn;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.CheckedListBox methodListBox;
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.ProgressBar progressBar2;
+        private System.Windows.Forms.TextBox outPathBox;
+        private System.Windows.Forms.LinkLabel fileOutputLink;
+        private System.Windows.Forms.ProgressBar MethodProgressBar;
         private System.Windows.Forms.ToolStripMenuItem resultsFormToolStripMenuItem;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
@@ -487,6 +481,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown iterBox;
         private System.Windows.Forms.Timer timerHightlight;
+        private System.Windows.Forms.Timer timer1;
     }
 }
 

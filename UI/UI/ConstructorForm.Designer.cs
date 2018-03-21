@@ -70,7 +70,7 @@
             0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(39, 20);
-            this.numericUpDown1.TabIndex = 0;
+            this.numericUpDown1.TabIndex = 1;
             this.numericUpDown1.Value = new decimal(new int[] {
             2,
             0,
@@ -134,7 +134,7 @@
             this.A.RowHeadersVisible = false;
             this.A.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.A.Size = new System.Drawing.Size(71, 45);
-            this.A.TabIndex = 12;
+            this.A.TabIndex = 0;
             this.A.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.CellBeginEdit);
             this.A.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellEndEdit);
             this.A.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.A_CellEnter);

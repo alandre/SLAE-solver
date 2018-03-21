@@ -84,7 +84,7 @@ namespace UI
                     string dataInput = sr.ReadToEnd();
                     sr.Close();
 
-                    Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
+                    Input = MatrixInitialazer.Input(dataInput, sim.Checked);
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
                     fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], Input, Input.symmetry);

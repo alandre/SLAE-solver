@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace SolverCore
 {
@@ -383,5 +385,12 @@ namespace SolverCore
         }
 
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+        public string Serialize(IVector b, IVector x0)
+        {
+            var obj = new { ia, b, x0, gg = a, ja };
+            return JsonConvert.SerializeObject(obj);
+
+        }
     }
 }

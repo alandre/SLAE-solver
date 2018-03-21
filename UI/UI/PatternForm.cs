@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -117,8 +118,7 @@ namespace UI
                 IMatrix A;
                 IVector x0, b;
                 SLAESource.GetSLAE(out A, format, out b, out x0);
-
-                IO.writeSLAE(new SLAE(A, b, x0), saveFileDialog.FileName);
+                File.WriteAllText(matrix.Serialize(b, x0), saveFileDialog.FileName);
             }
         }
 

@@ -103,8 +103,7 @@ namespace UI
                 IVector x0, b;
                 constructorForm = (ConstructorForm)Owner;
                 constructorForm.GetSLAE(out A, formatBox.Text, out b, out x0);
-
-                IO.writeSLAE(new SLAE(A, b, x0), saveFileDialog.FileName);                
+                File.WriteAllText(A.Serialize(b, x0), saveFileDialog.FileName);
             }
         }
 

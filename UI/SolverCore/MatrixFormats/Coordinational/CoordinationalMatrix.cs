@@ -88,7 +88,7 @@ namespace SolverCore
         /// <returns>True если значение установилось, false иначе.</returns>
         public bool Set(int row, int column, double value)
         {
-            if (matrix.ContainsKey((row, column)))
+            if (row == column || matrix.ContainsKey((row, column)))
             {
                 matrix[(row, column)] = value;
                 return true;

@@ -112,7 +112,7 @@ namespace SolverCore
         {
             (int i, int j) = row > column ? (row, column) : (column, row);
 
-            if (matrix.ContainsKey((i, j)))
+            if (i == j || matrix.ContainsKey((i, j)))
             {
                 matrix[(i, j)] = value;
                 return true;

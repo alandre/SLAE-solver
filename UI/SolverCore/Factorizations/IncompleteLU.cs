@@ -45,6 +45,8 @@ namespace SolverCore.Factorizations
                     }
                     foreach(var k in FA.GetMatrixRowsForCollumn(j))
                     {
+                        if (k >= i - 1)
+                            break;
                         sumU += FA[i, k] * FA[k, j];
                     }
                     FA.Set(i, j, (M[i, j] - sumL) / FA[j, j]);
@@ -58,42 +60,42 @@ namespace SolverCore.Factorizations
 
         public IVector LMult(IVector x)
         {
-            throw new NotImplementedException();
+            return FA.LMult(x, false, DiagonalElement.One);
         }
 
         public IVector LSolve(IVector x)
         {
-            throw new NotImplementedException();
+            return FA.LSolve(x, false);
         }
 
         public IVector LTransposeMult(IVector x)
         {
-            throw new NotImplementedException();
+            return FA.LMultTranspose(x, false, DiagonalElement.One);
         }
 
         public IVector LTransposeSolve(IVector x)
         {
-            throw new NotImplementedException();
+            return FA.LSolveTranspose(x, false);
         }
 
         public IVector UMult(IVector x)
         {
-            throw new NotImplementedException();
+            return FA.UMult(x, true);
         }
 
         public IVector USolve(IVector x)
         {
-            throw new NotImplementedException();
+            return FA.USolve(x, true);
         }
 
         public IVector UTransposeMult(IVector x)
         {
-            throw new NotImplementedException();
+            return FA.UMultTranspose(x, true);
         }
 
         public IVector UTransposeSolve(IVector x)
         {
-            throw new NotImplementedException();
+            return FA.USolveTranspose(x, true);
         }
     }
 }

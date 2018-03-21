@@ -3,6 +3,7 @@
 using Xunit;
 using SolverCore;
 using UI;
+using Xunit.Abstractions;
 
 namespace MF.SymmetricCoordinational
 {
@@ -18,9 +19,9 @@ namespace MF.SymmetricCoordinational
         private IVector vector;
 
         private SymmetricCoordinationalMatrix symmetricCoordinationalMatrix;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-
-        public TestSymmetricCoordinationalMatrix()
+        public TestSymmetricCoordinationalMatrix(ITestOutputHelper testOutputHelper)
         {
             size = 3;
             values = new double[] { 1, 4, 2, 5, 3 };
@@ -30,6 +31,39 @@ namespace MF.SymmetricCoordinational
             vector = new Vector(new double[] { 1, 1, 1 });
 
             symmetricCoordinationalMatrix = new SymmetricCoordinationalMatrix(rows, columns, values, size);
+            _testOutputHelper = testOutputHelper;
+        }
+
+        [Fact]
+        public void SkylineMatrix_TestForeach()
+        {
+            //di = new double[] { 1, 2, 3 };
+            //al = new double[] { 1, 2, 3 };
+            //au = new double[] { 3, 2, 1 };
+            //ia = new int[] { 1, 1, 2, 4 };
+            // 1 3 2
+            // 1 2 1 
+            // 2 3 3
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (4,0,1),
+                    (5,0,2),
+                    (4,1,0),
+                    (2,1,1),
+                    //(0,1,2),
+                    (5,2,0),
+                   // (0,2,1),
+                    (3,2,2),
+                };
+
+
+            Assert.True(new HashSet<(double, int, int)>(symmetricCoordinationalMatrix).SetEquals(elemList));
+
+            foreach (var elem in symmetricCoordinationalMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         //[Fact]

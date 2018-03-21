@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Xunit;
 using SolverCore;
+using Xunit.Abstractions;
 
 namespace MF.SparseRow
 {
@@ -17,8 +18,8 @@ namespace MF.SparseRow
         private IVector vector;
 
         public static SparseRowMatrix sparseRowMatrix;
-
-        public TestSparseRowMatrix()
+        private readonly ITestOutputHelper _testOutputHelper;
+        public TestSparseRowMatrix(ITestOutputHelper testOutputHelper)
         {
             _a = new double[] { 1, 8, 2, 7, 2, 3, 6, 4 };
             _ia = new int[] { 0, 2, 4, 6, 8 };
@@ -26,6 +27,34 @@ namespace MF.SparseRow
             vector = new Vector(new double[] { 2, 1, 1, 1 });
 
             sparseRowMatrix = new SparseRowMatrix(_a, _ja, _ia);
+            _testOutputHelper = testOutputHelper;
+        }
+
+
+        [Fact]
+        public void SparseRowMatrix_TestForeach()
+        {
+
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (8,0,2),
+                    (2,1,1),
+                    (7,1,3),
+                    (2,2,0),
+                    (3,2,2),
+                    (6,3,1),
+                    (4,3,3),
+                    
+                };
+
+
+            Assert.True(new HashSet<(double, int, int)>(sparseRowMatrix).SetEquals(elemList));
+
+            foreach (var elem in sparseRowMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         [Fact]

@@ -2,6 +2,7 @@
 using Xunit;
 using SolverCore;
 using System.Collections.Generic;
+using Xunit.Abstractions;
 
 namespace MF.SymmetricDense
 {
@@ -9,15 +10,41 @@ namespace MF.SymmetricDense
     {
         private double[][] _matrix;
         private SymmetricDenseMatrix denseSymmetricMatrix;
-
-        public TestsDenseSymmetricMatrix()
+        private readonly ITestOutputHelper _testOutputHelper;
+        public TestsDenseSymmetricMatrix(ITestOutputHelper testOutputHelper)
         {
             _matrix = new double[][] { new double[]{ 1 },
                                        new double[] { 2, 5 },
                                        new double[] { 2, 5, 4 } };
                 denseSymmetricMatrix = new SymmetricDenseMatrix(_matrix);
+            _testOutputHelper = testOutputHelper;
         }
 
+        [Fact]
+        public void DenseSymmetricMatrix_TestForeach()
+        {
+
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (2,0,1),
+                    (2,0,2),
+                    (2,1,0),
+                    (5,1,1),
+                    (5,1,2),
+                    (2,2,0),
+                    (5,2,1),
+                    (4,2,2),
+                };
+
+
+            Assert.True(new HashSet<(double, int, int)>(denseSymmetricMatrix).SetEquals(elemList));
+
+            foreach (var elem in denseSymmetricMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
+        }
 
         [Fact]
         public void DenseSymmetricMatrix_TestConstructorExeptions()

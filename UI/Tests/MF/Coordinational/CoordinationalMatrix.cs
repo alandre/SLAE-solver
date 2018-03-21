@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Xunit;
 using SolverCore;
 using UI;
+using Xunit.Abstractions;
 
 namespace MF.Coordinational
 {
@@ -22,10 +23,10 @@ namespace MF.Coordinational
         private IVector vector;
 
         private CoordinationalMatrix coordinationalMatrix;
-
+        private readonly ITestOutputHelper _testOutputHelper;
         // TODO сделать короче названия методов
 
-        public TestCoordinationalMatrix()
+        public TestCoordinationalMatrix(ITestOutputHelper testOutputHelper)
         {
             size = 3;
             values = new double[] { 1, 4, 5, 6, 2, 8, 3 };
@@ -35,7 +36,42 @@ namespace MF.Coordinational
             vector = new Vector(new double[] { 1, 1, 1 });
 
             coordinationalMatrix = new CoordinationalMatrix(rows, columns, values, size);
+            _testOutputHelper = testOutputHelper;
         }
+
+
+        [Fact]
+        public void CoordinationalMatrix_TestForeach()
+        {
+            //di = new double[] { 1, 2, 3 };
+            //al = new double[] { 1, 2, 3 };
+            //au = new double[] { 3, 2, 1 };
+            //ia = new int[] { 1, 1, 2, 4 };
+            // 1 3 2
+            // 1 2 1 
+            // 2 3 3
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (4,0,1),
+                    (5,0,2),
+                    (6,1,0),
+                    (2,1,1),
+                    //(0,1,2),
+                    (8,2,0),
+                    //(0,2,1),
+                    (3,2,2),
+                };
+
+
+            Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(elemList));
+
+            foreach (var elem in coordinationalMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
+        }
+
 
         [Theory]
         [InlineData(FormatFactory.Formats.Coordinational)]

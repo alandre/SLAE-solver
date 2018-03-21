@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Xunit;
 using SolverCore;
+using Xunit.Abstractions;
 
 namespace MF.SymmetricSparseRowColumn
 {
@@ -21,9 +22,9 @@ namespace MF.SymmetricSparseRowColumn
         private IVector vector;
 
         private SymmetricSparseRowColumnMatrix sparseSymmetricRowColumnMatrix;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-
-        public TestSparseSymmetricRowColumnMatrix()
+        public TestSparseSymmetricRowColumnMatrix(ITestOutputHelper testOutputHelper)
         {
             di = new double[] { 1, 2, 3 };
           
@@ -34,6 +35,32 @@ namespace MF.SymmetricSparseRowColumn
             vector = new Vector(new double[] { 1, 1, 1 });
 
             sparseSymmetricRowColumnMatrix = new SymmetricSparseRowColumnMatrix(di, aa, ia, ja);
+            _testOutputHelper = testOutputHelper;
+        }
+
+        [Fact]
+        public void SparseSymmetricRowColumnMatrix_TestForeach()
+        {
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (3,0,1),
+                    (2,0,2),
+                    (3,1,0),
+                    (2,1,1),
+                    (1,1,2),
+                    (2,2,0),
+                    (1,2,1),
+                    (3,2,2),
+                };
+
+
+            Assert.True(new HashSet<(double, int, int)>(sparseSymmetricRowColumnMatrix).SetEquals(elemList));
+
+            foreach (var elem in sparseSymmetricRowColumnMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         [Fact]

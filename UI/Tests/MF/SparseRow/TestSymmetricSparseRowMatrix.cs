@@ -104,7 +104,7 @@ namespace MF.SymmetricSparseRow
 
 
         [Fact]
-        public void SparseRowMatrix_TestForeach()
+        public void SymmetricSparseRowMatrix_TestForeach()
         {
             //_a = new double[] { 1, 2, 5, 3, 7, 4 };
             //_ia = new int[] { 0, 1, 2, 4, 6 };

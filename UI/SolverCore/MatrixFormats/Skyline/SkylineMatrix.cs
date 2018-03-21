@@ -127,75 +127,85 @@ namespace SolverCore
             }
 
             var size = coordinationalMatrix.Size;
-            ia = new int[size + 1];
-            di = new double[size];
+            var pattern = new SortedSet<int>[size];
+            var pattern2 = new Dictionary<(int i, int j), int>();
 
-            var orderedMatrix = coordinationalMatrix.OrderBy(key => key.row).ThenBy(key => key.col);
-            var itemsSymmetricProfile = new Dictionary<(int i, int j), (double al, double au)>();
-
-            int flag = 1, jj = 0; // флажок, обозначающий добавлены или нет нули в профиле (сохраняет номер строки/столбца, где добавлены)
-
-            // заполнение симметричного профиля
-            foreach (var item in orderedMatrix)
+            for (int i = 0; i < size; i++)
             {
-                if (item.row == item.col)
+                pattern[i] = new SortedSet<int>();
+            }
+
+            foreach (var item in coordinationalMatrix)
+            {
+                (int i, int j) = item.row > item.col ? (item.row, item.col) : (item.col, item.row);
+
+                if (i != j)
                 {
-                    di[item.row] = item.value;
+                    pattern[i].Add(j);
                 }
-                else
+            }
+
+            // добавление в шаблон нулей
+            for (int i = 1; i < size; i++)
+            {
+                if (pattern[i].Count != 0)
                 {
-                    (int i, int j) = item.row > item.col ? (item.row, item.col) : (item.col, item.row);
+                    int j = pattern[i].First();
 
-                    if (!itemsSymmetricProfile.ContainsKey((i, j)))
+                    pattern2[(i, j)] = 1;
+
+                    if (j < i - 1)
                     {
-                        itemsSymmetricProfile[(i, j)] = (0, 0);
-                    }
-
-                    if (item.row > item.col)
-                    {
-                        var au = itemsSymmetricProfile[(i, j)].au; 
-                        itemsSymmetricProfile[(i, j)] = (item.value, au); //добавление элемента в симметричный профиль (нижний)
-
-                        // добавление нулей, хранящихся в портрете матрицы
-                        if (flag < i)
+                        int jj = j + 1;
+                        for (; jj < i; jj++)
                         {
-                            jj = j++;
-                            for (; jj < (i - j); jj++) //заполнеие нулями до диагонали
+                            if (pattern[i].Contains(jj) == false)
                             {
-                                itemsSymmetricProfile[(i, jj)] = (0, 0); // заполнение нулей портрета по нижнему и верхнему треугольнику одновременно
+                                pattern[i].Add(jj);
+                                pattern2[(i, jj)] = 0;
                             }
-                            flag = i;
+                            else
+                            {
+                                pattern2[(i, jj)] = 1;
+                            }
                         }
-                    }
-                    else
-                    {
-                        var al = itemsSymmetricProfile[(i, j)].al;
-                        itemsSymmetricProfile[(i, j)] = (al, item.value); //добавление элемента в симметричный профиль (верхний)
                     }
                 }
             }
-            
-            var orderedItems = itemsSymmetricProfile.OrderBy(x => x.Key.i).ThenBy(x => x.Key.j);
-            var count = orderedItems.Count();
-            
+
+            ia = new int[size + 1];
+
+            for (int i = 0; i < size; i++)
+            {
+                ia[i + 1] = ia[i] + pattern[i].Count;
+            }
+
+            var count = ia[size];
+
+            di = new double[size];
             al = new double[count];
             au = new double[count];
 
-            int k = 0;
-            ia[0] = 0;
-            ia[1] = 0;
-
-            foreach (var item in orderedItems)
+            for (int i = 0; i < Size; i++)
             {
-                al[k] = item.Value.al;
-                au[k] = item.Value.au;
-                ia[item.Key.i + 1]++;
-                k++;
-            }
+                di[i] = coordinationalMatrix[i, i];
 
-            for(int i = 0; i < size; i++)
-            {
-                ia[i + 1] += ia[i];
+                int ia1 = ia[i];
+                int ia2 = ia[i + 1];
+                int k = i - (ia2 - ia1);
+                for (; ia1 < ia2; ia1++, k++)
+                {
+                    if (pattern2[(i, k)] == 1)
+                    {
+                        al[ia1] = coordinationalMatrix[i, k];
+                        au[ia1] = coordinationalMatrix[k, i];
+                    }
+                    else
+                    {
+                        al[ia1] = 0;
+                        au[ia1] = 0;
+                    }
+                }
             }
         }
 
@@ -207,9 +217,7 @@ namespace SolverCore
 
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
-            yield return (di[0], 0, 0);
-
-            for (int i = 1; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
                 yield return (di[i], i, i);
 

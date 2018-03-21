@@ -469,5 +469,40 @@ namespace SolverCore
 
             return result;
         }
+
+        public SortedSet<int>GetMatrixRows()
+        {
+            var rows = new SortedSet<int>();
+            List<(int, int)> Keys = new List<(int, int)>(matrix.Keys);
+            foreach(var KeyEntry in Keys)
+            {
+                rows.Add(KeyEntry.Item1);
+            }
+            return rows;
+        }
+
+        public SortedSet<int> GetMatrixCollumnsForRow(int row)
+        {
+            var colls = new SortedSet<int>();
+            List<(int, int)> Keys = new List<(int, int)>(matrix.Keys);
+            foreach (var KeyEntry in Keys)
+            {
+                if(KeyEntry.Item1 == row)
+                    colls.Add(KeyEntry.Item2);
+            }
+            return colls;
+        }
+
+        public SortedSet<int> GetMatrixRowsForCollumn(int col)
+        {
+            var rows = new SortedSet<int>();
+            List<(int, int)> Keys = new List<(int, int)>(matrix.Keys);
+            foreach (var KeyEntry in Keys)
+            {
+                if (KeyEntry.Item2 == col)
+                    rows.Add(KeyEntry.Item1);
+            }
+            return rows;
+        }
     }
 }

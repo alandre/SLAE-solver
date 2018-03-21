@@ -40,7 +40,8 @@ namespace UI
         bool fileInputNotNull = false;
         ILogger Logger;
         IVector x0_tmp;
-
+        int maxIter;
+        double eps;
         SLAE currentSLAE;
         SLAE manualInputedSLAE;
         SLAE fileInputedSLAE;
@@ -209,39 +210,46 @@ namespace UI
         {
             var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
             string fullDirectoryName = path + uniqueDirectoryName;
-
+            maxIter = Convert.ToInt16(iterBox.Value);
+            eps = Convert.ToDouble(epsBox.Text);
             Directory.CreateDirectory(fullDirectoryName);
 
             MethodProgressBar.Value = 0;
             MethodProgressBar.Maximum = methodListBox.CheckedItems.Count;
 
             //временная мера 
-            IterProgressBar.Maximum = 10000;
+            IterProgressBar.Maximum = maxIter;
             timer.Tick += new EventHandler(timer_Tick);
             timer.Interval = 1; //выбрать наилучшую 
             timer.Enabled = true;
-
+            int count = 0;
+            done_label.Text = Convert.ToString(count);
+            need_label.Text = Convert.ToString(methodListBox.CheckedItems.Count);
+            done_label.Visible = true;
+            need_label.Visible = true;
+            label5.Visible = true;
+            
             foreach (var methodName in methodListBox.CheckedItems)
             {
-                currentSLAE.x0 = x0_tmp;
+                currentSLAE.x0 = x0_tmp.Clone();
                 IterProgressBar.Value = 0;
-
-                IMethod method = new JacobiMethod();
+                MethodsEnum method =(MethodsEnum)methodName;
+                //IMethod method = new JacobiMethod();
                 Logger = new SaveBufferLogger();
-                var loggingSolver = new LoggingSolver(method, Logger);
+               
+                var loggingSolver = LoggingSolversFabric.Spawn(method, Logger);
 
                 timer.Start();
-                IVector result = await RunAsync(loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                IVector result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 timer.Stop();
-
-                var LogList = Logger.GetList();
-
                 MethodProgressBar.Increment(1);
-                //временно
-                IterProgressBar.Value = 10000;
+                var LogList = Logger.GetList();
+                residual_label.Text = Convert.ToString(LogList[LogList.Count-1]);
+                IterProgressBar.Value = maxIter;
                 //var newEntry1 = new KeyValuePair<int, double>(Count, r);
                 //TODO: замеры времени для Task
-
+                count++;
+                done_label.Text = Convert.ToString(count);
                 WriteResultToFile(result, methodName.ToString(), LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
             }
 
@@ -280,7 +288,9 @@ namespace UI
 
         void timer_Tick(object sender, EventArgs e)
         {
+            residual_label.Visible = true;
             var (iter, residual) = Logger.GetCurrentState();
+            residual_label.Text= Convert.ToString(residual);
             IterProgressBar.Value = iter;
         }
 
@@ -288,7 +298,7 @@ namespace UI
         {
             return Task.Run(() =>
             {
-                return loggingSolver.Solve((ILinearOperator)matrix, x0, b);
+                return loggingSolver.Solve((ILinearOperator)matrix, x0, b,maxIter,eps);
            });
         }
 

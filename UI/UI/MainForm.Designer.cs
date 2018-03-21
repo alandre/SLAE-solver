@@ -60,6 +60,9 @@
             this.label5 = new System.Windows.Forms.Label();
             this.timerHightlight = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.done_label = new System.Windows.Forms.Label();
+            this.need_label = new System.Windows.Forms.Label();
+            this.residual_label = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
@@ -399,20 +402,57 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(500, 244);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.Size = new System.Drawing.Size(19, 13);
             this.label5.TabIndex = 22;
-            this.label5.Text = "1 из 4";
+            this.label5.Text = "из";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label5.Visible = false;
             // 
             // timerHightlight
             // 
             this.timerHightlight.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // done_label
+            // 
+            this.done_label.AutoSize = true;
+            this.done_label.Location = new System.Drawing.Point(483, 244);
+            this.done_label.Name = "done_label";
+            this.done_label.Size = new System.Drawing.Size(13, 13);
+            this.done_label.TabIndex = 23;
+            this.done_label.Text = "0";
+            this.done_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.done_label.Visible = false;
+            // 
+            // need_label
+            // 
+            this.need_label.AutoSize = true;
+            this.need_label.Location = new System.Drawing.Point(524, 244);
+            this.need_label.Name = "need_label";
+            this.need_label.Size = new System.Drawing.Size(13, 13);
+            this.need_label.TabIndex = 24;
+            this.need_label.Text = "0";
+            this.need_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.need_label.Visible = false;
+            // 
+            // residual_label
+            // 
+            this.residual_label.AutoSize = true;
+            this.residual_label.Location = new System.Drawing.Point(115, 244);
+            this.residual_label.Name = "residual_label";
+            this.residual_label.Size = new System.Drawing.Size(13, 13);
+            this.residual_label.TabIndex = 25;
+            this.residual_label.Text = "0";
+            this.residual_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.residual_label.Visible = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(549, 348);
+            this.Controls.Add(this.residual_label);
+            this.Controls.Add(this.need_label);
+            this.Controls.Add(this.done_label);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.MethodProgressBar);
@@ -483,6 +523,9 @@
         private System.Windows.Forms.NumericUpDown iterBox;
         private System.Windows.Forms.Timer timerHightlight;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label done_label;
+        private System.Windows.Forms.Label need_label;
+        private System.Windows.Forms.Label residual_label;
     }
 }
 

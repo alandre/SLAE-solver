@@ -99,6 +99,10 @@
       <Project>{ef02a481-1888-4b87-a0ca-a06ba48ac308}</Project>
       <Name>SolverCore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\UI\UI.csproj">
+      <Project>{da5630c7-bef1-4e70-9801-c691d08e59b0}</Project>
+      <Name>UI</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

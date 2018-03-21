@@ -1,6 +1,8 @@
 ﻿using System;
 using Xunit;
 using SolverCore;
+using System.Collections.Generic;
+using Xunit.Abstractions;
 
 namespace MF.Dense
 {
@@ -8,11 +10,46 @@ namespace MF.Dense
     {
         private double[,] _matrix;
         private DenseMatrix denseMatrix;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        public TestsDenseMatrix()
+        public TestsDenseMatrix(ITestOutputHelper testOutputHelper)
         {
             _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
             denseMatrix = new DenseMatrix(_matrix);
+
+            _testOutputHelper = testOutputHelper;
+        }
+
+        [Fact]
+        public void DenseMatrix_TestForeach()
+        {
+            //di = new double[] { 1, 2, 3 };
+            //al = new double[] { 1, 2, 3 };
+            //au = new double[] { 3, 2, 1 };
+            //ia = new int[] { 1, 1, 2, 4 };
+            // 1 3 2
+            // 1 2 1 
+            // 2 3 3
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (3,0,1),
+                    (5,0,2),
+                    (2,1,0),
+                    (5,1,1),
+                    (4,1,2),
+                    (7,2,0),
+                    (1,2,1),
+                    (8,2,2),
+                };
+
+
+            Assert.True(new HashSet<(double, int, int)>(denseMatrix).SetEquals(elemList));
+
+            foreach (var elem in denseMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         [Fact]
@@ -162,6 +199,21 @@ namespace MF.Dense
             Assert.Throws<RankException>(() => denseMatrix.Multiply(vector));
         }
 
+        [Fact]
+        public void DenseMatrix_Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); }; // TODO вынести надо куда-нибудь
 
+            denseMatrix.Fill(fillFunc);
+            _matrix = new double[3, 3] 
+            {
+                { 2, 3, 4 },
+                { 3, 4, 5 },
+                { 4, 5, 6 }
+            };
+            DenseMatrix dense = new DenseMatrix(_matrix);
+            Assert.True(new HashSet<(double, int, int)>(denseMatrix).SetEquals(dense));
+
+        }
     }
 }

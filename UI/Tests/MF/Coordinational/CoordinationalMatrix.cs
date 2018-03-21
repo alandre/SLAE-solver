@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 using Xunit;
 using SolverCore;
+using UI;
+using Xunit.Abstractions;
 
 namespace MF.Coordinational
 {
@@ -21,9 +23,10 @@ namespace MF.Coordinational
         private IVector vector;
 
         private CoordinationalMatrix coordinationalMatrix;
+        private readonly ITestOutputHelper _testOutputHelper;
+        // TODO сделать короче названия методов
 
-
-        public TestCoordinationalMatrix()
+        public TestCoordinationalMatrix(ITestOutputHelper testOutputHelper)
         {
             size = 3;
             values = new double[] { 1, 4, 5, 6, 2, 8, 3 };
@@ -33,7 +36,73 @@ namespace MF.Coordinational
             vector = new Vector(new double[] { 1, 1, 1 });
 
             coordinationalMatrix = new CoordinationalMatrix(rows, columns, values, size);
+            _testOutputHelper = testOutputHelper;
         }
+
+
+        [Fact]
+        public void CoordinationalMatrix_TestForeach()
+        {
+            //di = new double[] { 1, 2, 3 };
+            //al = new double[] { 1, 2, 3 };
+            //au = new double[] { 3, 2, 1 };
+            //ia = new int[] { 1, 1, 2, 4 };
+            // 1 3 2
+            // 1 2 1 
+            // 2 3 3
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (4,0,1),
+                    (5,0,2),
+                    (6,1,0),
+                    (2,1,1),
+                    //(0,1,2),
+                    (8,2,0),
+                    //(0,2,1),
+                    (3,2,2),
+                };
+
+
+            Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(elemList));
+
+            foreach (var elem in coordinationalMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
+        }
+
+
+        [Theory]
+        [InlineData(FormatFactory.Formats.Coordinational)]
+        [InlineData(FormatFactory.Formats.Dense)]
+        [InlineData(FormatFactory.Formats.Skyline)]
+        [InlineData(FormatFactory.Formats.SparseRow)]
+        [InlineData(FormatFactory.Formats.SparseRowColumn)]
+        public void CoordinationalMatrix_TestConstructor(FormatFactory.Formats type)
+        {
+
+            var exploredMatrix = FormatFactory.Convert(coordinationalMatrix, type);
+            var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
+            Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(backCoordMatrix));
+            //Assert.True((coordinationalMatrix).Equals(backCoordMatrix));
+
+
+
+
+
+            //var formatFactory = new FormatFactory();
+            //
+            //foreach (var type in formatFactory.formats)
+            //{
+            //    var exploredMatrix = FormatFactory.Convert(coordinationalMatrix, type.Key);
+            //    var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
+            //    Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(backCoordMatrix));
+            //}
+        }
+
+       
+
 
         [Fact]
         public void CoordinationalMatrix_TestLMult()
@@ -166,6 +235,25 @@ namespace MF.Coordinational
 
             for (int i = 0; i < result.Size; i++)
                 Assert.Equal(result[i], resultActual[i], 8);
+        }
+
+
+        [Fact]
+        public void CoordinationalMatrix_Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
+
+            // ругается на коллекцию  "Коллекция была изменена; невозможно выполнить операцию перечисления."
+            coordinationalMatrix.Fill(fillFunc);
+
+            size = 3;
+            values = new double[] { 2, 3, 4, 3, 4, 4, 6};
+            columns = new int[] { 0, 1, 2, 0, 1, 0, 2 };
+            rows = new int[] { 0, 0, 0, 1, 1, 2, 2 };
+
+            CoordinationalMatrix coordinat = new CoordinationalMatrix(rows, columns, values, size);
+            Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(coordinat));
+
         }
 
     }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Xunit;
 using SolverCore;
+using Xunit.Abstractions;
 
 namespace MF.SparseRowColumn
 {
@@ -21,9 +22,9 @@ namespace MF.SparseRowColumn
         private IVector vector;
 
         private SparseRowColumnMatrix sparseRowColumnMatrix;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-
-        public TestSparseRowColumnMatrix()
+        public TestSparseRowColumnMatrix(ITestOutputHelper testOutputHelper)
         {
             di = new double[] { 1,2,3 };
             al = new double[] { 1,2,3 };
@@ -34,6 +35,33 @@ namespace MF.SparseRowColumn
             vector = new Vector(new double[] { 1, 1, 1 });
 
             sparseRowColumnMatrix = new SparseRowColumnMatrix(di,al,au,ia,ja);
+            _testOutputHelper = testOutputHelper;
+        }
+
+        [Fact]
+        public void SparseRowColumnMatrix_TestForeach()
+        {
+
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (3,0,1),
+                    (2,0,2),
+                    (1,1,0),
+                    (2,1,1),
+                    (1,1,2),
+                    (2,2,0),
+                    (3,2,1),
+                    (3,2,2),
+                };
+
+
+            Assert.True(new HashSet<(double, int, int)>(sparseRowColumnMatrix).SetEquals(elemList));
+
+            foreach (var elem in sparseRowColumnMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         [Fact]
@@ -159,5 +187,29 @@ namespace MF.SparseRowColumn
                 Assert.Equal(result[i], resultActual[i], 8);
         }
 
+
+        [Fact]
+        public void SparseRowColumnMatrix_Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
+
+            sparseRowColumnMatrix.Fill(fillFunc);
+           //di = new double[] { 1, 2, 3 };
+           //al = new double[] { 1, 2, 3 };
+           //au = new double[] { 3, 2, 1 };
+           //ja = new int[] { 1, 1, 2 };
+           //ia = new int[] { 1, 1, 2, 4 };
+
+            di = new double[] { 2, 4, 6 };
+            al = new double[] { 3, 4, 5 };
+            au = new double[] { 3, 4, 5 };
+            ja = new int[] { 1, 1, 2 };
+            ia = new int[] { 1, 1, 2, 4 };
+
+
+            SparseRowColumnMatrix sparseRowCollumn = new SparseRowColumnMatrix(di, al, au, ia, ja);
+            Assert.True(new HashSet<(double, int, int)>(sparseRowColumnMatrix).SetEquals(sparseRowCollumn));
+
+        }
     }
 }

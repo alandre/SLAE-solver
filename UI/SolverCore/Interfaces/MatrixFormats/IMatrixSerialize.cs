@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolverCore
 {
-    public interface ISLAESerialize
+    public interface IMatrixSerialize
     {
         string Serialize(IVector b, IVector x0);
     }

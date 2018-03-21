@@ -96,14 +96,18 @@ namespace UI
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveFileDialog = new SaveFileDialog();
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            var save = new SaveFileDialog
+            {
+                Filter = "Text file|*.txt",
+                FileName = "Output.txt"
+            };
+            if (save.ShowDialog() == DialogResult.OK)
             {
                 IMatrix A;
                 IVector x0, b;
                 constructorForm = (ConstructorForm)Owner;
                 constructorForm.GetSLAE(out A, formatBox.Text, out b, out x0);
-                File.WriteAllText(A.Serialize(b, x0), saveFileDialog.FileName);
+                File.WriteAllText(A.Serialize(b, x0), save.FileName);
             }
         }
 

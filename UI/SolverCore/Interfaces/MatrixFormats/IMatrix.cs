@@ -11,7 +11,7 @@ namespace SolverCore
     /// <returns></returns>
     public delegate double FillFunc(int i, int j);
 
-    public interface IMatrix : IEnumerable<(double value, int row, int col)>, ISLAESerialize
+    public interface IMatrix : IEnumerable<(double value, int row, int col)>, IMatrixSerialize
     {
         int Size { get; }
         double this[int i, int j] { get; }

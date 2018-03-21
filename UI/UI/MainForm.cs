@@ -22,7 +22,7 @@ namespace UI
         bool methodChecked = false;
         bool manualInputNotNull = false;
         bool fileInputNotNull = false;
-        ILogger Logger;
+        SaveBufferLogger Logger;
         IVector x0_tmp;
 
         struct SLAE

@@ -21,16 +21,17 @@ namespace Extensions
 
         public ProxyMethod(IMethod method)
         {
+            Counters.ResetAll();
             this.method = method;
         }
 
         public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
-            Counters.Mult.ResetCount();
+            Counters.Reset("Mult");
 
             var result = method.InitMethod(A, x0, b, false);
 
-            MultCount[0] = Counters.Mult.count;
+            MultCount[0] = Counters.GetCount("Mult"); 
             Counters.ResetAll();
 
             return result;
@@ -40,7 +41,7 @@ namespace Extensions
         {
             method.MakeStep(out iter, out residual);
             if(iter == 1)
-                MultCount[1] = Counters.Mult.count;
+                MultCount[1] = Counters.GetCount("Mult");
         }
 
         bool IMethod.InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc)

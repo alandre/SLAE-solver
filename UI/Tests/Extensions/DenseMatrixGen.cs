@@ -11,6 +11,7 @@ namespace Extensions
      internal static class DenseMatrixGen
      {
         private static Random rand = new Random();
+
         public static DenseMatrix DiagonalMatrix(int size)
         {
             double[,] matrix = new double[size, size];

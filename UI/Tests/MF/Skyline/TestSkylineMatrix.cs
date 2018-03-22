@@ -10,7 +10,6 @@ using Xunit.Abstractions;
 
 namespace MF.Skyline
 {
-    // TODO тесты на неполный профиль
     public class TestSkylineMatrix
     {
         private double[] di; // диагональ
@@ -39,7 +38,7 @@ namespace MF.Skyline
 
 
         [Fact]
-        public void SkylineMatrix_TestLMult()
+        public void LMult()
         {
             Vector vector = new Vector(new double[] { 1, 1, 1 });
 
@@ -59,7 +58,7 @@ namespace MF.Skyline
         
 
         [Fact]
-        public void SkylineMatrix_TestUMult()
+        public void UMult()
         {
             Vector vector = new Vector(new double[] { 1,1,1});
 
@@ -79,7 +78,7 @@ namespace MF.Skyline
         
 
         [Fact]
-        public void SkylineMatrix_TestLSolve()
+        public void LSolve()
         {
 
             di = new double[] { 1, 2, 3 };
@@ -101,7 +100,7 @@ namespace MF.Skyline
         
 
         [Fact]
-        public void SkylineMatrix_TestUSolve()
+        public void USolve()
         {
             di = new double[] { 1, 2, 3 };
             al = new double[] { 1, 2, 3 };
@@ -121,7 +120,7 @@ namespace MF.Skyline
         
 
         [Fact]
-        public void SkylineMatrix_Fill()
+        public void Fill()
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 
@@ -140,7 +139,7 @@ namespace MF.Skyline
         }
 
         [Fact]
-        public void SkylineMatrix_TestForeach()
+        public void Foreach()
         {
             //di = new double[] { 1, 2, 3 };
             //al = new double[] { 1, 2, 3 };

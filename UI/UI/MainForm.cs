@@ -169,6 +169,9 @@ namespace UI
 
         private void resultsFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //на вход нужен массив кортежей: (string, savebufferloger, double time)
+            //строка - название, логер и понятия не имею какого фомата время, потому дабл
+            //никто не может обещать, что функция работает, более вероятно что она не работает
             ResultsForm resultsForm = new ResultsForm();
             resultsForm.Show();
         }

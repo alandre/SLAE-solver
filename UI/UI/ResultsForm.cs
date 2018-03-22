@@ -8,26 +8,33 @@ using System.Windows.Forms.DataVisualization.Charting;
 namespace UI
 {
     public partial class ResultsForm : Form
-    {
-        //временный костыль
+    {// Говорили что нужно выводить время, в логерах его не нашел но в возможность выводить его есть; если нет возможности его добавить, то надо как-то вручную нули забить
+        //Если ничего не вышло разкоментить то что ниже
+        //public ResultsForm()
+        //{ }
 
         private Chart chart1;
-        (string name, List<double> residual)[] Methods;
+        (string name, List<double> residual, double time)[] Methods;
+        (string name, double residual, long maxiter, double time)[] dataSource;
         int methods_number;
 
-        public ResultsForm()
-        { }
-        public ResultsForm((string name, SolverCore.Loggers.SaveBufferLogger log)[] _Methods)
+
+        public ResultsForm((string name, SolverCore.Loggers.SaveBufferLogger log, double time )[] _Methods)
         {
             methods_number = _Methods.Length;
-            Methods = new(string name, List<double> residual)[methods_number];
-
+            Methods = new(string name, List<double> residual, double time)[methods_number];
+            dataSource = new(string name, double residual, long maxiter, double time)[methods_number];
             for (int i = 0; i < methods_number; i++)
             {
-                Methods[i].name = _Methods[i].name;
+                dataSource[i].name = Methods[i].name = _Methods[i].name;//название метода
                 var _residual = _Methods[i].log.GetList();
+                
                 int item_num = _residual.Count;
+                dataSource[i].residual = _residual[item_num - 1];//конечная невязка
+                dataSource[i].maxiter = item_num;
+                dataSource[i].time = _Methods[i].time;
                 Methods[i].residual = new List<double>(item_num);
+
                 for (int j = 0; j < item_num; j++)
                     Methods[i].residual[j] = _residual[j];
             }
@@ -70,6 +77,7 @@ namespace UI
             this.Name = "ResultsForm";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
+            InitializeComponent();
         }
     }
  

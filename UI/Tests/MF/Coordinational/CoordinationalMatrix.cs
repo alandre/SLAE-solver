@@ -78,7 +78,6 @@ namespace MF.Coordinational
         [InlineData(FormatFactory.Formats.SparseRowColumn)]
         public void Constructor(FormatFactory.Formats type)
         {
-
             var exploredMatrix = FormatFactory.Convert(coordinationalMatrix, type);
 
             var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();

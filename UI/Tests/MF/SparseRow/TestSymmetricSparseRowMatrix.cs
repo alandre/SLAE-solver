@@ -139,10 +139,9 @@ namespace MF.SymmetricSparseRow
             _ia = new int[] { 0, 1, 2, 4, 6 };
             _ja = new int[] { 0, 1, 0, 2, 1, 3 };
 
+            SymmetricSparseRowMatrix sparseRow = new SymmetricSparseRowMatrix(_a, _ja, _ia);
 
-            SparseRowMatrix sparseRow = new SparseRowMatrix(_a, _ja, _ia);
             Assert.True(new HashSet<(double, int, int)>(symmetricSparseRowMatrix).SetEquals(sparseRow));
-
         }
     }
    

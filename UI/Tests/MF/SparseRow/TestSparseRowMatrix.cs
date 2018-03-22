@@ -193,7 +193,7 @@ namespace MF.SparseRow
             _ja = new int[] { 0, 2, 1, 3, 0, 2, 1, 3 };
 
 
-            SparseRowMatrix sparseRow = new SparseRowMatrix(_a, _ia, _ja);
+            SparseRowMatrix sparseRow = new SparseRowMatrix(_a, _ja, _ia);
             Assert.True(new HashSet<(double, int, int)>(sparseRowMatrix).SetEquals(sparseRow));
 
         }

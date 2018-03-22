@@ -35,7 +35,7 @@ namespace MF.SymmetricCoordinational
         }
 
         [Fact]
-        public void SkylineMatrix_TestForeach()
+        public void TestForeach()
         {
             //di = new double[] { 1, 2, 3 };
             //al = new double[] { 1, 2, 3 };
@@ -59,21 +59,18 @@ namespace MF.SymmetricCoordinational
                     (3,2,2),
                 };
 
+            foreach (var elem in symmetricCoordinationalMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
 
             Assert.True(new HashSet<(double, int, int)>(symmetricCoordinationalMatrix).SetEquals(elemList));
 
-            foreach (var elem in symmetricCoordinationalMatrix)
-                _testOutputHelper.WriteLine(elem.ToString());
         }
 
-        //[Fact]
         [Theory]
         [InlineData(FormatFactory.Formats.Coordinational)]
-        [InlineData(FormatFactory.Formats.Dense)]
-        [InlineData(FormatFactory.Formats.Skyline)]
         [InlineData(FormatFactory.Formats.SparseRow)]
         [InlineData(FormatFactory.Formats.SparseRowColumn)]
-        public void SymmetricCoordinationalMatrix_TestConstructor(FormatFactory.Formats type)
+        public void Constructor(FormatFactory.Formats type)
         {
 
             var exploredMatrix = FormatFactory.Convert(symmetricCoordinationalMatrix, type);
@@ -90,8 +87,39 @@ namespace MF.SymmetricCoordinational
            // }
         }
 
+
+        [Theory]
+        [InlineData(FormatFactory.Formats.Dense)]
+        [InlineData(FormatFactory.Formats.Skyline)]
+        public void ConstructorWithZeros(FormatFactory.Formats type)
+        {
+           
+
+            var exploredMatrix = FormatFactory.Convert(symmetricCoordinationalMatrix, type);
+            var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
+
+            size = 3;
+            values = new double[] { 1, 4, 2, 5, 0, 3 };
+            columns = new int[] { 0, 0, 1, 0, 1, 2 };
+            rows = new int[] { 0, 1, 1, 2, 2, 2 };
+
+            symmetricCoordinationalMatrix = new SymmetricCoordinationalMatrix(rows, columns, values, size);
+
+            Assert.True(new HashSet<(double, int, int)>(symmetricCoordinationalMatrix).SetEquals(backCoordMatrix));
+
+            // var formatFactory = new FormatFactory();
+            // 
+            // foreach (var type in formatFactory.formats)
+            // {
+            //     var exploredMatrix = FormatFactory.Convert(symmetricCoordinationalMatrix, type.Key);
+            //     var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
+            //     Assert.True(new HashSet<(double, int, int)>(symmetricCoordinationalMatrix).SetEquals(backCoordMatrix));
+            // }
+        }
+
+
         [Fact]
-        public void SymmetricCoordinational_TestLMult()
+        public void LMult()
         {
             var resultTrueDiag = symmetricCoordinationalMatrix.LMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 1, 6, 8 });
@@ -107,7 +135,7 @@ namespace MF.SymmetricCoordinational
         }
 
         [Fact]
-        public void SymmetricCoordinationalMatrix_TestUMult()
+        public void UMult()
         {
             var resultTrueDiag = symmetricCoordinationalMatrix.UMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 10, 2, 3 });
@@ -123,7 +151,7 @@ namespace MF.SymmetricCoordinational
         }
 
         [Fact]
-        public void SymmetricCoordinationalMatrix_TestLSolve()
+        public void LSolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 1, 1 });
             IVector vector = symmetricCoordinationalMatrix.LMult(resultActual, true);
@@ -135,7 +163,7 @@ namespace MF.SymmetricCoordinational
         }
 
         [Fact]
-        public void SymmetricCoordinationalMatrix_TestUSolve()
+        public void USolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 1, 1 });
             IVector vector = symmetricCoordinationalMatrix.UMult(resultActual, true);
@@ -147,7 +175,7 @@ namespace MF.SymmetricCoordinational
         }
 
         [Fact]
-        public void SymmetricCoordinationalMatrix_TestMultiply()
+        public void Multiply()
         {
             var result = symmetricCoordinationalMatrix.Multiply(vector);
             Vector resultActual = new Vector(new double[] { 10, 6, 8 });
@@ -158,7 +186,7 @@ namespace MF.SymmetricCoordinational
 
 
         [Fact]
-        public void SymmetricCoordinationalMatrix_Foreach()
+        public void Foreach()
         {
             size = 3;
             var values = new double[] { 1, 4, 5, 4, 2, 5, 3 };
@@ -171,11 +199,10 @@ namespace MF.SymmetricCoordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_Fill()
+        public void Fill()
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 
-            // ругается на коллекцию  "Коллекция была изменена; невозможно выполнить операцию перечисления."
             symmetricCoordinationalMatrix.Fill(fillFunc);
 
             size = 3;

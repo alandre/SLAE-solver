@@ -59,7 +59,7 @@ namespace SolverCore
             }
         }
 
-        public SparseRowMatrix(int[] ja,int[] ia )
+        public SparseRowMatrix(int[] ja, int[] ia)
         {
             if (ja == null)
             {
@@ -105,7 +105,7 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(matrix));
             }
-            
+
             var elems = matrix.OrderBy(key => key.row).ThenBy(key => key.col);
 
             ia = new int[matrix.Size + 1];
@@ -120,8 +120,8 @@ namespace SolverCore
                 ja[j] = item.col;
                 a[j] = item.value;
                 j++;
-                ia[item.row+1]++;
-             
+                ia[item.row + 1]++;
+
             }
             for (int k = 0; k < Size; k++)
             {
@@ -187,13 +187,12 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(elems));
             }
-            for (int i=0;i<=Size;i++)
+
+            for (int i = 0; i < Size; i++)
             {
-                int ia1 = ia[i];
-                int ia2 = ia[i+1];
-                for (; ia1 < ia2; ia1++)
+                for (int ia1 = ia[i]; ia1 < ia[i + 1]; ia1++)
                 {
-                    a[ia1] = elems(i,ja[ia1]);
+                    a[ia1] = elems(i, ja[ia1]);
                 }
             }
         }
@@ -201,16 +200,16 @@ namespace SolverCore
         //значение и координаты
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
-        for (int i = 0; i < Size; i++)
-        {
-            var ia1 = ia[i];
-            var ia2 = ia[i + 1];
-            for (; ia1 < ia2; ia1++)
+            for (int i = 0; i < Size; i++)
             {
-                yield return (a[ia1], i, ja[ia1]);
+                var ia1 = ia[i];
+                var ia2 = ia[i + 1];
+                for (; ia1 < ia2; ia1++)
+                {
+                    yield return (a[ia1], i, ja[ia1]);
+                }
             }
         }
-    }
 
         //умножение на нижний треугольник
         public IVector LMult(IVector vector, bool UseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
@@ -239,7 +238,7 @@ namespace SolverCore
                 j = ja[ia1];
                 if (j == i && ia1 < ia2)
                 {
-                    sum += UseDiagonal ?  a[ia1] * vector[j]: (double)diagonalElement * vector[j];
+                    sum += UseDiagonal ? a[ia1] * vector[j] : (double)diagonalElement * vector[j];
                 }
                 result[i] = sum;
             }
@@ -271,7 +270,7 @@ namespace SolverCore
                 j = ja[ia1];
                 if (j == i && ia1 < ia2)
                 {
-                    result[j] += UseDiagonal? a[ia1] * vector[j]: (double)diagonalElement * vector[j];
+                    result[j] += UseDiagonal ? a[ia1] * vector[j] : (double)diagonalElement * vector[j];
                 }
             }
             return result;
@@ -290,7 +289,7 @@ namespace SolverCore
             var result = vector.Clone();
             double sum = 0;
             for (int i = 0; i < Size; i++)
-                {
+            {
                 var ia1 = ia[i];
                 var ia2 = ia[i + 1];
                 int j;
@@ -342,7 +341,7 @@ namespace SolverCore
                 }
                 else
                 {
-                    throw new ArgumentNullException( nameof(a));
+                    throw new ArgumentNullException(nameof(a));
                 }
             }
             return result;
@@ -426,7 +425,7 @@ namespace SolverCore
                 j = ja[ia2];
                 if (j == i && ia1 <= ia2)
                 {
-                    sum += UseDiagonal ? a[ia2] * vector[j] : (double)diagonalElement*vector[j];
+                    sum += UseDiagonal ? a[ia2] * vector[j] : (double)diagonalElement * vector[j];
                 }
                 result[i] = sum;
             }
@@ -488,7 +487,7 @@ namespace SolverCore
                 j = ja[ia2];
                 if (i == j && ia1 <= ia2)
                 {
-                    result[i] = UseDiagonal ? (result[i] - sum)/ a[ia2] : result[i] - sum;
+                    result[i] = UseDiagonal ? (result[i] - sum) / a[ia2] : result[i] - sum;
                 }
                 else
                 {

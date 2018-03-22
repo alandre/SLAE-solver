@@ -81,7 +81,6 @@ namespace MF.Coordinational
         [InlineData(FormatFactory.Formats.SparseRowColumn)]
         public void CoordinationalMatrix_TestConstructor(FormatFactory.Formats type)
         {
-
             var exploredMatrix = FormatFactory.Convert(coordinationalMatrix, type);
             var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
             Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(backCoordMatrix));

@@ -75,11 +75,11 @@ namespace MF.SymmetricSkyline
                     (3,2,2),
                };
 
+            foreach (var elem in symmetricSkylineMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
 
             Assert.True(new HashSet<(double, int, int)>(symmetricSkylineMatrix).SetEquals(elemList));
 
-            foreach (var elem in symmetricSkylineMatrix)
-                _testOutputHelper.WriteLine(elem.ToString());
         }
 
 

@@ -59,17 +59,15 @@ namespace MF.SymmetricCoordinational
                     (3,2,2),
                 };
 
+            foreach (var elem in symmetricCoordinationalMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
 
             Assert.True(new HashSet<(double, int, int)>(symmetricCoordinationalMatrix).SetEquals(elemList));
 
-            foreach (var elem in symmetricCoordinationalMatrix)
-                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         [Theory]
         [InlineData(FormatFactory.Formats.Coordinational)]
-        [InlineData(FormatFactory.Formats.Dense)]
-        [InlineData(FormatFactory.Formats.Skyline)]
         [InlineData(FormatFactory.Formats.SparseRow)]
         [InlineData(FormatFactory.Formats.SparseRowColumn)]
         public void Constructor(FormatFactory.Formats type)
@@ -88,6 +86,37 @@ namespace MF.SymmetricCoordinational
            //     Assert.True(new HashSet<(double, int, int)>(symmetricCoordinationalMatrix).SetEquals(backCoordMatrix));
            // }
         }
+
+
+        [Theory]
+        [InlineData(FormatFactory.Formats.Dense)]
+        [InlineData(FormatFactory.Formats.Skyline)]
+        public void ConstructorWithZeros(FormatFactory.Formats type)
+        {
+           
+
+            var exploredMatrix = FormatFactory.Convert(symmetricCoordinationalMatrix, type);
+            var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
+
+            size = 3;
+            values = new double[] { 1, 4, 2, 5, 0, 3 };
+            columns = new int[] { 0, 0, 1, 0, 1, 2 };
+            rows = new int[] { 0, 1, 1, 2, 2, 2 };
+
+            symmetricCoordinationalMatrix = new SymmetricCoordinationalMatrix(rows, columns, values, size);
+
+            Assert.True(new HashSet<(double, int, int)>(symmetricCoordinationalMatrix).SetEquals(backCoordMatrix));
+
+            // var formatFactory = new FormatFactory();
+            // 
+            // foreach (var type in formatFactory.formats)
+            // {
+            //     var exploredMatrix = FormatFactory.Convert(symmetricCoordinationalMatrix, type.Key);
+            //     var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
+            //     Assert.True(new HashSet<(double, int, int)>(symmetricCoordinationalMatrix).SetEquals(backCoordMatrix));
+            // }
+        }
+
 
         [Fact]
         public void LMult()

@@ -39,11 +39,11 @@ namespace MF.SymmetricDense
                     (4,2,2),
                 };
 
+            foreach (var elem in denseSymmetricMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
 
             Assert.True(new HashSet<(double, int, int)>(denseSymmetricMatrix).SetEquals(elemList));
 
-            foreach (var elem in denseSymmetricMatrix)
-                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         [Fact]

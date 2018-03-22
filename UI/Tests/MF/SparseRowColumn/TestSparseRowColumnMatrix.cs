@@ -57,11 +57,11 @@ namespace MF.SparseRowColumn
                     (3,2,2),
                 };
 
+            foreach (var elem in sparseRowColumnMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
 
             Assert.True(new HashSet<(double, int, int)>(sparseRowColumnMatrix).SetEquals(elemList));
 
-            foreach (var elem in sparseRowColumnMatrix)
-                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         [Fact]

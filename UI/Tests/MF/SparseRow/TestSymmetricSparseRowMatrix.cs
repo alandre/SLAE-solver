@@ -121,11 +121,11 @@ namespace MF.SymmetricSparseRow
                     (4,3,3),
                 };
 
+            foreach (var elem in symmetricSparseRowMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
 
             Assert.True(new HashSet<(double, int, int)>(symmetricSparseRowMatrix).SetEquals(elemList));
 
-            foreach (var elem in symmetricSparseRowMatrix)
-                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace MF.SymmetricSparseRow
             _ja = new int[] { 0, 1, 0, 2, 1, 3 };
 
 
-            SparseRowMatrix sparseRow = new SparseRowMatrix(_a, _ia, _ja);
+            SparseRowMatrix sparseRow = new SparseRowMatrix(_a, _ja, _ia);
             Assert.True(new HashSet<(double, int, int)>(symmetricSparseRowMatrix).SetEquals(sparseRow));
 
         }

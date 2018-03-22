@@ -305,7 +305,7 @@ namespace SolverCore
                 j[k] = tmpForj[k];
             }
 
-            var obj = new { b, x0, gg, column = i, row = j };
+            var obj = new { b, x0, gg, column = i, row = j, size = Size };
             return JsonConvert.SerializeObject(obj);
         }
     }

@@ -122,7 +122,7 @@ namespace UI
                 IMatrix A;
                 IVector x0, b;
                 SLAESource.GetSLAE(out A, format, out b, out x0);
-                File.WriteAllText(matrix.Serialize(b, x0), save.FileName);
+                File.WriteAllText(save.FileName, A.Serialize(b, x0));
             }
         }
 

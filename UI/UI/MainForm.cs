@@ -10,6 +10,7 @@ using SolverCore.Loggers;
 using SolverCore.Solvers;
 using SolverCore.Methods;
 using System.Collections.Immutable;
+using System.ServiceModel.Channels;
 using UI.Properties;
 using System.Text;
 
@@ -89,6 +90,17 @@ namespace UI
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
                     fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], Input, Input.symmetry);
+                    fileInputedSLAE.b = new Vector(Input.b);
+                    if (Input.x0 != null)
+                        fileInputedSLAE.x0 = new Vector(Input.x0);
+                    else
+                    {
+                        double[] tmpx0 = new double[fileInputedSLAE.matrix.Size];
+                        for (int i = 0; i < tmpx0.Length; i++)
+                            tmpx0[i] = 0;
+                        fileInputedSLAE.x0 = new Vector(tmpx0);
+                    }
+
                     var a = FormatFactory.PatternRequired(FormatFactory.FormatsDictionary[formatBox.SelectedItem.ToString()]);
 
                     fileInputBtn.Text = file.FileName;

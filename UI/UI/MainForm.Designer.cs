@@ -302,7 +302,7 @@
             // 
             // IterProgressBar
             // 
-            this.IterProgressBar.Location = new System.Drawing.Point(12, 287);
+            this.IterProgressBar.Location = new System.Drawing.Point(12, 265);
             this.IterProgressBar.Name = "IterProgressBar";
             this.IterProgressBar.Size = new System.Drawing.Size(525, 19);
             this.IterProgressBar.TabIndex = 4;
@@ -383,7 +383,7 @@
             // 
             // MethodProgressBar
             // 
-            this.MethodProgressBar.Location = new System.Drawing.Point(12, 262);
+            this.MethodProgressBar.Location = new System.Drawing.Point(12, 294);
             this.MethodProgressBar.Name = "MethodProgressBar";
             this.MethodProgressBar.Size = new System.Drawing.Size(525, 19);
             this.MethodProgressBar.TabIndex = 21;

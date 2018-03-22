@@ -11,7 +11,7 @@ namespace MF.VectorTests
     {
 
         [Fact]
-        public void Vector_TestConstructor()
+        public void Constructor()
         { 
             var array = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector = new Vector(array);
@@ -21,13 +21,13 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestConstructorArgumentException()
+        public void ConstructorArgumentException()
         {
             Assert.Throws<ArgumentException>(() => { IVector vector = new Vector(-1); });
         }
 
         [Fact]
-        public void Vector_TestEnumerator()
+        public void Enumerator()
         {
             var array = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector = new Vector(array);
@@ -40,7 +40,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestClone()
+        public void Clone()
         {
             var array = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector = new Vector(array);
@@ -49,7 +49,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestSetConst()
+        public void SetConst()
         {
             var array = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector = new Vector(array);
@@ -61,7 +61,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestNegativeIndex()
+        public void NegativeIndex()
         {
             var array = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector = new Vector(array);
@@ -71,7 +71,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestIndexOverSize()
+        public void IndexOverSize()
         {
             var array = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector = new Vector(array);
@@ -80,7 +80,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestNullArgumentInConstructor()
+        public void NullArgumentInConstructor()
         {
             Assert.Throws<ArgumentNullException>(() => { IVector vector = new Vector(null); });
         }
@@ -88,7 +88,7 @@ namespace MF.VectorTests
         #region Add Tests
 
         [Fact]
-        public void Vector_TestAdd()
+        public void Add()
         {
             var array1 = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector1 = new Vector(array1);
@@ -103,7 +103,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestAddArgumentException()
+        public void AddArgumentException()
         {
             var array1 = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector1 = new Vector(array1);
@@ -112,7 +112,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestAddRankException()
+        public void AddRankException()
         {
             var arrayMain = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vectorMain = new Vector(arrayMain);
@@ -127,7 +127,7 @@ namespace MF.VectorTests
         #region Hadamar Tests
 
         [Fact]
-        public void Vector_TestHadamardProduct()
+        public void HadamardProduct()
         {
             var array1 = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector1 = new Vector(array1);
@@ -142,7 +142,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestHadamarArgumentException()
+        public void HadamarArgumentException()
         {
 
             var array1 = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
@@ -152,7 +152,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestHadamarRankException()
+        public void HadamarRankException()
         {
             var arrayMain = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vectorMain = new Vector(arrayMain);
@@ -167,7 +167,7 @@ namespace MF.VectorTests
         #region DotProduct and Norm Test
 
         [Fact]
-        public void Vector_TestNorm()
+        public void Norm()
         {
             var array1 = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector1 = new Vector(array1);
@@ -175,7 +175,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestDotProductArgumentException()
+        public void DotProductArgumentException()
         {
             var array1 = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };
             IVector vector1 = new Vector(array1);
@@ -184,7 +184,7 @@ namespace MF.VectorTests
         }
 
         [Fact]
-        public void Vector_TestDotProductRankException()
+        public void DotProductRankException()
         {
 
             var arrayMain = new[] { 1.0, 2.0, 3.0, 4.0, 5.0 };

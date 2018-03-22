@@ -13,7 +13,6 @@ namespace MF.SymmetricSparseRow
 {
     public class TestSymmetricSparseRowMatrix
     {
-        private double[,] _matrix;
         private double[] _a;
         private int[] _ia;
         private int[] _ja;
@@ -37,7 +36,7 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestLMult()
+        public void LMult()
         {
             var resultTrueDiag = symmetricSparseRowMatrix.LMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 2, 2, 13, 11 });
@@ -53,7 +52,7 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestUMult()
+        public void UMult()
         {
             var resultTrueDiag = symmetricSparseRowMatrix.UMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 7, 9, 3, 4 });
@@ -69,7 +68,7 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestLSolve()
+        public void LSolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 2, 3, 4 });
             IVector vector = symmetricSparseRowMatrix.LMult(resultActual, true);
@@ -81,7 +80,7 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestUSolve()
+        public void USolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 2, 3, 4 });
             IVector vector = symmetricSparseRowMatrix.UMult(resultActual, true);
@@ -93,7 +92,7 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestMultiply()
+        public void Multiply()
         {
             var result = symmetricSparseRowMatrix.Multiply(vector);
             Vector resultActual = new Vector(new double[] { 7, 9, 13, 11 });
@@ -104,7 +103,7 @@ namespace MF.SymmetricSparseRow
 
 
         [Fact]
-        public void SymmetricSparseRowMatrix_TestForeach()
+        public void Foreach()
         {
             //_a = new double[] { 1, 2, 5, 3, 7, 4 };
             //_ia = new int[] { 0, 1, 2, 4, 6 };
@@ -130,11 +129,10 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_Fill()
+        public void Fill()
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 
-            // лишняя итерация
             symmetricSparseRowMatrix.Fill(fillFunc);
 
             _a = new double[] { 2, 4, 4, 6, 6, 8 };

@@ -39,7 +39,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseSymmetricRowColumnMatrix_TestForeach()
+        public void Foreach()
         {
 
             List<(double, int, int)> elemList =
@@ -64,7 +64,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestLMult()
+        public void LMult()
         {
             var resultTrueDiag = sparseSymmetricRowColumnMatrix.LMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 1, 5, 6 });
@@ -80,7 +80,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestUMult()
+        public void UMult()
         {
             var resultTrueDiag = sparseSymmetricRowColumnMatrix.UMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 6, 3, 3 });
@@ -96,7 +96,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestLSolve()
+        public void LSolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 1, 1 });
             IVector vector = sparseSymmetricRowColumnMatrix.LMult(resultActual, true);
@@ -108,7 +108,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestUSolve()
+        public void USolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 1, 1 });
             IVector vector = sparseSymmetricRowColumnMatrix.UMult(resultActual, true);
@@ -120,7 +120,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestMultiply()
+        public void Multiply()
         {
             var result = sparseSymmetricRowColumnMatrix.Multiply(vector);
             Vector resultActual = new Vector(new double[] { 6, 6, 6 });
@@ -130,7 +130,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_Foreach()
+        public void TestForeach()
         {
             var di = new double[] { 1, 2, 3 };
             var al = new double[] { 3, 2, 1 };
@@ -145,7 +145,7 @@ namespace MF.SymmetricSparseRowColumn
 
 
         [Fact]
-        public void SparseRowColumnMatrix_Fill()
+        public void Fill()
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 

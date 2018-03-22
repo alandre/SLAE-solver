@@ -21,7 +21,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestForeach()
+        public void Foreach()
         {
 
 
@@ -47,7 +47,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestConstructorExeptions()
+        public void ConstructorExeptions()
         {
             _matrix = new double[][] { 
                                        new double[] { 2, 5 },
@@ -60,7 +60,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestIndexator()
+        public void Indexator()
         {
             Assert.Throws<IndexOutOfRangeException>(() => denseSymmetricMatrix[4, 2]);
             
@@ -79,7 +79,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestLMultExeptions()
+        public void LMultExeptions()
         {
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
 
@@ -88,7 +88,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestLMult()
+        public void LMult()
         {
             Vector vector = new Vector(new double[] { 1, 3, 8 });
 
@@ -106,7 +106,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestUMultExeptions()
+        public void UMultExeptions()
         {
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
 
@@ -116,7 +116,7 @@ namespace MF.SymmetricDense
 
 
         [Fact]
-        public void DenseSymmetricMatrix_TestUMult()
+        public void UMult()
         {
             Vector vector = new Vector(new double[] { 1, 3, 8 });
 
@@ -134,7 +134,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestLSolveExeptions()
+        public void LSolveExeptions()
         {
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
 
@@ -144,7 +144,7 @@ namespace MF.SymmetricDense
 
 
         [Fact]
-        public void DenseSymmetricMatrix_TestLSolve()
+        public void LSolve()
         {
             //_matrix = new double[3, 3] { { 1, 2, 3 }, { 2, -1, 1 }, { 7, -20, 93 } };
 
@@ -164,7 +164,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestUSolveExeptions()
+        public void USolveExeptions()
         {
             _matrix = new double[][] { new double[]{ 1 },
                                        new double[] { 2, 5 },
@@ -178,7 +178,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestUSolve()
+        public void USolve()
         {
             _matrix = new double[][] { new double[]{ 1 },
                                        new double[] { 2, 5 },
@@ -196,7 +196,7 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseSymmetricMatrix_TestMultyplyExceptions()
+        public void MultyplyExceptions()
         {
             Vector vector = new Vector(new double[] { 1, 0 });
 
@@ -205,11 +205,10 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
-        public void DenseMatrix_Fill()
+        public void Fill()
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
-            // косяк
-            // проходит по всем элементам, но вылетает, так как инициализация только нижнего треугольника
+
             denseSymmetricMatrix.Fill(fillFunc);
             _matrix = new double[][] { new double[] { 2 },
                                        new double[] { 3, 4 },

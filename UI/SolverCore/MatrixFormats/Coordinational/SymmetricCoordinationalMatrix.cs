@@ -284,28 +284,18 @@ namespace SolverCore
 
         public string Serialize(IVector b, IVector x0)
         {
-            var tmpFori = new List<int>();
-            var tmpForj = new List<int>();
-            var tmpForgg = new List<double>();
+            var i = new List<int>();
+            var j = new List<int>();
+            var gg = new List<double>();
 
             foreach (var elem in matrix)
             {
-                tmpFori.Add(elem.Key.column);
-                tmpForj.Add(elem.Key.row);
-                tmpForgg.Add(elem.Value);
-            }
-            double[] gg = new double[tmpForgg.Count];
-            int[] i = new int[tmpForgg.Count];
-            int[] j = new int[tmpForgg.Count];
-
-            for (int k = 0; k < tmpForgg.Count; k++)
-            {
-                gg[k] = tmpForgg[k];
-                i[k] = tmpFori[k];
-                j[k] = tmpForj[k];
+                i.Add(elem.Key.column);
+                j.Add(elem.Key.row);
+                gg.Add(elem.Value);
             }
 
-            var obj = new { b, x0, gg, column = i, row = j, size = Size };
+            var obj = new { b, x0, gg = gg.ToArray(), column = i.ToArray(), row = j.ToArray(), size = Size };
             return JsonConvert.SerializeObject(obj);
         }
     }

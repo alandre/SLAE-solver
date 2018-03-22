@@ -64,6 +64,7 @@
     <Compile Include="Interfaces\MatrixFormats\IVector.cs" />
     <Compile Include="MatrixFormats\DiagonalElement.cs" />
     <Compile Include="MatrixFormats\TransposeMatrix.cs" />
+    <Compile Include="Methods\BCGStab.cs" />
     <Compile Include="Methods\CGM.cs" />
     <Compile Include="Methods\GaussianSeidelMethod.cs" />
     <Compile Include="Methods\JacobiMethod.cs" />

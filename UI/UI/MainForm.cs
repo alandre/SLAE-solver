@@ -39,7 +39,7 @@ namespace UI
         bool methodChecked = false;
         bool manualInputNotNull = false;
         bool fileInputNotNull = false;
-        ILogger Logger;
+        SaveBufferLogger Logger;
         IVector x0_tmp;
         int maxIter;
         double eps;

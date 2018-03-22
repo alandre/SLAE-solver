@@ -208,8 +208,7 @@ namespace MF.SymmetricDense
         public void Fill()
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
-            // косяк
-            // проходит по всем элементам, но вылетает, так как инициализация только нижнего треугольника
+
             denseSymmetricMatrix.Fill(fillFunc);
             _matrix = new double[][] { new double[] { 2 },
                                        new double[] { 3, 4 },

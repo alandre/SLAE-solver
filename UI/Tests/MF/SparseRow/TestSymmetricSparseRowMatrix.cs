@@ -133,7 +133,6 @@ namespace MF.SymmetricSparseRow
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 
-            // лишняя итерация
             symmetricSparseRowMatrix.Fill(fillFunc);
 
             _a = new double[] { 2, 4, 4, 6, 6, 8 };

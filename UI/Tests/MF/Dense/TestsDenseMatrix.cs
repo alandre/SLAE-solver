@@ -202,7 +202,7 @@ namespace MF.Dense
         [Fact]
         public void Fill()
         {
-            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); }; // TODO вынести надо куда-нибудь
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); }; 
 
             denseMatrix.Fill(fillFunc);
             _matrix = new double[3, 3] 

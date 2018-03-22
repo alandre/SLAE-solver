@@ -185,7 +185,6 @@ namespace MF.SparseRow
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
             
-            // лишняя итерация
             sparseRowMatrix.Fill(fillFunc);
 
             _a = new double[] { 2, 4, 4, 6, 4, 6, 6, 8 };

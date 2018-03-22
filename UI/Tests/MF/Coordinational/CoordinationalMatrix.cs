@@ -242,7 +242,6 @@ namespace MF.Coordinational
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 
-            // ругается на коллекцию  "Коллекция была изменена; невозможно выполнить операцию перечисления."
             coordinationalMatrix.Fill(fillFunc);
 
             size = 3;

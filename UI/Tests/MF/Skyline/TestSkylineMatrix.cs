@@ -124,7 +124,6 @@ namespace MF.Skyline
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 
-            // не работает
             skylineMatrix.Fill(fillFunc);
 
             di = new double[] { 2, 4, 6 };

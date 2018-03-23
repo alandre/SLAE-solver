@@ -10,6 +10,7 @@ namespace SolverCore
 {
    // public enum MethodsEnum { CG, GaussianSeidel, Jacobi, LOS, BCGStab, GMRes }
     public enum MethodsEnum { CG,GaussianSeidel, Jacobi, LOS, BCGStab}
+    public enum Factorizer { IncompleteLU, IncompleteLUsq, IncompleteCholesky }
 
     public class LoggingSolversFabric
     {

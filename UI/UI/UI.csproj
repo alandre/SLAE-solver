@@ -61,6 +61,12 @@
     <Compile Include="ConstructorForm.Designer.cs">
       <DependentUpon>ConstructorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Factorizer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Factorizer.Designer.cs">
+      <DependentUpon>Factorizer.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormatForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -92,6 +98,9 @@
     </Compile>
     <EmbeddedResource Include="ConstructorForm.resx">
       <DependentUpon>ConstructorForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Factorizer.resx">
+      <DependentUpon>Factorizer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormatForm.resx">
       <DependentUpon>FormatForm.cs</DependentUpon>

@@ -205,7 +205,10 @@ namespace UI
         {
             string method = methodListBox.SelectedItem.ToString();
             if (Types.Contains(method)) Types.Remove(method);
-            else Types.Add(method);
+            else
+            {
+                Types.Add(method);
+            }
             if (methodListBox.CheckedItems.Count > 0)
             {
                 methodCheckedImg.Image = Resources.CheckMark;

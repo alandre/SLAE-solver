@@ -43,6 +43,7 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,7 +68,6 @@
       <DependentUpon>FormatForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FormatFactory.cs" />
-    <Compile Include="IO.cs" />
     <Compile Include="MatrixInitialazer.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

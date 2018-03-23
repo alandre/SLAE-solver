@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -10,6 +10,7 @@ using SolverCore.Loggers;
 using SolverCore.Solvers;
 using SolverCore.Methods;
 using System.Collections.Immutable;
+using System.ServiceModel.Channels;
 using UI.Properties;
 using System.Text;
 
@@ -38,9 +39,10 @@ namespace UI
         bool methodChecked = false;
         bool manualInputNotNull = false;
         bool fileInputNotNull = false;
-        ILogger Logger;
+        SaveBufferLogger Logger;
         IVector x0_tmp;
-
+        int maxIter;
+        double eps;
         SLAE currentSLAE;
         SLAE manualInputedSLAE;
         SLAE fileInputedSLAE;
@@ -87,10 +89,21 @@ namespace UI
                     string dataInput = sr.ReadToEnd();
                     sr.Close();
 
-                    Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
+                    Input = MatrixInitialazer.Input(dataInput, sim.Checked);
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
                     fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], Input, Input.symmetry);
+                    fileInputedSLAE.b = new Vector(Input.b);
+                    if (Input.x0 != null)
+                        fileInputedSLAE.x0 = new Vector(Input.x0);
+                    else
+                    {
+                        double[] tmpx0 = new double[fileInputedSLAE.matrix.Size];
+                        for (int i = 0; i < tmpx0.Length; i++)
+                            tmpx0[i] = 0;
+                        fileInputedSLAE.x0 = new Vector(tmpx0);
+                    }
+
                     var a = FormatFactory.PatternRequired(FormatFactory.FormatsDictionary[formatBox.SelectedItem.ToString()]);
 
                     fileInputBtn.Text = file.FileName;
@@ -167,7 +180,9 @@ namespace UI
 
         private void toolStripMenuOpenOutput_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = path;
+            openFileDialog1.ShowDialog();
         }
 
         private void resultsFormToolStripMenuItem_Click(object sender, EventArgs e)
@@ -213,35 +228,45 @@ namespace UI
         }
         private async void SolveAsync()
         {
-            var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
+            var uniqueDirectoryName = string.Format(@"\{0}", DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy"));
+            //var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
             string fullDirectoryName = path + uniqueDirectoryName;
+            
             _Methods = new(string name, SaveBufferLogger log, double time)[methodListBox.CheckedItems.Count];
 
+            maxIter = Convert.ToInt16(iterBox.Value);
+            eps = Convert.ToDouble(epsBox.Text);
+            
             Directory.CreateDirectory(fullDirectoryName);
 
             MethodProgressBar.Value = 0;
             MethodProgressBar.Maximum = methodListBox.CheckedItems.Count;
 
             //временная мера 
-            IterProgressBar.Maximum = 10000;
+            IterProgressBar.Maximum = maxIter;
             timer.Tick += new EventHandler(timer_Tick);
             timer.Interval = 1; //выбрать наилучшую 
             timer.Enabled = true;
-
+            int count = 0;
+            done_label.Text = Convert.ToString(count);
+            need_label.Text = Convert.ToString(methodListBox.CheckedItems.Count);
+            done_label.Visible = true;
+            need_label.Visible = true;
+            label5.Visible = true;
             int i = 0;
-
             foreach (var methodName in methodListBox.CheckedItems)
             {
-                _Methods[i].name = methodName.ToString();
                 currentSLAE.x0 = x0_tmp;
+                _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
-
-                IMethod method = new JacobiMethod();
+                MethodsEnum method =(MethodsEnum)methodName;
+                //IMethod method = new JacobiMethod();
                 Logger = new SaveBufferLogger();
-                var loggingSolver = new LoggingSolver(method, Logger);
+               
+                var loggingSolver = LoggingSolversFabric.Spawn(method, Logger);
 
                 timer.Start();
-                IVector result = await RunAsync(loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                IVector result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 timer.Stop();
                 _Methods[i].time = 0;
 
@@ -249,11 +274,13 @@ namespace UI
                 _Methods[i].log = (SaveBufferLogger)Logger;
 
                 MethodProgressBar.Increment(1);
-                //временно
-                IterProgressBar.Value = 10000;
+                var LogList = Logger.GetList();
+                residual_label.Text = Convert.ToString(LogList[LogList.Count-1]);
+                IterProgressBar.Value = maxIter;
                 //var newEntry1 = new KeyValuePair<int, double>(Count, r);
                 //TODO: замеры времени для Task
-
+                count++;
+                done_label.Text = Convert.ToString(count);
                 WriteResultToFile(result, methodName.ToString(), LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
 
                 i++;
@@ -271,30 +298,37 @@ namespace UI
             var directory = $"{pathToDirectory}\\{method}";
             Directory.CreateDirectory(directory);
 
-            var pathToTotalFile = $"{directory}\\Total.txt";
-            var pathToSolveFile = $"{directory}\\Solve.txt";
-            var pathToResidualFile = $"{directory}\\Residual.txt";
-            var pathToIterationsFile = $"{directory}\\Iterations.txt";
+            var pathToTotalFile = $"{path}\\Сводные данные.txt";
+            var pathToSolveReportFile = $"{directory}\\Протокол решения.txt";
+            var pathToVectorFile = $"{directory}\\Вектор решения.txt";
 
-            var resultText = new StringBuilder();
+            var totalString = new StringBuilder();
+            var resultReportString = new StringBuilder(); 
 
             var solve = string.Join(" ", result);
 
-            resultText
-                .AppendLine($"X: {solve}")
-                .AppendLine($"Iteration: {iterationCount}")
-                .AppendLine($"Residual: {residual}");
+            totalString
+                .AppendLine($"{method}")
+                .AppendLine($"Вектор решения: {solve}")
+                .AppendLine($"Число итераций: {iterationCount}")
+                .AppendLine($"Невязка: {residual}\r\n");
 
-            File.WriteAllText(pathToTotalFile, resultText.ToString());
-            File.WriteAllText(pathToSolveFile, solve);
-            File.WriteAllText(pathToIterationsFile, iterationCount.ToString());
-            File.WriteAllText(pathToResidualFile, residual.ToString());
+            resultReportString
+               .AppendLine($"Число итераций: {iterationCount}")
+               .AppendLine($"Невязка: {residual}");
+
+
+            File.WriteAllText(pathToSolveReportFile, resultReportString.ToString());
+            File.WriteAllText(pathToVectorFile, solve.ToString());
+            File.AppendAllText(pathToTotalFile, totalString.ToString());
         }
 
 
         void timer_Tick(object sender, EventArgs e)
         {
+            residual_label.Visible = true;
             var (iter, residual) = Logger.GetCurrentState();
+            residual_label.Text= Convert.ToString(residual);
             IterProgressBar.Value = iter;
         }
 
@@ -302,13 +336,14 @@ namespace UI
         {
             return Task.Run(() =>
             {
-                return loggingSolver.Solve((ILinearOperator)matrix, x0, b);
+                return loggingSolver.Solve((ILinearOperator)matrix, x0, b,maxIter,eps);
            });
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FolderBrowserDialog FBD = new FolderBrowserDialog();
+            FBD.SelectedPath = path;
             if (FBD.ShowDialog() == DialogResult.OK)
             {
                 path = FBD.SelectedPath;

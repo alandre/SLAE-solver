@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace SolverCore
 {
-    public class SymmetricCoordinationalMatrix : IMatrix, ILinearOperator
+    public class SymmetricCoordinationalMatrix : IMatrix, ILinearOperator, ICloneable
     {
         private int count = -1;
         private Dictionary<(int row, int column), double> matrix;
@@ -51,7 +53,7 @@ namespace SolverCore
             Size = size;
             matrix = new Dictionary<(int row, int column), double>();
 
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 (int row, int column) = item.i >= item.j ? (item.i, item.j) : (item.j, item.i);
                 matrix[(row, column)] = item.value;
@@ -79,7 +81,7 @@ namespace SolverCore
 
                 (int row, int column) = i > j ? (i, j) : (j, i);
 
-                if(matrix.TryGetValue((row,column), out var value))
+                if (matrix.TryGetValue((row, column), out var value))
                 {
                     return value;
                 }
@@ -92,7 +94,7 @@ namespace SolverCore
         {
             get
             {
-                if(count < 0)
+                if (count < 0)
                 {
                     count = matrix.Count + matrix.Where(x => x.Key.column != x.Key.row).Count();
                 }
@@ -100,6 +102,28 @@ namespace SolverCore
                 return count;
             }
         }
+
+        /// <summary>
+        /// Устанавливает элемент в матрице, если он уже есть. Иначе -- игнорирует операцию.
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="column"></param>
+        /// <param name="value"></param>
+        /// <returns>True если значение установилось, false иначе.</returns>
+        public bool Set(int row, int column, double value)
+        {
+            (int i, int j) = row > column ? (row, column) : (column, row);
+
+            if (i == j || matrix.ContainsKey((i, j)))
+            {
+                matrix[(i, j)] = value;
+                return true;
+            }
+
+            return false;
+        }
+
+        public object Clone() => new SymmetricCoordinationalMatrix(matrix, Size);
 
         public IVector Diagonal
         {
@@ -128,9 +152,9 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(elems));
             }
 
-            foreach (var item in this)
+            foreach (var item in matrix.ToDictionary(x => x.Key, x => x.Value))
             {
-                matrix[(item.row, item.col)] = elems(item.row, item.col);
+                matrix[(item.Key.row, item.Key.column)] = elems(item.Key.row, item.Key.column);
             }
         }
 
@@ -278,6 +302,23 @@ namespace SolverCore
             }
 
             return result;
+        }
+
+        public string Serialize(IVector b, IVector x0)
+        {
+            var i = new List<int>();
+            var j = new List<int>();
+            var gg = new List<double>();
+
+            foreach (var elem in matrix)
+            {
+                i.Add(elem.Key.column);
+                j.Add(elem.Key.row);
+                gg.Add(elem.Value);
+            }
+
+            var obj = new { b, x0, gg = gg.ToArray(), column = i.ToArray(), row = j.ToArray(), size = Size };
+            return JsonConvert.SerializeObject(obj);
         }
     }
 }

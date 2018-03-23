@@ -6,21 +6,24 @@ using System.Threading.Tasks;
 
 using Xunit;
 using SolverCore;
+using Xunit.Abstractions;
+using UI;
 
 namespace MF.SymmetricSparseRow
 {
     public class TestSymmetricSparseRowMatrix
     {
-        private double[,] _matrix;
         private double[] _a;
         private int[] _ia;
         private int[] _ja;
         private IVector vector;
 
+        private readonly ITestOutputHelper _testOutputHelper;
+
         private SymmetricSparseRowMatrix symmetricSparseRowMatrix;
 
 
-        public TestSymmetricSparseRowMatrix()
+        public TestSymmetricSparseRowMatrix(ITestOutputHelper testOutputHelper)
         {
             _a = new double[] { 1, 2, 5, 3, 7, 4 };
             _ia = new int[] { 0, 1, 2, 4, 6 };
@@ -29,10 +32,11 @@ namespace MF.SymmetricSparseRow
             vector = new Vector(new double[] { 2, 1, 1, 1 });
 
             symmetricSparseRowMatrix = new SymmetricSparseRowMatrix(_a, _ja, _ia);
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
-        public void SparseRowMatrix_TestLMult()
+        public void LMult()
         {
             var resultTrueDiag = symmetricSparseRowMatrix.LMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 2, 2, 13, 11 });
@@ -48,7 +52,7 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestUMult()
+        public void UMult()
         {
             var resultTrueDiag = symmetricSparseRowMatrix.UMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 7, 9, 3, 4 });
@@ -64,7 +68,7 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestLSolve()
+        public void LSolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 2, 3, 4 });
             IVector vector = symmetricSparseRowMatrix.LMult(resultActual, true);
@@ -76,7 +80,7 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestUSolve()
+        public void USolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 2, 3, 4 });
             IVector vector = symmetricSparseRowMatrix.UMult(resultActual, true);
@@ -88,7 +92,7 @@ namespace MF.SymmetricSparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestMultiply()
+        public void Multiply()
         {
             var result = symmetricSparseRowMatrix.Multiply(vector);
             Vector resultActual = new Vector(new double[] { 7, 9, 13, 11 });
@@ -99,16 +103,49 @@ namespace MF.SymmetricSparseRow
 
 
         [Fact]
-        public void SparseRowMatrix_TestForeach()
+        public void Foreach()
         {
-            var a = new double[] { 1, 5, 2, 7, 5, 3, 7, 4 };
-            var ia = new int[] { 0, 2, 4, 6, 8 };
-            var ja = new int[] { 0, 2, 1, 3, 0, 2, 1, 3 };
+            //_a = new double[] { 1, 2, 5, 3, 7, 4 };
+            //_ia = new int[] { 0, 1, 2, 4, 6 };
+            //_ja = new int[] { 0, 1, 0, 2, 1, 3 };
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (5,0,2),
+                    (2,1,1),
+                    (7,1,3),
+                    (5,2,0),
+                    (3,2,2),
+                    (7,3,1),
+                    (4,3,3),
+                };
 
-            SparseRowMatrix sparseRowMatrix = new SparseRowMatrix(a, ja, ia);
-            //Assert.True(symmetricSparseRowMatrix.SequenceEqual(sparseRowMatrix));
-            Assert.True(new HashSet<(double, int, int)>(symmetricSparseRowMatrix).SetEquals(sparseRowMatrix));
+            foreach (var elem in symmetricSparseRowMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
+
+            Assert.True(new HashSet<(double, int, int)>(symmetricSparseRowMatrix).SetEquals(elemList));
+
+        }
+
+        [Fact]
+        public void Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
+
+            symmetricSparseRowMatrix.Fill(fillFunc);
+
+            _a = new double[] { 2, 4, 4, 6, 6, 8 };
+            _ia = new int[] { 0, 1, 2, 4, 6 };
+            _ja = new int[] { 0, 1, 0, 2, 1, 3 };
+
+            SymmetricSparseRowMatrix sparseRow = new SymmetricSparseRowMatrix(_a, _ja, _ia);
+
+            Assert.True(new HashSet<(double, int, int)>(symmetricSparseRowMatrix).SetEquals(sparseRow));
         }
     }
    
 }
+
+
+

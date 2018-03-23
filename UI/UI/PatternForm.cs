@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -111,14 +112,17 @@ namespace UI
 
         private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveFileDialog = new SaveFileDialog();
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            var save = new SaveFileDialog
+            {
+                Filter = "Text file|*.txt",
+                FileName = "Output.txt"
+            };
+            if (save.ShowDialog() == DialogResult.OK)
             {
                 IMatrix A;
                 IVector x0, b;
                 SLAESource.GetSLAE(out A, format, out b, out x0);
-
-                IO.writeSLAE(new SLAE(A, b, x0), saveFileDialog.FileName);
+                File.WriteAllText(save.FileName, A.Serialize(b, x0));
             }
         }
 

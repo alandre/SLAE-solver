@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace UI
 {
@@ -16,12 +10,12 @@ namespace UI
         public double[,] dense { get; set; }
         public double[][] denseL { get; set; }
 
-        public int[] ig { get; set; }
-        public int[] jg { get; set; }
+        public int[] ia { get; set; }
+        public int[] ja { get; set; }
 
         public double[] gg { get; set; }
-        public double[] gl { get; set; }
-        public double[] gu { get; set; }
+        public double[] al { get; set; }
+        public double[] au { get; set; }
 
         public double[] di { get; set; }
 
@@ -31,9 +25,11 @@ namespace UI
 
         public int size { set; get; }
 
-        public static MatrixInitialazer Input(string data, MatrixInitialazer matrix, bool symmetry)
+        public double[] b { get; set; }
+
+        public static MatrixInitialazer Input(string data, bool symmetry)
         {
-            matrix = JsonConvert.DeserializeObject<MatrixInitialazer>(data);
+            var matrix = JsonConvert.DeserializeObject<MatrixInitialazer>(data);
             matrix.symmetry = symmetry;
             return matrix;
         }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Xunit;
 using SolverCore;
+using Xunit.Abstractions;
 
 namespace MF.SparseRow
 {
@@ -17,8 +18,8 @@ namespace MF.SparseRow
         private IVector vector;
 
         public static SparseRowMatrix sparseRowMatrix;
-
-        public TestSparseRowMatrix()
+        private readonly ITestOutputHelper _testOutputHelper;
+        public TestSparseRowMatrix(ITestOutputHelper testOutputHelper)
         {
             _a = new double[] { 1, 8, 2, 7, 2, 3, 6, 4 };
             _ia = new int[] { 0, 2, 4, 6, 8 };
@@ -26,10 +27,38 @@ namespace MF.SparseRow
             vector = new Vector(new double[] { 2, 1, 1, 1 });
 
             sparseRowMatrix = new SparseRowMatrix(_a, _ja, _ia);
+            _testOutputHelper = testOutputHelper;
+        }
+
+
+        [Fact]
+        public void Foreach()
+        {
+
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (8,0,2),
+                    (2,1,1),
+                    (7,1,3),
+                    (2,2,0),
+                    (3,2,2),
+                    (6,3,1),
+                    (4,3,3),
+                    
+                };
+
+            foreach (var elem in sparseRowMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
+
+            Assert.True(new HashSet<(double, int, int)>(sparseRowMatrix).SetEquals(elemList));
+
         }
 
         [Fact]
-        public void SparseRowMatrix_TestLMult()
+        public void LMult()
         {
             var resultTrueDiag = sparseRowMatrix.LMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 2, 2, 7, 10 });
@@ -45,7 +74,7 @@ namespace MF.SparseRow
         }
 
        [Fact]
-       public void SparseRowMatrix_TestUMult()
+       public void UMult()
        {
             var resultTrueDiag = sparseRowMatrix.UMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 10, 9, 3, 4 });
@@ -61,7 +90,7 @@ namespace MF.SparseRow
        }
       
        [Fact]
-       public void SparseRowMatrix_TestLSolve()
+       public void LSolve()
        {
            IVector resultActual = new Vector(new double[] { 1, 2, 3, 4 });
            IVector vector = sparseRowMatrix.LMult(resultActual, true);
@@ -73,7 +102,7 @@ namespace MF.SparseRow
        }
 
         [Fact]
-        public void SparseRowMatrix_TestUSolve()
+        public void USolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 2, 3, 4 });
             IVector vector = sparseRowMatrix.UMult(resultActual, true);
@@ -85,7 +114,7 @@ namespace MF.SparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestMultiply()
+        public void Multiply()
         {
             var result = sparseRowMatrix.Multiply(vector);
             Vector resultActual = new Vector(new double[] { 10, 9, 7, 10 });
@@ -95,7 +124,7 @@ namespace MF.SparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestUMultTranspose()
+        public void UMultTranspose()
         {
             var resultTrueDiag = sparseRowMatrix.UMultTranspose(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 2, 2, 19, 11 });
@@ -112,7 +141,7 @@ namespace MF.SparseRow
         }
 
         [Fact]
-        public void SparseRowMatrix_TestLMultTranspose()
+        public void LMultTranspose()
         {
             var resultTrueDiag = sparseRowMatrix.LMultTranspose(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 4, 8, 3, 4 });
@@ -128,7 +157,7 @@ namespace MF.SparseRow
         }
         
         [Fact]
-        public void SparseRowMatrix_TestLSolveTranspose()
+        public void LSolveTranspose()
         {
             IVector resultActual = new Vector(new double[] { 1, 2, 3, 4 });
             IVector vector = sparseRowMatrix.LMultTranspose(resultActual, true);
@@ -140,7 +169,7 @@ namespace MF.SparseRow
         }
        
         [Fact]
-        public void SparseRowMatrix_TestUSolveTranspose()
+        public void USolveTranspose()
         {
             IVector resultActual = new Vector(new double[] { 1, 2, 3, 4 });
             IVector vector = sparseRowMatrix.UMultTranspose(resultActual, true);
@@ -151,5 +180,21 @@ namespace MF.SparseRow
                 Assert.Equal(result[i], resultActual[i], 8);
         }
 
+        [Fact]
+        public void Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
+            
+            sparseRowMatrix.Fill(fillFunc);
+
+            _a = new double[] { 2, 4, 4, 6, 4, 6, 6, 8 };
+            _ia = new int[] { 0, 2, 4, 6, 8 };
+            _ja = new int[] { 0, 2, 1, 3, 0, 2, 1, 3 };
+
+
+            SparseRowMatrix sparseRow = new SparseRowMatrix(_a, _ja, _ia);
+            Assert.True(new HashSet<(double, int, int)>(sparseRowMatrix).SetEquals(sparseRow));
+
+        }
     }
 }

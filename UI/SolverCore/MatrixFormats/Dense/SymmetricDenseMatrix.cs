@@ -55,17 +55,17 @@ namespace SolverCore
         /// <exception cref="RankException"></exception>
         public SymmetricDenseMatrix(double[][] matrix)
         {
-            if(matrix == null)
+            if (matrix == null)
             {
                 throw new ArgumentNullException(nameof(matrix));
             }
-            
+
             int size = matrix.Length;
             this.matrix = new double[size][];
 
-            for(int i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
-                if(matrix[i] == null)
+                if (matrix[i] == null)
                 {
                     throw new ArgumentException("One of the lines is null", nameof(matrix));
                 }
@@ -82,7 +82,7 @@ namespace SolverCore
 
         public SymmetricDenseMatrix(int size)
         {
-            if(size < 0)
+            if (size < 0)
             {
                 throw new ArgumentException($"{nameof(size)} must be nonnegative");
             }
@@ -92,7 +92,7 @@ namespace SolverCore
 
         public SymmetricDenseMatrix(SymmetricCoordinationalMatrix coordinationalMatrix)
         {
-            if(coordinationalMatrix == null)
+            if (coordinationalMatrix == null)
             {
                 throw new ArgumentNullException(nameof(coordinationalMatrix));
             }
@@ -126,23 +126,23 @@ namespace SolverCore
 
         public IVector LMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
-            if(vector == null)
+            if (vector == null)
             {
                 throw new ArgumentNullException(nameof(vector));
             }
 
-            if(vector.Size != Size)
+            if (vector.Size != Size)
             {
                 throw new RankException();
             }
 
             var result = new Vector(Size);
 
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
                 var sum = isUseDiagonal ? matrix[i][i] * vector[i] : (int)diagonalElement * vector[i];
 
-                for(int j = 0; j < i; j++)
+                for (int j = 0; j < i; j++)
                 {
                     sum += matrix[i][j] * vector[j];
                 }
@@ -167,7 +167,7 @@ namespace SolverCore
 
             var result = new Vector(Size);
 
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
                 result[i] += isUseDiagonal ? matrix[i][i] * vector[i] : (int)diagonalElement * vector[i];
 
@@ -182,19 +182,19 @@ namespace SolverCore
 
         public IVector Multiply(IVector vector)
         {
-            if(vector == null)
+            if (vector == null)
             {
                 throw new ArgumentNullException(nameof(vector));
             }
 
-            if(vector.Size != Size)
+            if (vector.Size != Size)
             {
                 throw new RankException();
             }
 
             var result = new Vector(Size);
 
-            for(int i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
             {
                 result[i] += matrix[i][i] * vector[i];
 
@@ -210,14 +210,17 @@ namespace SolverCore
 
         public void Fill(FillFunc elems)
         {
-            if(elems == null)
+            if (elems == null)
             {
                 throw new ArgumentNullException(nameof(elems));
             }
 
-            foreach(var elem in this)
+            for (int i = 0; i < Size; i++)
             {
-                matrix[elem.row][elem.col] = elems(elem.row, elem.col);
+                for (int j = 0; j <= i; j++)
+                {
+                    matrix[i][j] = elems(i, j);
+                }
             }
         }
 

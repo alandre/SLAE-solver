@@ -11,19 +11,18 @@ using Extensions;
 using Xunit;
 using Xunit.Abstractions;
 
-//  TODO fill и foreach для методов
 
 
 namespace Methods
 {
-    // TODO соглашение об именовании
 
     public class TestBCGStabMethod
     {
-       private readonly ITestOutputHelper _testOutputHelper;
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        private double[,] _matrix;
         IMethod Method;
         ILogger Logger;
-        private double[,] _matrix;
         LoggingSolver loggingSolver;
 
         public TestBCGStabMethod(ITestOutputHelper testOutputHelper)
@@ -35,7 +34,7 @@ namespace Methods
         }
 
         [Fact]
-        public void TestAlgorithm()
+        public void Algorithm()
         {
             _matrix = new double[3, 3] { { 3, 1, 1 },
                                          { 0, 5, 1 },
@@ -57,7 +56,7 @@ namespace Methods
        
 
         [Fact]
-        public void TestNotDiagonallyDominant()
+        public void NotDiagonallyDominant()
         {
             _matrix = new double[3, 3] { { 3, 1, 1 },
                                          { 0, 5, 1 },
@@ -74,7 +73,7 @@ namespace Methods
         }
 
         [Fact]
-        public void TestAlgorithmCountMult()
+        public void AlgorithmCountMult()
         {
             var proxyMethod = new ProxyMethod(new BCGStab());
             loggingSolver = new LoggingSolver(proxyMethod, Logger);
@@ -100,7 +99,6 @@ namespace Methods
                 Assert.Equal(result[i], resultActual[i], 8);
 
         }
-        // ...
 
     }
 }

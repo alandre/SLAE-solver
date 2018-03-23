@@ -52,11 +52,11 @@ namespace SolverCore
             if (this.ia[0] == 1) //если массив начинается с 1, то уменьшаем значения всех элементов на 1
             {
                 for (int i = 0; i < size1; i++) this.ia[i]--;
-            }  
-            
+            }
+
             var size2 = al.Length;
             var size3 = au.Length;
-            if(this.ia[size1 - 1] != size2)
+            if (this.ia[size1 - 1] != size2)
             {
                 throw new RankException();
             }
@@ -65,7 +65,7 @@ namespace SolverCore
                 throw new RankException();
             }
             this.al = (double[])al.Clone();
-         
+
             this.au = (double[])au.Clone();
         }
 
@@ -92,7 +92,7 @@ namespace SolverCore
                         return au[ia[j] + i - k];
                     }
                 }
-                catch(IndexOutOfRangeException)
+                catch (IndexOutOfRangeException)
                 {
                     throw new IndexOutOfRangeException(); //если выходим за рамки размерности матрицы
                 }
@@ -102,16 +102,16 @@ namespace SolverCore
         /// конструктор
         public SkylineMatrix(int[] ia)
         {
-            if (ia == null) 
+            if (ia == null)
             {
                 throw new ArgumentNullException(nameof(ia));
             }
-            
+
             this.ia = (int[])ia.Clone();
             this.di = new double[ia.Length - 1];
             this.al = new double[ia[ia.Length - 1]];
             this.au = new double[ia[ia.Length - 1]];
-            
+
             if (this.ia[0] == 1)
             {
                 for (int i = 0; i < ia.Length; i++)
@@ -226,7 +226,7 @@ namespace SolverCore
                 int ia1 = ia[i];
                 int ia2 = ia[i + 1];
                 int k = i - (ia2 - ia1);
-                for ( ; ia1 < ia2; ia1++, k++)
+                for (; ia1 < ia2; ia1++, k++)
                 {
                     yield return (al[ia1], i, k);
                     yield return (au[ia1], k, i);
@@ -237,44 +237,27 @@ namespace SolverCore
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         // заполнение матрицы
-        public void Fill(FillFunc elems) 
-        { 
-            if (elems == null) 
-            { 
-                throw new ArgumentNullException(nameof(elems)); 
-            } 
-            int i = 0, ju = 0, jl=0, k = 0; 
-            ia[0] = 0; 
-            ia[1] = 0; 
-            foreach (var elem in this) 
+        public void Fill(FillFunc elems)
+        {
+            if (elems == null)
             {
-                if (elem.col == elem.row)
-                {
-                    di[i] = elems(elem.row, elem.col);
-                }
-                else
-                if (elem.col > elem.row)
-                {
-                    au[ju] = elems(elem.row, elem.col);
-                    ju++;
-                }
-                else
-                {
-                    al[jl] = elems(elem.row, elem.col);
-                    jl++;
-                }
+                throw new ArgumentNullException(nameof(elems));
+            }
 
-                if (elem.row == i && i > 0)
+            for (int i = 0; i < Size; i++)
+            {
+                di[i] = elems(i, i);
+
+                int ia1 = ia[i];
+                int ia2 = ia[i + 1];
+                int k = i - (ia2 - ia1);
+
+                for (; ia1 < ia2; ia1++, k++)
                 {
-                    k++; // подсчет количества элементов в профиле
-                }    
-                else
-                {
-                    ia[i+1] = k;
-                    i++;
-                    k = 0;
+                    al[ia1] = elems(i, k);
+                    au[ia1] = elems(k, i);
                 }
-            } 
+            }
         }
 
         //умножение на нижний треугольник
@@ -298,7 +281,7 @@ namespace SolverCore
                 for (int j = i - (ia[i + 1] - k); j < i; j++, k++)
                     result[i] += al[k] * vector[j];
             }
-            
+
             for (int i = 0; i < Size; i++)
                 result[i] += isUseDiagonal ? di[i] * vector[i] : (double)diagonalElement * vector[i];
 
@@ -327,7 +310,7 @@ namespace SolverCore
                     result[j] += al[k] * vector[i];
             }
 
-           for (int i = 0; i < Size; i++)
+            for (int i = 0; i < Size; i++)
                 result[i] += isUseDiagonal ? di[i] * vector[i] : (double)diagonalElement * vector[i];
 
             return result;
@@ -417,7 +400,7 @@ namespace SolverCore
 
             return result;
         }
-        
+
         //умножение на верхний треугольник трансп
         public IVector UMultTranspose(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
@@ -469,7 +452,7 @@ namespace SolverCore
                     sum += al[j] * result[k];
                 result[i] = isUseDiagonal ? (vector[i] - sum) / di[i] : vector[i] - sum;
             }
-            
+
             return result;
         }
 
@@ -495,7 +478,7 @@ namespace SolverCore
                 for (int j = ia[i + 1] - 1, m = i - 1; m >= k; j--, m--)
                     result[m] -= al[j] * result[i];
             }
-            
+
             return result;
         }
 
@@ -513,7 +496,7 @@ namespace SolverCore
             }
 
             var result = vector.Clone();
-            
+
             for (int i = Size - 1; i >= 0; i--)
             {
                 if (isUseDiagonal) result[i] /= di[i];
@@ -521,7 +504,7 @@ namespace SolverCore
                 for (int j = ia[i + 1] - 1, m = i - 1; m >= k; j--, m--)
                     result[m] -= au[j] * result[i];
             }
-            
+
             return result;
         }
 
@@ -539,7 +522,7 @@ namespace SolverCore
             }
 
             var result = vector.Clone();
-            
+
             for (int i = 0; i < Size; i++)
             {
                 double sum = 0;
@@ -548,7 +531,7 @@ namespace SolverCore
                     sum += au[j] * result[k];
                 result[i] = isUseDiagonal ? (vector[i] - sum) / di[i] : vector[i] - sum;
             }
-            
+
             return result;
         }
 
@@ -558,5 +541,5 @@ namespace SolverCore
             return JsonConvert.SerializeObject(obj);
 
         }
-    }        
+    }   
 }

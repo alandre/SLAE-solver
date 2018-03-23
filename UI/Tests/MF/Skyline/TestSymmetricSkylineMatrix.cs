@@ -35,7 +35,7 @@ namespace MF.SymmetricSkyline
 
 
         [Fact]
-        public void SymmetricSkylineMatrix_TestLMult()
+        public void LMult()
         {
             Vector vector = new Vector(new double[] { 1, 1, 1 });
 
@@ -53,7 +53,7 @@ namespace MF.SymmetricSkyline
         }
 
         [Fact]
-        public void SymmetricSkylineMatrix_Foreach()
+        public void Foreach()
         {
             //di = new double[] { 1, 2, 3 };
             //al = new double[] { 1, 2, 3 };
@@ -75,18 +75,18 @@ namespace MF.SymmetricSkyline
                     (3,2,2),
                };
 
+            foreach (var elem in symmetricSkylineMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
 
             Assert.True(new HashSet<(double, int, int)>(symmetricSkylineMatrix).SetEquals(elemList));
 
-            foreach (var elem in symmetricSkylineMatrix)
-                _testOutputHelper.WriteLine(elem.ToString());
         }
 
 
      
 
         [Fact]
-        public void SymmetricSkylineMatrix_TestUMult()
+        public void UMult()
         {
             Vector vector = new Vector(new double[] { 1,1,1});
 
@@ -106,7 +106,7 @@ namespace MF.SymmetricSkyline
       
 
         [Fact]
-        public void SymmetricSkylineMatrix_TestLSolve()
+        public void LSolve()
         {
 
             di = new double[] { 1, 2, 3 };
@@ -127,7 +127,7 @@ namespace MF.SymmetricSkyline
      
 
         [Fact]
-        public void SymmetricSkylineMatrix_TestUSolve()
+        public void USolve()
         {
             di = new double[] { 1, 2, 3 };
             al = new double[] { 1, 2, 3 };
@@ -146,7 +146,7 @@ namespace MF.SymmetricSkyline
        
 
         [Fact]
-        public void SymmetricSkylineMatrix_Fill()
+        public void Fill()
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 

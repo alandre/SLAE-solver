@@ -37,17 +37,17 @@ namespace SolverCore
             var size = coordinationalMatrix.Size;
             var pattern = new SortedSet<int>[size];
 
-            for(int i = 0; i < size; i++)
+            for (int i = 0; i < size; i++)
             {
                 pattern[i] = new SortedSet<int>();
             }
 
-            foreach(var item in coordinationalMatrix)
+            foreach (var item in coordinationalMatrix)
             {
                 (int i, int j) = item.row > item.col ? (item.row, item.col) : (item.col, item.row);
 
                 if (i != j)
-                { 
+                {
                     pattern[i].Add(j);
                 }
             }
@@ -72,7 +72,7 @@ namespace SolverCore
             {
                 di[i] = coordinationalMatrix[i, i];
 
-                foreach(var col in pattern[i])
+                foreach (var col in pattern[i])
                 {
                     ja[k++] = col;
                 }
@@ -202,7 +202,7 @@ namespace SolverCore
 
         public void Fill(FillFunc elems)
         {
-            if(elems == null)
+            if (elems == null)
             {
                 throw new ArgumentNullException(nameof(elems));
             }
@@ -221,12 +221,12 @@ namespace SolverCore
 
         public IVector Multiply(IVector vector)
         {
-            if(vector == null)
+            if (vector == null)
             {
                 throw new ArgumentNullException(nameof(vector));
             }
 
-            if(vector.Size != Size)
+            if (vector.Size != Size)
             {
                 throw new RankException();
             }
@@ -280,12 +280,12 @@ namespace SolverCore
 
         public IVector LMult(IVector vector, bool isUseDiagonal, DiagonalElement diagonalElement = DiagonalElement.One)
         {
-            if(vector == null)
+            if (vector == null)
             {
                 throw new ArgumentNullException(nameof(vector));
             }
 
-            if(vector.Size != Size)
+            if (vector.Size != Size)
             {
                 throw new RankException();
             }
@@ -435,11 +435,11 @@ namespace SolverCore
 
             var result = vector.Clone();
 
-            for(int i = Size - 1; i >= 0; i--)
+            for (int i = Size - 1; i >= 0; i--)
             {
                 var diagonalElement = result[i] /= di[i];
 
-                for(int j = ia[i]; j < ia[i + 1]; j++)
+                for (int j = ia[i]; j < ia[i + 1]; j++)
                 {
                     var column = ja[j];
                     result[column] -= au[j] * diagonalElement;

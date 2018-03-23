@@ -43,10 +43,10 @@ namespace SolverCore
             if (this.ia[0] == 1) //если массив начинается с 1, то уменьшаем значения всех элементов на 1
             {
                 for (int i = 0; i < size1; i++) this.ia[i]--;
-            }  
-            
+            }
+
             var size2 = al.Length;
-            if(this.ia[size1 - 1] != size2)
+            if (this.ia[size1 - 1] != size2)
             {
                 throw new RankException();
             }
@@ -59,7 +59,7 @@ namespace SolverCore
             {
                 throw new ArgumentNullException(nameof(ia));
             }
-            
+
             this.ia = (int[])ia.Clone();
             this.di = new double[ia.Length - 1];
             this.al = new double[ia[ia.Length - 1]];
@@ -181,7 +181,7 @@ namespace SolverCore
                     int k = i - (ia[i + 1] - ia[i]); // индекс столбца первого элемента в профиле
                     return al[ia[i] + j - k];
                 }
-                catch(IndexOutOfRangeException)
+                catch (IndexOutOfRangeException)
                 {
                     throw new IndexOutOfRangeException();
                 }
@@ -191,7 +191,7 @@ namespace SolverCore
         public int Size => di.Length;
 
         public IVector Diagonal => new Vector(di);
-        
+
         public ILinearOperator Transpose => this;
 
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
@@ -203,7 +203,7 @@ namespace SolverCore
                 int ia1 = ia[i];
                 int ia2 = ia[i + 1];
                 int k = i - (ia2 - ia1);
-                for ( ; ia1 < ia2; ia1++, k++)
+                for (; ia1 < ia2; ia1++, k++)
                 {
                     yield return (al[ia1], i, k);
                     yield return (al[ia1], k, i);
@@ -214,41 +214,26 @@ namespace SolverCore
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         // заполнение матрицы
-        public void Fill(FillFunc elems) 
-        { 
-            if (elems == null) 
-            { 
-                throw new ArgumentNullException(nameof(elems)); 
-            } 
-
-            int i = 0, j = 0, k = 0; 
-            ia[0] = 0; 
-            ia[1] = 0; 
-
-            foreach (var elem in this) 
+        public void Fill(FillFunc elems)
+        {
+            if (elems == null)
             {
-                if (elem.col == elem.row)
-                {
-                    di[i] = elems(elem.row, elem.col);
-                }
-                else
-                if (elem.col < elem.row)
-                {
-                    al[j] = elems(elem.row, elem.col);
-                    j++;
-                }
+                throw new ArgumentNullException(nameof(elems));
+            }
 
-                if (elem.row == i && i > 0)
+            for (int i = 0; i < Size; i++)
+            {
+                di[i] = elems(i, i);
+
+                int ia1 = ia[i];
+                int ia2 = ia[i + 1];
+                int k = i - (ia2 - ia1);
+
+                for (; ia1 < ia2; ia1++, k++)
                 {
-                    k++; // подсчет количества элементов в профиле
-                }    
-                else
-                {
-                    ia[i+1] = k;
-                    i++;
-                    k = 0;
+                    al[ia1] = elems(i, k);
                 }
-            } 
+            }
         }
 
         //умножение на нижний треугольник
@@ -319,7 +304,7 @@ namespace SolverCore
             {
                 throw new RankException();
             }
-            
+
             var result = new Vector(Size);
 
             for (int i = 0; i < Size; i++)
@@ -338,7 +323,7 @@ namespace SolverCore
         //прямой ход
         public IVector LSolve(IVector vector, bool isUseDiagonal)
         {
-            if(vector == null)
+            if (vector == null)
             {
                 throw new ArgumentNullException(nameof(vector));
             }
@@ -376,7 +361,7 @@ namespace SolverCore
             }
 
             var result = vector.Clone();
-            
+
             for (int i = Size - 1; i >= 0; i--)
             {
                 if (isUseDiagonal) result[i] = result[i] / di[i];
@@ -384,7 +369,7 @@ namespace SolverCore
                 for (int j = ia[i + 1] - 1, m = i - 1; m >= k; j--, m--)
                     result[m] -= al[j] * result[i];
             }
-            
+
             return result;
         }
 

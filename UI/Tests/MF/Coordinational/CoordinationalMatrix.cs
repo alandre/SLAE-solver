@@ -24,7 +24,6 @@ namespace MF.Coordinational
 
         private CoordinationalMatrix coordinationalMatrix;
         private readonly ITestOutputHelper _testOutputHelper;
-        // TODO сделать короче названия методов
 
         public TestCoordinationalMatrix(ITestOutputHelper testOutputHelper)
         {
@@ -41,7 +40,7 @@ namespace MF.Coordinational
 
 
         [Fact]
-        public void CoordinationalMatrix_TestForeach()
+        public void Foreach()
         {
             //di = new double[] { 1, 2, 3 };
             //al = new double[] { 1, 2, 3 };
@@ -65,24 +64,22 @@ namespace MF.Coordinational
                     (3,2,2),
                 };
 
+            foreach (var elem in coordinationalMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
 
             Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(elemList));
 
-            foreach (var elem in coordinationalMatrix)
-                _testOutputHelper.WriteLine(elem.ToString());
         }
 
 
         [Theory]
         [InlineData(FormatFactory.Formats.Coordinational)]
-        [InlineData(FormatFactory.Formats.Dense)]
-        [InlineData(FormatFactory.Formats.Skyline)]
         [InlineData(FormatFactory.Formats.SparseRow)]
         [InlineData(FormatFactory.Formats.SparseRowColumn)]
-        public void CoordinationalMatrix_TestConstructor(FormatFactory.Formats type)
+        public void Constructor(FormatFactory.Formats type)
         {
-
             var exploredMatrix = FormatFactory.Convert(coordinationalMatrix, type);
+
             var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
             Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(backCoordMatrix));
             //Assert.True((coordinationalMatrix).Equals(backCoordMatrix));
@@ -101,11 +98,44 @@ namespace MF.Coordinational
             //}
         }
 
-       
+        [Theory]
+        [InlineData(FormatFactory.Formats.Dense)]
+        [InlineData(FormatFactory.Formats.Skyline)]
+        public void ConstructorWithZeros(FormatFactory.Formats type)
+        {
+            type = FormatFactory.Formats.Skyline;
+            var exploredMatrix = FormatFactory.Convert(coordinationalMatrix, type);
+            var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
+
+            size = 3;
+            values = new double[] { 1, 4, 5, 6, 2, 0, 8, 0, 3 };
+            columns = new int[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
+            rows = new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
+
+            coordinationalMatrix = new CoordinationalMatrix(rows, columns, values, size);
+
+            Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(backCoordMatrix));
+            //Assert.True((coordinationalMatrix).Equals(backCoordMatrix));
+
+
+
+
+
+            //var formatFactory = new FormatFactory();
+            //
+            //foreach (var type in formatFactory.formats)
+            //{
+            //    var exploredMatrix = FormatFactory.Convert(coordinationalMatrix, type.Key);
+            //    var backCoordMatrix = exploredMatrix.ConvertToCoordinationalMatrix();
+            //    Assert.True(new HashSet<(double, int, int)>(coordinationalMatrix).SetEquals(backCoordMatrix));
+            //}
+        }
+
+
 
 
         [Fact]
-        public void CoordinationalMatrix_TestLMult()
+        public void LMult()
         {
             var resultTrueDiag = coordinationalMatrix.LMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 1, 8, 11 });
@@ -121,7 +151,7 @@ namespace MF.Coordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_TestUMult()
+        public void UMult()
         {
             var resultTrueDiag = coordinationalMatrix.UMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 10, 2, 3 });
@@ -137,7 +167,7 @@ namespace MF.Coordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_TestLSolve()
+        public void LSolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 1, 1 });
             IVector vector = coordinationalMatrix.LMult(resultActual, true);
@@ -149,7 +179,7 @@ namespace MF.Coordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_TestUSolve()
+        public void USolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 1, 1 });
             IVector vector = coordinationalMatrix.UMult(resultActual, true);
@@ -161,7 +191,7 @@ namespace MF.Coordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_TestMultiply()
+        public void Multiply()
         {
             var result = coordinationalMatrix.Multiply(vector);
             Vector resultActual = new Vector(new double[] { 10, 8, 11 });
@@ -171,7 +201,7 @@ namespace MF.Coordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_TestMultiplyTranspose()
+        public void MultiplyTranspose()
         {
             var result = coordinationalMatrix.MultiplyTranspose(vector);
             Vector resultActual = new Vector(new double[] { 15, 6, 8 });
@@ -181,7 +211,7 @@ namespace MF.Coordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_TestUMultTranspose()
+        public void UMultTranspose()
         {
             var resultTrueDiag = coordinationalMatrix.UMultTranspose(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 1, 6, 8 });
@@ -198,7 +228,7 @@ namespace MF.Coordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_TestLMultTranspose()
+        public void LMultTranspose()
         {
             var resultTrueDiag = coordinationalMatrix.LMultTranspose(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 15, 2, 3 });
@@ -214,7 +244,7 @@ namespace MF.Coordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_TestLSolveTranspose()
+        public void LSolveTranspose()
         {
             IVector resultActual = new Vector(new double[] { 1, 6, 8 });
             IVector vector = coordinationalMatrix.LMultTranspose(resultActual, true);
@@ -226,7 +256,7 @@ namespace MF.Coordinational
         }
 
         [Fact]
-        public void CoordinationalMatrix_TestUSolveTranspose()
+        public void USolveTranspose()
         {
             IVector resultActual = new Vector(new double[] { 15, 2, 3 });
             IVector vector = coordinationalMatrix.UMultTranspose(resultActual, true);
@@ -239,11 +269,10 @@ namespace MF.Coordinational
 
 
         [Fact]
-        public void CoordinationalMatrix_Fill()
+        public void Fill()
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
 
-            // ругается на коллекцию  "Коллекция была изменена; невозможно выполнить операцию перечисления."
             coordinationalMatrix.Fill(fillFunc);
 
             size = 3;

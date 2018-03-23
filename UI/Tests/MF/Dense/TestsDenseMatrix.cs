@@ -21,7 +21,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestForeach()
+        public void Foreach()
         {
             //di = new double[] { 1, 2, 3 };
             //al = new double[] { 1, 2, 3 };
@@ -45,15 +45,15 @@ namespace MF.Dense
                     (8,2,2),
                 };
 
+            foreach (var elem in denseMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
 
             Assert.True(new HashSet<(double, int, int)>(denseMatrix).SetEquals(elemList));
 
-            foreach (var elem in denseMatrix)
-                _testOutputHelper.WriteLine(elem.ToString());
         }
 
         [Fact]
-        public void DenseMatrix_TestConstructorExeptions()
+        public void ConstructorExeptions()
         {
             _matrix = new double[2, 3] { { 1, 3, 5 }, { 2, 5, 4 } };
             double[,] nullArray = null;
@@ -64,7 +64,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestIndexator()
+        public void Indexator()
         {
             Assert.Throws<IndexOutOfRangeException>(() =>  denseMatrix[4,2]);
             Assert.Equal(1.0,denseMatrix[2,1]);
@@ -85,7 +85,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestLMultExeptions()
+        public void LMultExeptions()
         {
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
 
@@ -94,7 +94,7 @@ namespace MF.Dense
         }
      
         [Fact]
-        public void DenseMatrix_TestLMult()
+        public void LMult()
         {
             Vector vector = new Vector(new double[] { 1, 3, 8 });
 
@@ -112,7 +112,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestUMultExeptions()
+        public void UMultExeptions()
         {
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
 
@@ -121,7 +121,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestUMult()
+        public void UMult()
         {
             Vector vector = new Vector(new double[] { 1, 3, 8 });
 
@@ -139,7 +139,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestLSolveExeptions()
+        public void LSolveExeptions()
         {
             Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
 
@@ -148,7 +148,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestLSolve()
+        public void LSolve()
         {
             _matrix = new double[3, 3] { { 1, 2, 3 }, { 2, -1, 1 }, { 7, -20, 93 } };
             DenseMatrix denseMatrix = new DenseMatrix(_matrix);
@@ -163,7 +163,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestUSolveExeptions()
+        public void USolveExeptions()
         {
             _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
             DenseMatrix denseMatrix = new DenseMatrix(_matrix);
@@ -175,7 +175,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestUSolve()
+        public void USolve()
         {
             _matrix = new double[3, 3] { { 1, 3, 5 }, { 1, 1, 6 }, { 4, 2, 1 } };
             DenseMatrix denseMatrix = new DenseMatrix(_matrix);
@@ -191,7 +191,7 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_TestMultyplyExceptions()
+        public void MultyplyExceptions()
         {
             Vector vector = new Vector(new double[] { 1, 0});
 
@@ -200,9 +200,9 @@ namespace MF.Dense
         }
 
         [Fact]
-        public void DenseMatrix_Fill()
+        public void Fill()
         {
-            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); }; // TODO вынести надо куда-нибудь
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); }; 
 
             denseMatrix.Fill(fillFunc);
             _matrix = new double[3, 3] 

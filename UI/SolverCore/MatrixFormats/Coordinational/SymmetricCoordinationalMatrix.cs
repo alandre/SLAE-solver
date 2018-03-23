@@ -53,7 +53,7 @@ namespace SolverCore
             Size = size;
             matrix = new Dictionary<(int row, int column), double>();
 
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 (int row, int column) = item.i >= item.j ? (item.i, item.j) : (item.j, item.i);
                 matrix[(row, column)] = item.value;
@@ -94,7 +94,7 @@ namespace SolverCore
         {
             get
             {
-                if(count < 0)
+                if (count < 0)
                 {
                     count = matrix.Count + matrix.Where(x => x.Key.column != x.Key.row).Count();
                 }
@@ -152,9 +152,9 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(elems));
             }
 
-            foreach (var item in this)
+            foreach (var item in matrix.ToDictionary(x => x.Key, x => x.Value))
             {
-                matrix[(item.row, item.col)] = elems(item.row, item.col);
+                matrix[(item.Key.row, item.Key.column)] = elems(item.Key.row, item.Key.column);
             }
         }
 

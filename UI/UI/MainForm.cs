@@ -297,7 +297,7 @@ namespace UI
             Directory.CreateDirectory(directory);
 
             var pathToTotalFile = $"{pathToDirectory}\\Сводные данные.txt";
-            var pathToSolveReportFile = $"{directory}\\Протокол решения.txt";
+            var pathToSolveReportFile = $"{directory}\\Информация о решении.txt";
             var pathToVectorFile = $"{directory}\\Вектор решения.txt";
 
             var totalString = new StringBuilder();

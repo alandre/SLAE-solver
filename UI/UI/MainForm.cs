@@ -269,8 +269,7 @@ namespace UI
                 IVector result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 timer.Stop();
                 _Methods[i].time = 0;
-
-                var LogList = Logger.GetList();
+                
                 _Methods[i].log = (SaveBufferLogger)Logger;
 
                 MethodProgressBar.Increment(1);

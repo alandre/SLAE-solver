@@ -12,5 +12,9 @@ namespace SolverCore
         IVector USolve(IVector x);
         IVector LMult(IVector x);
         IVector UMult(IVector x);
+        IVector LTransposeSolve(IVector x);
+        IVector UTransposeSolve(IVector x);
+        IVector LTransposeMult(IVector x);
+        IVector UTransposeMult(IVector x);
     }
 }

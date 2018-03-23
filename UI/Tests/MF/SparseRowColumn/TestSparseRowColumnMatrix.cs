@@ -207,8 +207,8 @@ namespace MF.SparseRowColumn
             ia = new int[] { 1, 1, 2, 4 };
 
 
-            SparseRowColumnMatrix sparseRowCollumn = new SparseRowColumnMatrix(di, al, au, ia, ja);
-            Assert.True(new HashSet<(double, int, int)>(sparseRowColumnMatrix).SetEquals(sparseRowCollumn));
+            SparseRowColumnMatrix sparseRowColumn = new SparseRowColumnMatrix(di, al, au, ia, ja);
+            Assert.True(new HashSet<(double, int, int)>(sparseRowColumnMatrix).SetEquals(sparseRowColumn));
 
         }
     }

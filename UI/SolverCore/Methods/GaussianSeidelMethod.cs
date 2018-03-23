@@ -19,11 +19,6 @@ namespace SolverCore.Methods
 
         public IVector x { get; private set; }
 
-        public GaussianSeidelMethod()
-        {
-            init = false;
-        }
-
         public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc)
@@ -40,14 +35,10 @@ namespace SolverCore.Methods
             this.A = A;
             currentIter = 0;
             norm_b = b.Norm;
-            try
-            {
-                lastResidual = A.Multiply(x0).Add(b, -1).Norm / norm_b;
-            }
-            catch (DivideByZeroException e)
-            {
+
+           lastResidual = A.Multiply(x0).Add(b, -1).Norm / norm_b;
+            if (Double.IsNaN(lastResidual) || Double.IsInfinity(lastResidual))
                 return false;
-            }
             init = true;
             x_temp = new Vector(x.Size);
             Ux = A.UMult(x0, false, 0);

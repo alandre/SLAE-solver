@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -51,6 +51,9 @@ namespace UI
 
         private string path;
         ConstructorForm constructorForm;
+
+        (string name, SolverCore.Loggers.SaveBufferLogger log, double time)[] _Methods;
+
 
         public MainForm()
         {
@@ -184,7 +187,10 @@ namespace UI
 
         private void resultsFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ResultsForm resultsForm = new ResultsForm();
+            //на вход нужен массив кортежей: (string, savebufferloger, double time)
+            //строка - название, логер и понятия не имею какого фомата время, потому дабл
+            //никто не может обещать, что функция работает, более вероятно что она не работает
+            ResultsForm resultsForm = new ResultsForm(_Methods);
             resultsForm.Show();
         }
 
@@ -225,8 +231,12 @@ namespace UI
             var uniqueDirectoryName = string.Format(@"\{0}", DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy"));
             //var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
             string fullDirectoryName = path + uniqueDirectoryName;
+            
+            _Methods = new(string name, SaveBufferLogger log, double time)[methodListBox.CheckedItems.Count];
+
             maxIter = Convert.ToInt16(iterBox.Value);
             eps = Convert.ToDouble(epsBox.Text);
+            
             Directory.CreateDirectory(fullDirectoryName);
 
             MethodProgressBar.Value = 0;
@@ -243,10 +253,11 @@ namespace UI
             done_label.Visible = true;
             need_label.Visible = true;
             label5.Visible = true;
-            
+            int i = 0;
             foreach (var methodName in methodListBox.CheckedItems)
             {
-                currentSLAE.x0 = x0_tmp.Clone();
+                currentSLAE.x0 = x0_tmp;
+                _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
                 MethodsEnum method =(MethodsEnum)methodName;
                 //IMethod method = new JacobiMethod();
@@ -257,6 +268,11 @@ namespace UI
                 timer.Start();
                 IVector result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 timer.Stop();
+                _Methods[i].time = 0;
+
+                var LogList = Logger.GetList();
+                _Methods[i].log = (SaveBufferLogger)Logger;
+
                 MethodProgressBar.Increment(1);
                 var LogList = Logger.GetList();
                 residual_label.Text = Convert.ToString(LogList[LogList.Count-1]);
@@ -266,6 +282,8 @@ namespace UI
                 count++;
                 done_label.Text = Convert.ToString(count);
                 WriteResultToFile(result, methodName.ToString(), LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
+
+                i++;
             }
 
         }

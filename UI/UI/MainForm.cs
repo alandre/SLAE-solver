@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,6 +11,7 @@ using SolverCore.Solvers;
 using SolverCore.Methods;
 using System.Collections.Immutable;
 using System.ServiceModel.Channels;
+using System.Diagnostics;
 using UI.Properties;
 using System.Text;
 
@@ -34,15 +35,13 @@ namespace UI
     public partial class MainForm : Form
     {
         private MatrixInitialazer Input = new MatrixInitialazer();
-        Timer timer = new Timer();
+
         bool inputChecked = false;
         bool methodChecked = false;
         bool manualInputNotNull = false;
         bool fileInputNotNull = false;
         SaveBufferLogger Logger;
         IVector x0_tmp;
-        int maxIter;
-        double eps;
         SLAE currentSLAE;
         SLAE manualInputedSLAE;
         SLAE fileInputedSLAE;
@@ -51,6 +50,9 @@ namespace UI
 
         private string path;
         ConstructorForm constructorForm;
+
+        (string name, SolverCore.Loggers.SaveBufferLogger log, double time)[] _Methods;
+
 
         public MainForm()
         {
@@ -177,23 +179,26 @@ namespace UI
 
         private void toolStripMenuOpenOutput_Click(object sender, EventArgs e)
         {
-            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            Process.Start("explorer.exe", fullDirectoryName);
+            /*OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.InitialDirectory = path;
-            openFileDialog1.ShowDialog();
+            openFileDialog1.ShowDialog();*/
         }
 
         private void resultsFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ResultsForm resultsForm = new ResultsForm();
-            resultsForm.Show();
-        }
-
-        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
-        {
-            //if (checkedListBox1.CheckedItems.Count > 0)
-            //    methodCheckedImg.Image = Resources.CheckMark;
-            //else
-            //    methodCheckedImg.Image = Resources.UnabledCheckMark;
+            //на вход нужен массив кортежей: (string, savebufferloger, double time)
+            //строка - название, логер и понятия не имею какого фомата время, потому дабл
+            //никто не может обещать, что функция работает, более вероятно что она не работает
+            try
+            {
+                ResultsForm resultsForm = new ResultsForm(_Methods);
+                resultsForm.Show();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Нет данных для решений");
+            }
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -220,52 +225,62 @@ namespace UI
             currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
             SolveAsync();
         }
+
+        string fullDirectoryName = "";
+
         private async void SolveAsync()
         {
-            var uniqueDirectoryName = string.Format(@"\{0}", DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy"));
+            var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
             //var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
-            string fullDirectoryName = path + uniqueDirectoryName;
-            maxIter = Convert.ToInt16(iterBox.Value);
-            eps = Convert.ToDouble(epsBox.Text);
+            fullDirectoryName = path + uniqueDirectoryName;
+            
+            _Methods = new(string name, SaveBufferLogger log, double time)[methodListBox.CheckedItems.Count];
+
+            
             Directory.CreateDirectory(fullDirectoryName);
 
             MethodProgressBar.Value = 0;
             MethodProgressBar.Maximum = methodListBox.CheckedItems.Count;
 
-            //временная мера 
-            IterProgressBar.Maximum = maxIter;
-            timer.Tick += new EventHandler(timer_Tick);
-            timer.Interval = 1; //выбрать наилучшую 
-            timer.Enabled = true;
+            IterProgressBar.Maximum = (int)iterBox.Value;
             int count = 0;
             done_label.Text = Convert.ToString(count);
             need_label.Text = Convert.ToString(methodListBox.CheckedItems.Count);
             done_label.Visible = true;
             need_label.Visible = true;
             label5.Visible = true;
-            
+            int i = 0;
             foreach (var methodName in methodListBox.CheckedItems)
             {
-                currentSLAE.x0 = x0_tmp.Clone();
+                currentSLAE.x0 = x0_tmp;
+                _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
                 MethodsEnum method =(MethodsEnum)methodName;
-                //IMethod method = new JacobiMethod();
                 Logger = new SaveBufferLogger();
-               
                 var loggingSolver = LoggingSolversFabric.Spawn(method, Logger);
-
-                timer.Start();
+                timer1.Enabled = true;
+                timer1.Start();
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
                 IVector result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
-                timer.Stop();
+                sw.Stop();
+               
+                timer1.Stop();
+                timer1.Enabled = false;
+
+                _Methods[i].time = 0;
+                
+                _Methods[i].log = (SaveBufferLogger)Logger;
+
                 MethodProgressBar.Increment(1);
                 var LogList = Logger.GetList();
                 residual_label.Text = Convert.ToString(LogList[LogList.Count-1]);
-                IterProgressBar.Value = maxIter;
-                //var newEntry1 = new KeyValuePair<int, double>(Count, r);
-                //TODO: замеры времени для Task
+                IterProgressBar.Value = (int)iterBox.Value;
+                
                 count++;
                 done_label.Text = Convert.ToString(count);
-                WriteResultToFile(result, methodName.ToString(), LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
+                WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
+                i++;
             }
 
         }
@@ -273,6 +288,7 @@ namespace UI
         private void WriteResultToFile(
           IVector result,
           string method,
+          long time,
           int iterationCount,
           double residual,
           string pathToDirectory)
@@ -280,17 +296,18 @@ namespace UI
             var directory = $"{pathToDirectory}\\{method}";
             Directory.CreateDirectory(directory);
 
-            var pathToTotalFile = $"{path}\\Сводные данные.txt";
+            var pathToTotalFile = $"{pathToDirectory}\\Сводные данные.txt";
             var pathToSolveReportFile = $"{directory}\\Протокол решения.txt";
             var pathToVectorFile = $"{directory}\\Вектор решения.txt";
 
             var totalString = new StringBuilder();
-            var resultReportString = new StringBuilder(); 
+            var resultReportString = new StringBuilder();
 
             var solve = string.Join(" ", result);
 
             totalString
                 .AppendLine($"{method}")
+                .AppendLine($"Время решения в миллисекундах: {time}")
                 .AppendLine($"Вектор решения: {solve}")
                 .AppendLine($"Число итераций: {iterationCount}")
                 .AppendLine($"Невязка: {residual}\r\n");
@@ -317,8 +334,8 @@ namespace UI
         private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
         {
             return Task.Run(() =>
-            {
-                return loggingSolver.Solve((ILinearOperator)matrix, x0, b,maxIter,eps);
+           {
+                return loggingSolver.Solve((ILinearOperator)matrix, x0, b,(int)iterBox.Value, double.Parse(epsBox.Text.Replace(".", ",")));
            });
         }
 

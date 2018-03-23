@@ -8,7 +8,7 @@ namespace SolverCore.Methods
         ILinearOperator A;
         double norm_b, dotproduct_rr, dotproduct_rkr0, dotproduct_rprevr0;
         int currentIter;
-        bool init;
+        bool init = false;
 
         public IVector x { get; private set; }
 

@@ -177,7 +177,9 @@ namespace UI
 
         private void toolStripMenuOpenOutput_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = path;
+            openFileDialog1.ShowDialog();
         }
 
         private void resultsFormToolStripMenuItem_Click(object sender, EventArgs e)
@@ -220,7 +222,8 @@ namespace UI
         }
         private async void SolveAsync()
         {
-            var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
+            var uniqueDirectoryName = string.Format(@"\{0}", DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy"));
+            //var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
             string fullDirectoryName = path + uniqueDirectoryName;
             maxIter = Convert.ToInt16(iterBox.Value);
             eps = Convert.ToDouble(epsBox.Text);
@@ -277,24 +280,29 @@ namespace UI
             var directory = $"{pathToDirectory}\\{method}";
             Directory.CreateDirectory(directory);
 
-            var pathToTotalFile = $"{directory}\\Total.txt";
-            var pathToSolveFile = $"{directory}\\Solve.txt";
-            var pathToResidualFile = $"{directory}\\Residual.txt";
-            var pathToIterationsFile = $"{directory}\\Iterations.txt";
+            var pathToTotalFile = $"{path}\\Сводные данные.txt";
+            var pathToSolveReportFile = $"{directory}\\Протокол решения.txt";
+            var pathToVectorFile = $"{directory}\\Вектор решения.txt";
 
-            var resultText = new StringBuilder();
+            var totalString = new StringBuilder();
+            var resultReportString = new StringBuilder(); 
 
             var solve = string.Join(" ", result);
 
-            resultText
-                .AppendLine($"X: {solve}")
-                .AppendLine($"Iteration: {iterationCount}")
-                .AppendLine($"Residual: {residual}");
+            totalString
+                .AppendLine($"{method}")
+                .AppendLine($"Вектор решения: {solve}")
+                .AppendLine($"Число итераций: {iterationCount}")
+                .AppendLine($"Невязка: {residual}\r\n");
 
-            File.WriteAllText(pathToTotalFile, resultText.ToString());
-            File.WriteAllText(pathToSolveFile, solve);
-            File.WriteAllText(pathToIterationsFile, iterationCount.ToString());
-            File.WriteAllText(pathToResidualFile, residual.ToString());
+            resultReportString
+               .AppendLine($"Число итераций: {iterationCount}")
+               .AppendLine($"Невязка: {residual}");
+
+
+            File.WriteAllText(pathToSolveReportFile, resultReportString.ToString());
+            File.WriteAllText(pathToVectorFile, solve.ToString());
+            File.AppendAllText(pathToTotalFile, totalString.ToString());
         }
 
 
@@ -317,6 +325,7 @@ namespace UI
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FolderBrowserDialog FBD = new FolderBrowserDialog();
+            FBD.SelectedPath = path;
             if (FBD.ShowDialog() == DialogResult.OK)
             {
                 path = FBD.SelectedPath;

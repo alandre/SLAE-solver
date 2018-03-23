@@ -510,7 +510,7 @@ namespace SolverCore
 
         public string Serialize(IVector b, IVector x0)
         {
-            var obj = new { ia, b, x0, al, au, ja };
+            var obj = new { ia, b, x0, al, au, ja, di };
             return JsonConvert.SerializeObject(obj);
         }
     }

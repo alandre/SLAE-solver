@@ -274,12 +274,13 @@ namespace UI
 
                 MethodProgressBar.Increment(1);
                 var LogList = Logger.GetList();
-                residual_label.Text = Convert.ToString(LogList[LogList.Count-1]);
+                if (!LogList.IsEmpty) residual_label.Text = Convert.ToString(LogList[LogList.Count - 1]);
+                else residual_label.Text = Convert.ToString(-1); 
                 IterProgressBar.Value = (int)iterBox.Value;
                 
                 count++;
                 done_label.Text = Convert.ToString(count);
-                WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
+                if (!LogList.IsEmpty) WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
                 i++;
             }
 
@@ -297,7 +298,7 @@ namespace UI
             Directory.CreateDirectory(directory);
 
             var pathToTotalFile = $"{pathToDirectory}\\Сводные данные.txt";
-            var pathToSolveReportFile = $"{directory}\\Информация о решении.txt";
+            var pathToSolveReportFile = $"{directory}\\Протокол решения.txt";
             var pathToVectorFile = $"{directory}\\Вектор решения.txt";
 
             var totalString = new StringBuilder();

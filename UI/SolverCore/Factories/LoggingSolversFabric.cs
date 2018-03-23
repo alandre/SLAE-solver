@@ -9,7 +9,7 @@ using SolverCore.Methods;
 namespace SolverCore
 {
    // public enum MethodsEnum { CG, GaussianSeidel, Jacobi, LOS, BCGStab, GMRes }
-    public enum MethodsEnum { GaussianSeidel, Jacobi, LOS, BCGStab}
+    public enum MethodsEnum { CG,GaussianSeidel, Jacobi, LOS, BCGStab}
 
     public class LoggingSolversFabric
     {
@@ -40,6 +40,7 @@ namespace SolverCore
             IMethod method = null;
             switch (type)
             {
+                case MethodsEnum.CG: method = new CGM(); break;
                 case MethodsEnum.GaussianSeidel: method = new GaussianSeidelMethod(); break;
                 case MethodsEnum.Jacobi: method = new JacobiMethod(); break;
                 case MethodsEnum.LOS: method = new LOS(); break;

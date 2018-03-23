@@ -1,20 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2005
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{DA5630C7-BEF1-4E70-9801-C691D08E59B0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolverCore", "SolverCore\SolverCore.csproj", "{EF02A481-1888-4B87-A0CA-A06BA48AC308}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{C312B24C-931A-410F-8616-50E801B78A6C}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ResultsForm", "ResultsForm", "{0B9E63D7-5A26-4D51-BF2B-1BCC6DC5D446}"
-	ProjectSection(SolutionItems) = preProject
-		UI\ResultsForm.cs = UI\ResultsForm.cs
-		UI\ResultsForm.Designer.cs = UI\ResultsForm.Designer.cs
-		UI\ResultsForm.resx = UI\ResultsForm.resx
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,8 +30,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {773542BA-6650-40CA-95E6-B1C23B7D972E}
 	EndGlobalSection
 EndGlobal

@@ -190,8 +190,15 @@ namespace UI
             //на вход нужен массив кортежей: (string, savebufferloger, double time)
             //строка - название, логер и понятия не имею какого фомата время, потому дабл
             //никто не может обещать, что функция работает, более вероятно что она не работает
-            ResultsForm resultsForm = new ResultsForm(_Methods);
-            resultsForm.Show();
+            try
+            {
+                ResultsForm resultsForm = new ResultsForm(_Methods);
+                resultsForm.Show();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Нет данных для решений");
+            }
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -225,12 +232,10 @@ namespace UI
         {
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
             //var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
-            string fullDirectoryName = path + uniqueDirectoryName;
+            fullDirectoryName = path + uniqueDirectoryName;
             
             _Methods = new(string name, SaveBufferLogger log, double time)[methodListBox.CheckedItems.Count];
 
-            maxIter = Convert.ToInt16(iterBox.Value);
-            eps = Convert.ToDouble(epsBox.Text);
             
             Directory.CreateDirectory(fullDirectoryName);
 
@@ -263,9 +268,6 @@ namespace UI
                 timer1.Stop();
                 timer1.Enabled = false;
 
-                timer.Start();
-                IVector result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
-                timer.Stop();
                 _Methods[i].time = 0;
                 
                 _Methods[i].log = (SaveBufferLogger)Logger;
@@ -278,6 +280,7 @@ namespace UI
                 count++;
                 done_label.Text = Convert.ToString(count);
                 WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
+                i++;
             }
 
         }

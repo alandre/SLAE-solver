@@ -19,6 +19,11 @@ namespace UI
 
         public ResultsForm((string name, SolverCore.Loggers.SaveBufferLogger log, double time)[] _Methods)
         {
+            if (_Methods == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             InitializeComponent();
 
             methods_number = _Methods.Length;

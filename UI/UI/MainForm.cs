@@ -10,10 +10,27 @@ using SolverCore.Loggers;
 using SolverCore.Solvers;
 using SolverCore.Methods;
 using System.Collections.Immutable;
+using System.ServiceModel.Channels;
 using UI.Properties;
+using System.Text;
 
 namespace UI
 {
+    struct SLAE
+    {
+        public IMatrix matrix;
+        public IVector b;
+        public IVector x0;
+
+
+        public SLAE(IMatrix _matrix, IVector _b, IVector _x0)
+        {
+            matrix = _matrix;
+            b = _b;
+            x0 = _x0;
+        }
+    }
+
     public partial class MainForm : Form
     {
         private MatrixInitialazer Input = new MatrixInitialazer();
@@ -22,24 +39,10 @@ namespace UI
         bool methodChecked = false;
         bool manualInputNotNull = false;
         bool fileInputNotNull = false;
-        ILogger Logger;
+        SaveBufferLogger Logger;
         IVector x0_tmp;
-
-        struct SLAE
-        {
-            public IMatrix matrix;
-            public IVector b;
-            public IVector x0;
-
-
-            public SLAE(IMatrix _matrix, IVector _b, IVector _x0)
-            {
-                matrix = _matrix;
-                b = _b;
-                x0 = _x0;
-            }
-        }
-
+        int maxIter;
+        double eps;
         SLAE currentSLAE;
         SLAE manualInputedSLAE;
         SLAE fileInputedSLAE;
@@ -83,10 +86,21 @@ namespace UI
                     string dataInput = sr.ReadToEnd();
                     sr.Close();
 
-                    Input = MatrixInitialazer.Input(dataInput, Input, sim.Checked);
+                    Input = MatrixInitialazer.Input(dataInput, sim.Checked);
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
                     fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], Input, Input.symmetry);
+                    fileInputedSLAE.b = new Vector(Input.b);
+                    if (Input.x0 != null)
+                        fileInputedSLAE.x0 = new Vector(Input.x0);
+                    else
+                    {
+                        double[] tmpx0 = new double[fileInputedSLAE.matrix.Size];
+                        for (int i = 0; i < tmpx0.Length; i++)
+                            tmpx0[i] = 0;
+                        fileInputedSLAE.x0 = new Vector(tmpx0);
+                    }
+
                     var a = FormatFactory.PatternRequired(FormatFactory.FormatsDictionary[formatBox.SelectedItem.ToString()]);
 
                     fileInputBtn.Text = file.FileName;
@@ -163,7 +177,9 @@ namespace UI
 
         private void toolStripMenuOpenOutput_Click(object sender, EventArgs e)
         {
-
+            OpenFileDialog openFileDialog1 = new OpenFileDialog();
+            openFileDialog1.InitialDirectory = path;
+            openFileDialog1.ShowDialog();
         }
 
         private void resultsFormToolStripMenuItem_Click(object sender, EventArgs e)
@@ -203,61 +219,98 @@ namespace UI
         {
             currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
             SolveAsync();
-
-            var uniqueDirectoryName = $@"\{Guid.NewGuid()}";
-            string full_directory_name = path + uniqueDirectoryName;
-            Directory.CreateDirectory(@full_directory_name);
-
-            //TODO: different file names (depending on the choosen methods)
-            System.IO.File.Create(full_directory_name + "\\result.txt");
-            MessageBox.Show("Результат был записан");
-
         }
         private async void SolveAsync()
         {
-            /*
-            foreach (string Method in Types)
-            {
-                ILogger Logger = new FakeLog();
-                LoggingSolver loggingSolver = Spawn(Method, Logger);
-                IVector result = await RunAsync(loggingSolver, matrix, x0, b);
-            }
-            */
+            var uniqueDirectoryName = string.Format(@"\{0}", DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy"));
+            //var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
+            string fullDirectoryName = path + uniqueDirectoryName;
+            maxIter = Convert.ToInt16(iterBox.Value);
+            eps = Convert.ToDouble(epsBox.Text);
+            Directory.CreateDirectory(fullDirectoryName);
+
             MethodProgressBar.Value = 0;
-           
             MethodProgressBar.Maximum = methodListBox.CheckedItems.Count;
+
             //временная мера 
-            IterProgressBar.Maximum = 10000;
-            //x0_tmp = currentSLAE.x0;
-            //временная мера для запуска программы
-            for (int i = 0; i < methodListBox.CheckedItems.Count; i++)
+            IterProgressBar.Maximum = maxIter;
+            timer.Tick += new EventHandler(timer_Tick);
+            timer.Interval = 1; //выбрать наилучшую 
+            timer.Enabled = true;
+            int count = 0;
+            done_label.Text = Convert.ToString(count);
+            need_label.Text = Convert.ToString(methodListBox.CheckedItems.Count);
+            done_label.Visible = true;
+            need_label.Visible = true;
+            label5.Visible = true;
+            
+            foreach (var methodName in methodListBox.CheckedItems)
             {
-                currentSLAE.x0= x0_tmp;
+                currentSLAE.x0 = x0_tmp.Clone();
                 IterProgressBar.Value = 0;
-                LoggingSolver loggingSolver;
-                IMethod Method = new JacobiMethod();
+                MethodsEnum method =(MethodsEnum)methodName;
+                //IMethod method = new JacobiMethod();
                 Logger = new SaveBufferLogger();
-                loggingSolver = new LoggingSolver(Method, Logger);
-                timer.Tick += new EventHandler(timer_Tick);
-                timer.Interval = 100; //выбрать наилучшую 
-                timer.Enabled = true;
+               
+                var loggingSolver = LoggingSolversFabric.Spawn(method, Logger);
+
                 timer.Start();
-                IVector result = await RunAsync(loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                IVector result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 timer.Stop();
-                ImmutableList<double> LogList = ImmutableList.CreateRange(new double[0] { });
-                LogList = Logger.GetList();
                 MethodProgressBar.Increment(1);
-                //временно
-                IterProgressBar.Value = 10000; 
+                var LogList = Logger.GetList();
+                residual_label.Text = Convert.ToString(LogList[LogList.Count-1]);
+                IterProgressBar.Value = maxIter;
                 //var newEntry1 = new KeyValuePair<int, double>(Count, r);
                 //TODO: замеры времени для Task
-
+                count++;
+                done_label.Text = Convert.ToString(count);
+                WriteResultToFile(result, methodName.ToString(), LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
             }
 
         }
+
+        private void WriteResultToFile(
+          IVector result,
+          string method,
+          int iterationCount,
+          double residual,
+          string pathToDirectory)
+        {
+            var directory = $"{pathToDirectory}\\{method}";
+            Directory.CreateDirectory(directory);
+
+            var pathToTotalFile = $"{path}\\Сводные данные.txt";
+            var pathToSolveReportFile = $"{directory}\\Протокол решения.txt";
+            var pathToVectorFile = $"{directory}\\Вектор решения.txt";
+
+            var totalString = new StringBuilder();
+            var resultReportString = new StringBuilder(); 
+
+            var solve = string.Join(" ", result);
+
+            totalString
+                .AppendLine($"{method}")
+                .AppendLine($"Вектор решения: {solve}")
+                .AppendLine($"Число итераций: {iterationCount}")
+                .AppendLine($"Невязка: {residual}\r\n");
+
+            resultReportString
+               .AppendLine($"Число итераций: {iterationCount}")
+               .AppendLine($"Невязка: {residual}");
+
+
+            File.WriteAllText(pathToSolveReportFile, resultReportString.ToString());
+            File.WriteAllText(pathToVectorFile, solve.ToString());
+            File.AppendAllText(pathToTotalFile, totalString.ToString());
+        }
+
+
         void timer_Tick(object sender, EventArgs e)
         {
+            residual_label.Visible = true;
             var (iter, residual) = Logger.GetCurrentState();
+            residual_label.Text= Convert.ToString(residual);
             IterProgressBar.Value = iter;
         }
 
@@ -265,18 +318,24 @@ namespace UI
         {
             return Task.Run(() =>
             {
-                return loggingSolver.Solve((ILinearOperator)matrix, x0, b);
+                return loggingSolver.Solve((ILinearOperator)matrix, x0, b,maxIter,eps);
            });
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             FolderBrowserDialog FBD = new FolderBrowserDialog();
+            FBD.SelectedPath = path;
             if (FBD.ShowDialog() == DialogResult.OK)
             {
                 path = FBD.SelectedPath;
                 outPathBox.Text = path;
             }
+        }
+
+        private void fileInputBtn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+
         }
     }
 }

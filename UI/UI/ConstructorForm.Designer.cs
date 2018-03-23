@@ -32,7 +32,7 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.sizePanel = new System.Windows.Forms.Panel();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.symCheckBox = new System.Windows.Forms.CheckBox();
             this.label2 = new System.Windows.Forms.Label();
             this.A = new System.Windows.Forms.DataGridView();
             this.F = new System.Windows.Forms.DataGridView();
@@ -70,7 +70,7 @@
             0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(39, 20);
-            this.numericUpDown1.TabIndex = 0;
+            this.numericUpDown1.TabIndex = 1;
             this.numericUpDown1.Value = new decimal(new int[] {
             2,
             0,
@@ -89,7 +89,7 @@
             // 
             // sizePanel
             // 
-            this.sizePanel.Controls.Add(this.checkBox1);
+            this.sizePanel.Controls.Add(this.symCheckBox);
             this.sizePanel.Controls.Add(this.label1);
             this.sizePanel.Controls.Add(this.numericUpDown1);
             this.sizePanel.Location = new System.Drawing.Point(3, 3);
@@ -97,16 +97,16 @@
             this.sizePanel.Size = new System.Drawing.Size(183, 65);
             this.sizePanel.TabIndex = 2;
             // 
-            // checkBox1
+            // symCheckBox
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(12, 40);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(147, 17);
-            this.checkBox1.TabIndex = 15;
-            this.checkBox1.Text = "Симметричная матрица";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.symCheckBox.AutoSize = true;
+            this.symCheckBox.Location = new System.Drawing.Point(12, 40);
+            this.symCheckBox.Name = "symCheckBox";
+            this.symCheckBox.Size = new System.Drawing.Size(147, 17);
+            this.symCheckBox.TabIndex = 15;
+            this.symCheckBox.Text = "Симметричная матрица";
+            this.symCheckBox.UseVisualStyleBackColor = true;
+            this.symCheckBox.CheckedChanged += new System.EventHandler(this.symCheckBox_CheckedChanged);
             // 
             // label2
             // 
@@ -134,7 +134,7 @@
             this.A.RowHeadersVisible = false;
             this.A.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.A.Size = new System.Drawing.Size(71, 45);
-            this.A.TabIndex = 12;
+            this.A.TabIndex = 0;
             this.A.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.CellBeginEdit);
             this.A.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellEndEdit);
             this.A.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.A_CellEnter);
@@ -143,6 +143,9 @@
             // F
             // 
             this.F.AllowUserToAddRows = false;
+            this.F.AllowUserToDeleteRows = false;
+            this.F.AllowUserToResizeColumns = false;
+            this.F.AllowUserToResizeRows = false;
             this.F.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.F.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             this.F.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -190,6 +193,9 @@
             // x0
             // 
             this.x0.AllowUserToAddRows = false;
+            this.x0.AllowUserToDeleteRows = false;
+            this.x0.AllowUserToResizeColumns = false;
+            this.x0.AllowUserToResizeRows = false;
             this.x0.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.x0.BackgroundColor = System.Drawing.SystemColors.ControlLight;
             this.x0.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -299,7 +305,7 @@
         private System.Windows.Forms.DataGridView F;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem cancelToolStripMenuItem;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox symCheckBox;
         private System.Windows.Forms.DataGridView x0;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button CleanX0_Btn;

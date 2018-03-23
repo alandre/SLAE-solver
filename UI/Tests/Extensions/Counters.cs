@@ -9,33 +9,52 @@ namespace Extensions
 {
     internal class Counter
     {
-        public int count { get; private set; } = 0;
+        public int Сount { get; private set; } = 0;
 
         public void ResetCount()
         {
-            count = 0;
+            Сount = 0;
         }
 
         public void Inc()
         {
-            count++;
+            Сount++;
         }
     }
     internal static class Counters
     {
+        private static Dictionary<string, Counter> CountersDictionary;
+
+        static Counters()
+        {
+            CountersDictionary = new Dictionary<string, Counter>();
+            CountersDictionary.Add("Mult", new Counter());
+            CountersDictionary.Add("LMult", new Counter());
+            CountersDictionary.Add("UMult", new Counter());
+
+        }
         public static void ResetAll()
         {
-            Type type = typeof(Counters);
-            foreach (var field in type.GetFields())
+            foreach (var counter in CountersDictionary)
             {
-                var curField = field.GetValue(type);
-                if (curField is Counter)
-                    (curField as Counter).ResetCount();
+                counter.Value.ResetCount();
             }
         }
-        public static Counter Mult = new Counter();
-        public static Counter LMult = new Counter();
-        public static Counter UMult = new Counter();
+
+        public static void Inc(string name)
+        {
+            CountersDictionary[name].Inc();
+        }
+
+        public static void Reset(string name)
+        {
+            CountersDictionary[name].ResetCount();
+        }
+        public static int GetCount(string name)
+        {
+            return CountersDictionary[name].Сount;
+        }
+
 
     }
 }

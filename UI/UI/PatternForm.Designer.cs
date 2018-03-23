@@ -33,6 +33,8 @@
             this.backwardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.forwardToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.infoTextBox = new System.Windows.Forms.RichTextBox();
+            this.saveToFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             ((System.ComponentModel.ISupportInitialize)(this.A)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -64,6 +66,7 @@
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.backwardToolStripMenuItem,
+            this.saveToFileToolStripMenuItem,
             this.forwardToolStripMenuItem1});
             this.menuStrip1.Location = new System.Drawing.Point(0, 127);
             this.menuStrip1.Name = "menuStrip1";
@@ -98,6 +101,13 @@
             this.infoTextBox.Text = "Портрет матрицы был определен автоматически. Для добавления в него нулевых элемен" +
     "тов, щелкните по ним мышью.";
             // 
+            // saveToFileToolStripMenuItem
+            // 
+            this.saveToFileToolStripMenuItem.Name = "saveToFileToolStripMenuItem";
+            this.saveToFileToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
+            this.saveToFileToolStripMenuItem.Text = "Сохранить в файл";
+            this.saveToFileToolStripMenuItem.Click += new System.EventHandler(this.saveToFileToolStripMenuItem_Click);
+            // 
             // PatternForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -126,5 +136,7 @@
         private System.Windows.Forms.ToolStripMenuItem backwardToolStripMenuItem;
         private System.Windows.Forms.RichTextBox infoTextBox;
         private System.Windows.Forms.ToolStripMenuItem forwardToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem saveToFileToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
     }
 }

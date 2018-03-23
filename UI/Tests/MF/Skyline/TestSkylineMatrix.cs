@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Xunit;
 using SolverCore;
+using Xunit.Abstractions;
 
 namespace MF.Skyline
 {
@@ -16,19 +17,20 @@ namespace MF.Skyline
         private double[] au; // массив элементов профиля верхнего треугольника
         private int[] ia; // целочисленный массив с указателями начала строк профиля 
         private SkylineMatrix skylineMatrix;
+        private readonly ITestOutputHelper _testOutputHelper;
 
 
 
-
-        public TestSkylineMatrix()
+        public TestSkylineMatrix(ITestOutputHelper testOutputHelper)
         {
 
             di = new double[] { 1, 2, 3 };
             al = new double[] { 1, 2, 3 };
             au = new double[] { 3, 2, 1 };
             ia = new int[] { 1, 1, 2, 4 };
-            skylineMatrix = new SkylineMatrix(di, ia,al,au);    
+            skylineMatrix = new SkylineMatrix(di, ia, al, au);
 
+            _testOutputHelper = testOutputHelper;
         }
 
 
@@ -36,7 +38,7 @@ namespace MF.Skyline
 
 
         [Fact]
-        public void SkylineMatrix_TestLMult()
+        public void LMult()
         {
             Vector vector = new Vector(new double[] { 1, 1, 1 });
 
@@ -53,17 +55,10 @@ namespace MF.Skyline
             }
         }
 
-        //[Fact]
-        //public void DenseMatrix_TestUMultExeptions()
-        //{
-        //    Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
-
-        //    Assert.Throws<ArgumentNullException>(() => denseMatrix.UMult(null, false, DiagonalElement.One));
-        //    Assert.Throws<RankException>(() => denseMatrix.UMult(exampleVector, false, DiagonalElement.One));
-        //}
+        
 
         [Fact]
-        public void SkylineMatrix_TestUMult()
+        public void UMult()
         {
             Vector vector = new Vector(new double[] { 1,1,1});
 
@@ -80,21 +75,14 @@ namespace MF.Skyline
             }
         }
 
-        //[Fact]
-        //public void DenseMatrix_TestLSolveExeptions()
-        //{
-        //    Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
-
-        //    Assert.Throws<ArgumentNullException>(() => denseMatrix.LSolve(null, false));
-        //    Assert.Throws<RankException>(() => denseMatrix.LSolve(exampleVector, false));
-        //}
+        
 
         [Fact]
-        public void SkylineMatrix_TestLSolve()
+        public void LSolve()
         {
 
             di = new double[] { 1, 2, 3 };
-            al = new double[] { 1, 2, 3 };
+            au = new double[] { 1, 2, 3 };
             al = new double[] { 3, 2, 1 };
             ia = new int[] { 1, 1, 2, 4 };
             skylineMatrix = new SkylineMatrix(di, ia, al, au);
@@ -109,20 +97,10 @@ namespace MF.Skyline
                 Assert.Equal(result[i], resultActual[i], 8);
         }
 
-        //[Fact]
-        //public void DenseMatrix_TestUSolveExeptions()
-        //{
-        //    _matrix = new double[3, 3] { { 1, 3, 5 }, { 2, 5, 4 }, { 7, 1, 8 } };
-        //    DenseMatrix denseMatrix = new DenseMatrix(_matrix);
-
-        //    Vector exampleVector = new Vector(new double[2] { 1.0, 2.0 });
-
-        //    Assert.Throws<ArgumentNullException>(() => denseMatrix.USolve(null, false));
-        //    Assert.Throws<RankException>(() => denseMatrix.USolve(exampleVector, false));
-        //}
+        
 
         [Fact]
-        public void SkylineMatrix_TestUSolve()
+        public void USolve()
         {
             di = new double[] { 1, 2, 3 };
             al = new double[] { 1, 2, 3 };
@@ -139,15 +117,56 @@ namespace MF.Skyline
                 Assert.Equal(result[i], resultActual[i], 8);
         }
 
-        //[Fact]
-        //public void DenseMatrix_TestMultyplyExceptions()
-        //{
-        //    Vector vector = new Vector(new double[] { 1, 0 });
+        
 
-        //    Assert.Throws<ArgumentNullException>(() => denseMatrix.Multiply(null));
-        //    Assert.Throws<RankException>(() => denseMatrix.Multiply(vector));
-        //}
+        [Fact]
+        public void Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
+
+            skylineMatrix.Fill(fillFunc);
+
+            di = new double[] { 2, 4, 6 };
+            al = new double[] { 3, 4, 5 };
+            au = new double[] { 3, 4, 5 };
+            ia = new int[] { 1, 1, 2, 4 };
 
 
+            SkylineMatrix skyline = new SkylineMatrix(di, ia, al, au);
+            Assert.True(new HashSet<(double, int, int)>(skylineMatrix).SetEquals(skyline));
+
+        }
+
+        [Fact]
+        public void Foreach()
+        {
+            //di = new double[] { 1, 2, 3 };
+            //al = new double[] { 1, 2, 3 };
+            //au = new double[] { 3, 2, 1 };
+            //ia = new int[] { 1, 1, 2, 4 };
+            // 1 3 2
+            // 1 2 1 
+            // 2 3 3
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (3,0,1),
+                    (2,0,2),
+                    (1,1,0),
+                    (2,1,1),
+                    (1,1,2),
+                    (2,2,0),
+                    (3,2,1),
+                    (3,2,2),
+                };
+
+            foreach (var elem in skylineMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
+
+            Assert.True(new HashSet<(double, int, int)>(skylineMatrix).SetEquals(elemList));
+
+        }
     }
 }

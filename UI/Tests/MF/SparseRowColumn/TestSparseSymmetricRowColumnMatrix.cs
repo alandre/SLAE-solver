@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Xunit;
 using SolverCore;
+using Xunit.Abstractions;
 
 namespace MF.SymmetricSparseRowColumn
 {
@@ -21,9 +22,9 @@ namespace MF.SymmetricSparseRowColumn
         private IVector vector;
 
         private SymmetricSparseRowColumnMatrix sparseSymmetricRowColumnMatrix;
+        private readonly ITestOutputHelper _testOutputHelper;
 
-
-        public TestSparseSymmetricRowColumnMatrix()
+        public TestSparseSymmetricRowColumnMatrix(ITestOutputHelper testOutputHelper)
         {
             di = new double[] { 1, 2, 3 };
           
@@ -34,10 +35,36 @@ namespace MF.SymmetricSparseRowColumn
             vector = new Vector(new double[] { 1, 1, 1 });
 
             sparseSymmetricRowColumnMatrix = new SymmetricSparseRowColumnMatrix(di, aa, ia, ja);
+            _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestLMult()
+        public void Foreach()
+        {
+
+            List<(double, int, int)> elemList =
+                new List<(double, int, int)>()
+                {
+                    (1,0,0),
+                    (3,0,1),
+                    (2,0,2),
+                    (3,1,0),
+                    (2,1,1),
+                    (1,1,2),
+                    (2,2,0),
+                    (1,2,1),
+                    (3,2,2),
+                };
+
+            foreach (var elem in sparseSymmetricRowColumnMatrix)
+                _testOutputHelper.WriteLine(elem.ToString());
+
+            Assert.True(new HashSet<(double, int, int)>(sparseSymmetricRowColumnMatrix).SetEquals(elemList));
+
+        }
+
+        [Fact]
+        public void LMult()
         {
             var resultTrueDiag = sparseSymmetricRowColumnMatrix.LMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 1, 5, 6 });
@@ -53,7 +80,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestUMult()
+        public void UMult()
         {
             var resultTrueDiag = sparseSymmetricRowColumnMatrix.UMult(vector, true);
             Vector resultActualTrueDiag = new Vector(new double[] { 6, 3, 3 });
@@ -69,7 +96,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestLSolve()
+        public void LSolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 1, 1 });
             IVector vector = sparseSymmetricRowColumnMatrix.LMult(resultActual, true);
@@ -81,7 +108,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestUSolve()
+        public void USolve()
         {
             IVector resultActual = new Vector(new double[] { 1, 1, 1 });
             IVector vector = sparseSymmetricRowColumnMatrix.UMult(resultActual, true);
@@ -93,7 +120,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_TestMultiply()
+        public void Multiply()
         {
             var result = sparseSymmetricRowColumnMatrix.Multiply(vector);
             Vector resultActual = new Vector(new double[] { 6, 6, 6 });
@@ -103,7 +130,7 @@ namespace MF.SymmetricSparseRowColumn
         }
 
         [Fact]
-        public void SparseRowColumnMatrix_Foreach()
+        public void TestForeach()
         {
             var di = new double[] { 1, 2, 3 };
             var al = new double[] { 3, 2, 1 };
@@ -114,6 +141,32 @@ namespace MF.SymmetricSparseRowColumn
             SparseRowColumnMatrix sparseRowColumnMatrix = new SparseRowColumnMatrix(di, al, au, ia, ja);
 
             Assert.True(new HashSet<(double, int, int)>(sparseSymmetricRowColumnMatrix).SetEquals(sparseRowColumnMatrix));
+        }
+
+
+        [Fact]
+        public void Fill()
+        {
+            FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };
+
+
+            sparseSymmetricRowColumnMatrix.Fill(fillFunc);
+            //di = new double[] { 1, 2, 3 };
+            //al = new double[] { 1, 2, 3 };
+            //au = new double[] { 3, 2, 1 };
+            //ja = new int[] { 1, 1, 2 };
+            //ia = new int[] { 1, 1, 2, 4 };
+
+            di = new double[] { 2, 4, 6 };
+
+            aa = new double[] { 3, 4, 5 };
+            ja = new int[] { 1, 1, 2 };
+            ia = new int[] { 1, 1, 2, 4 };
+
+
+            SymmetricSparseRowColumnMatrix sparseRowCollumn = new SymmetricSparseRowColumnMatrix(di, aa, ia, ja);
+            Assert.True(new HashSet<(double, int, int)>(sparseSymmetricRowColumnMatrix).SetEquals(sparseRowCollumn));
+
         }
 
     }

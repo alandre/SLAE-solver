@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace SolverCore
 {
@@ -20,7 +22,7 @@ namespace SolverCore
             Size = size;
             matrix = new Dictionary<(int row, int column), double>();
 
-            for(int i = 0; i < rows.Length; i++)
+            for (int i = 0; i < rows.Length; i++)
             {
                 matrix[(rows[i], columns[i])] = values[i];
             }
@@ -43,7 +45,7 @@ namespace SolverCore
             Size = size;
             matrix = new Dictionary<(int row, int column), double>();
 
-            foreach(var item in items)
+            foreach (var item in items)
             {
                 matrix[(item.i, item.j)] = item.value;
             }
@@ -128,15 +130,17 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(elems));
             }
 
-            foreach (var item in this)
+            var clone = matrix.ToDictionary(x => x.Key, x => x.Value);
+
+            foreach (var item in clone)
             {
-                matrix[(item.row, item.col)] = elems(item.row, item.col);
+                matrix[(item.Key.row, item.Key.column)] = elems(item.Key.row, item.Key.column);
             }
         }
 
         public IEnumerator<(double value, int row, int col)> GetEnumerator()
         {
-            foreach(var item in matrix)
+            foreach (var item in matrix)
             {
                 yield return (item.Value, item.Key.row, item.Key.column);
             }
@@ -151,7 +155,7 @@ namespace SolverCore
                 throw new ArgumentNullException(nameof(vector));
             }
 
-            if(vector.Size != Size)
+            if (vector.Size != Size)
             {
                 throw new RankException();
             }
@@ -357,7 +361,7 @@ namespace SolverCore
                 }
                 else if (key.column == key.row)
                 {
-                    result[key.row] = isUseDiagonal ? (vector[key.row]-sum[key.row])/elem.Value: vector[key.row] - sum[key.row] ;
+                    result[key.row] = isUseDiagonal ? (vector[key.row] - sum[key.row]) / elem.Value : vector[key.row] - sum[key.row];
                 }
                 else
                 {
@@ -470,7 +474,7 @@ namespace SolverCore
             return result;
         }
 
-        public SortedSet<int>GetMatrixRows()
+        public SortedSet<int> GetMatrixRows()
         {
             var rows = new SortedSet<int>();
             List<(int, int)> Keys = new List<(int, int)>(matrix.Keys);
@@ -503,6 +507,23 @@ namespace SolverCore
                     rows.Add(KeyEntry.Item1);
             }
             return rows;
+        }
+        
+        public string Serialize(IVector b, IVector x0)
+        {
+            var i = new List<int>();
+            var j = new List<int>();
+            var gg = new List<double>();
+
+            foreach (var elem in matrix)
+            {
+                i.Add(elem.Key.column);
+                j.Add(elem.Key.row);
+                gg.Add(elem.Value);
+            }
+
+            var obj = new { b, x0, gg = gg.ToArray(), column = i.ToArray(), row = j.ToArray(), size = Size };
+            return JsonConvert.SerializeObject(obj);
         }
     }
 }

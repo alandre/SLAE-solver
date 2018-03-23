@@ -33,7 +33,7 @@ namespace SolverCore
         /// <param name="Factorizer">Разложение</param>
         /// <param name="KrylovSubspaceDimension">Размерность подпространства Крылова</param>
         /// <returns></returns>
-        public ISolver Spawn(MethodsEnum type, ILogger Logger, IFactorization Factorizer = null, int KrylovSubspaceDimension = 4)
+        public static ISolver Spawn(MethodsEnum type, ILogger Logger, IFactorization Factorizer = null, int KrylovSubspaceDimension = 4)
         {
             IMethod method = null;
             switch (type)
@@ -59,7 +59,7 @@ namespace SolverCore
         /// <param name="Factorizer">Разложение</param>
         /// <param name="KrylovSubspaceDimension">Размерность подпространства Крылова</param>
         /// <returns></returns>
-        public ISolver Spawn(String type, ILogger Logger, IFactorization Factorizer = null, int KrylovSubspaceDimension = 4)
+        public static ISolver Spawn(String type, ILogger Logger, IFactorization Factorizer = null, int KrylovSubspaceDimension = 4)
         {
             try
             {

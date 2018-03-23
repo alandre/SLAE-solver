@@ -30,7 +30,7 @@ namespace Methods
         }
 
         [Fact]
-        public void TestAlgorithm()
+        public void Algorithm()
         {
             _matrix = new double[3, 3] { { 3, 1, 1 },
                                              { 0, 5, 1 },
@@ -65,7 +65,7 @@ namespace Methods
         }
 
         [Fact]
-        public void TestAlgorithmCountMult()
+        public void AlgorithmCountMult()
         {
             var proxyMethod = new ProxyMethod(new GaussianSeidelMethod());
             loggingSolver = new LoggingSolver(proxyMethod, Logger);

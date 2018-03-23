@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace SolverCore
 {
@@ -335,6 +337,12 @@ namespace SolverCore
             }
 
             return result;
+        }
+
+        public string Serialize(IVector b, IVector x0)
+        {
+            var obj = new { ia, b, x0, gg = aa, ja, di};
+            return JsonConvert.SerializeObject(obj);
         }
     }
 }

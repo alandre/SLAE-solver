@@ -32,11 +32,11 @@ namespace UI
                         case Formats.Dense:
                             return new SymmetricDenseMatrix(initialazer.denseL);
                         case Formats.Skyline:
-                            return new SymmetricSkylineMatrix(initialazer.di, initialazer.ig, initialazer.gg);
+                            return new SymmetricSkylineMatrix(initialazer.di, initialazer.ia, initialazer.gg);
                         case Formats.SparseRow:
-                            return new SymmetricSparseRowMatrix(initialazer.gg, initialazer.jg, initialazer.ig);
+                            return new SymmetricSparseRowMatrix(initialazer.gg, initialazer.ja, initialazer.ia);
                         case Formats.SparseRowColumn:
-                            return new SymmetricSparseRowColumnMatrix(initialazer.di, initialazer.gg, initialazer.ig, initialazer.ig);
+                            return new SymmetricSparseRowColumnMatrix(initialazer.di, initialazer.gg, initialazer.ia, initialazer.ia);
                         default:
                             throw new ArgumentOutOfRangeException(nameof(type), type, null);
                     }
@@ -47,11 +47,11 @@ namespace UI
                     case Formats.Dense:
                         return new DenseMatrix(initialazer.dense);
                     case Formats.Skyline:
-                        return new SkylineMatrix(initialazer.di, initialazer.ig, initialazer.gl, initialazer.gl);
+                        return new SkylineMatrix(initialazer.di, initialazer.ia, initialazer.al, initialazer.al);
                     case Formats.SparseRow:
-                        return new SparseRowMatrix(initialazer.gg, initialazer.jg, initialazer.ig);
+                        return new SparseRowMatrix(initialazer.gg, initialazer.ja, initialazer.ia);
                     case Formats.SparseRowColumn:
-                        return new SparseRowColumnMatrix(initialazer.di, initialazer.gl, initialazer.gu, initialazer.ig, initialazer.jg);
+                        return new SparseRowColumnMatrix(initialazer.di, initialazer.al, initialazer.au, initialazer.ia, initialazer.ja);
                     default:
                         throw new ArgumentOutOfRangeException(nameof(type), type, null);
                 }

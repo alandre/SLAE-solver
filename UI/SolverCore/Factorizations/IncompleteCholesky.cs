@@ -10,11 +10,6 @@ namespace SolverCore.Factorizations
     {
         CoordinationalMatrix factorizedMatix;
 
-        public IncompleteCholesky()
-        {
-
-        }
-
         public IncompleteCholesky(CoordinationalMatrix M)
         {
             Factorize(M);

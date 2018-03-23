@@ -10,11 +10,6 @@ namespace SolverCore.Factorizations
     {
         CoordinationalMatrix FA;
 
-        public IncompleteLU()
-        {
-
-        }
-
         public IncompleteLU(CoordinationalMatrix M)
         {
             Factorize(M);

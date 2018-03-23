@@ -164,8 +164,8 @@ namespace MF.SymmetricSparseRowColumn
             ia = new int[] { 1, 1, 2, 4 };
 
 
-            SymmetricSparseRowColumnMatrix sparseRowCollumn = new SymmetricSparseRowColumnMatrix(di, aa, ia, ja);
-            Assert.True(new HashSet<(double, int, int)>(sparseSymmetricRowColumnMatrix).SetEquals(sparseRowCollumn));
+            SymmetricSparseRowColumnMatrix sparseRowColumn = new SymmetricSparseRowColumnMatrix(di, aa, ia, ja);
+            Assert.True(new HashSet<(double, int, int)>(sparseSymmetricRowColumnMatrix).SetEquals(sparseRowColumn));
 
         }
 

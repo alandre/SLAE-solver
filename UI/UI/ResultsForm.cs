@@ -18,8 +18,12 @@ namespace UI
         (string name, double residual, long maxiter, double time)[] dataSource;
         int methods_number;
 
+        public ResultsForm()
+        {
 
-        public ResultsForm((string name, SolverCore.Loggers.SaveBufferLogger log, double time )[] _Methods)
+        }
+
+        public ResultsForm((string name, SolverCore.Loggers.SaveBufferLogger log, double time)[] _Methods)
         {
             methods_number = _Methods.Length;
             Methods = new(string name, List<double> residual, double time)[methods_number];
@@ -33,10 +37,10 @@ namespace UI
                 dataSource[i].residual = _residual[item_num - 1];//конечная невязка
                 dataSource[i].maxiter = item_num;
                 dataSource[i].time = _Methods[i].time;
-                Methods[i].residual = new List<double>(item_num);
+                Methods[i].residual = new List<double>();
 
                 for (int j = 0; j < item_num; j++)
-                    Methods[i].residual[j] = _residual[j];
+                    Methods[i].residual.Add(_residual[j]);
             }
 
             ChartArea chartArea1 = new ChartArea();
@@ -60,8 +64,9 @@ namespace UI
             Series[] myGraphics = new Series[methods_number];
             for (int i = 0; i < methods_number; i++)
             {
+                myGraphics[i] = new Series();
                 int m = Methods[i].residual.Count;
-                myGraphics[i].Name = myGraphics[i].Legend = Methods[i].name;
+                myGraphics[i].Name = myGraphics[i].LegendText = Methods[i].name;
                 for (int j = 0; j < m; j++)
                     myGraphics[i].Points.AddXY(j, Methods[i].residual[j]);
                 myGraphics[i].ChartType = SeriesChartType.Line;

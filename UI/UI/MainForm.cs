@@ -50,6 +50,9 @@ namespace UI
         private string path;
         ConstructorForm constructorForm;
 
+        (string name, SolverCore.Loggers.SaveBufferLogger log, double time)[] _Methods;
+
+
         public MainForm()
         {
             InitializeComponent();
@@ -172,7 +175,7 @@ namespace UI
             //на вход нужен массив кортежей: (string, savebufferloger, double time)
             //строка - название, логер и понятия не имею какого фомата время, потому дабл
             //никто не может обещать, что функция работает, более вероятно что она не работает
-            ResultsForm resultsForm = new ResultsForm();
+            ResultsForm resultsForm = new ResultsForm(_Methods);
             resultsForm.Show();
         }
 
@@ -212,6 +215,7 @@ namespace UI
         {
             var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
             string fullDirectoryName = path + uniqueDirectoryName;
+            _Methods = new(string name, SaveBufferLogger log, double time)[methodListBox.CheckedItems.Count];
 
             Directory.CreateDirectory(fullDirectoryName);
 
@@ -224,8 +228,11 @@ namespace UI
             timer.Interval = 1; //выбрать наилучшую 
             timer.Enabled = true;
 
+            int i = 0;
+
             foreach (var methodName in methodListBox.CheckedItems)
             {
+                _Methods[i].name = methodName.ToString();
                 currentSLAE.x0 = x0_tmp;
                 IterProgressBar.Value = 0;
 
@@ -236,8 +243,10 @@ namespace UI
                 timer.Start();
                 IVector result = await RunAsync(loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 timer.Stop();
+                _Methods[i].time = 0;
 
                 var LogList = Logger.GetList();
+                _Methods[i].log = (SaveBufferLogger)Logger;
 
                 MethodProgressBar.Increment(1);
                 //временно
@@ -246,6 +255,8 @@ namespace UI
                 //TODO: замеры времени для Task
 
                 WriteResultToFile(result, methodName.ToString(), LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
+
+                i++;
             }
 
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -107,6 +108,22 @@ namespace UI
 
         private void PatternForm_Shown(object sender, EventArgs e)
         {
+        }
+
+        private void saveToFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var save = new SaveFileDialog
+            {
+                Filter = "Text file|*.txt",
+                FileName = "Output.txt"
+            };
+            if (save.ShowDialog() == DialogResult.OK)
+            {
+                IMatrix A;
+                IVector x0, b;
+                SLAESource.GetSLAE(out A, format, out b, out x0);
+                File.WriteAllText(save.FileName, A.Serialize(b, x0));
+            }
         }
 
         private void backwardToolStripMenuItem_Click(object sender, EventArgs e)

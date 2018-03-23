@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using Newtonsoft.Json;
 
 namespace SolverCore
 {
@@ -470,6 +472,23 @@ namespace SolverCore
             }
 
             return result;
+        }
+
+        public string Serialize(IVector b, IVector x0)
+        {
+            var i = new List<int>();
+            var j = new List<int>();
+            var gg = new List<double>();
+
+            foreach (var elem in matrix)
+            {
+                i.Add(elem.Key.column);
+                j.Add(elem.Key.row);
+                gg.Add(elem.Value);
+            }
+
+            var obj = new { b, x0, gg = gg.ToArray(), column = i.ToArray(), row = j.ToArray(), size = Size };
+            return JsonConvert.SerializeObject(obj);
         }
     }
 }

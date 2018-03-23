@@ -60,6 +60,9 @@
             this.label5 = new System.Windows.Forms.Label();
             this.timerHightlight = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.done_label = new System.Windows.Forms.Label();
+            this.need_label = new System.Windows.Forms.Label();
+            this.residual_label = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
@@ -81,7 +84,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox2.Location = new System.Drawing.Point(260, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(246, 128);
+            this.groupBox2.Size = new System.Drawing.Size(277, 128);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Выбор методов решения";
@@ -127,7 +130,7 @@
             // 
             this.methodCheckedImg.Enabled = false;
             this.methodCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
-            this.methodCheckedImg.Location = new System.Drawing.Point(220, 11);
+            this.methodCheckedImg.Location = new System.Drawing.Point(251, 11);
             this.methodCheckedImg.Name = "methodCheckedImg";
             this.methodCheckedImg.Size = new System.Drawing.Size(20, 20);
             this.methodCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -139,12 +142,12 @@
             this.methodListBox.BackColor = System.Drawing.SystemColors.Control;
             this.methodListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.methodListBox.CheckOnClick = true;
-            this.methodListBox.ColumnWidth = 115;
+            this.methodListBox.ColumnWidth = 130;
             this.methodListBox.FormattingEnabled = true;
             this.methodListBox.Location = new System.Drawing.Point(8, 53);
             this.methodListBox.MultiColumn = true;
             this.methodListBox.Name = "methodListBox";
-            this.methodListBox.Size = new System.Drawing.Size(230, 60);
+            this.methodListBox.Size = new System.Drawing.Size(260, 60);
             this.methodListBox.Sorted = true;
             this.methodListBox.TabIndex = 27;
             this.methodListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
@@ -266,6 +269,7 @@
             this.fileInputBtn.TabStop = true;
             this.fileInputBtn.Text = "Обзор...";
             this.fileInputBtn.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
+            this.fileInputBtn.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.fileInputBtn_LinkClicked);
             this.fileInputBtn.Click += new System.EventHandler(this.fileInput_Click);
             // 
             // sim
@@ -298,9 +302,9 @@
             // 
             // IterProgressBar
             // 
-            this.IterProgressBar.Location = new System.Drawing.Point(12, 287);
+            this.IterProgressBar.Location = new System.Drawing.Point(12, 265);
             this.IterProgressBar.Name = "IterProgressBar";
-            this.IterProgressBar.Size = new System.Drawing.Size(494, 19);
+            this.IterProgressBar.Size = new System.Drawing.Size(525, 19);
             this.IterProgressBar.TabIndex = 4;
             // 
             // startBtn
@@ -308,7 +312,7 @@
             this.startBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.startBtn.Location = new System.Drawing.Point(12, 206);
             this.startBtn.Name = "startBtn";
-            this.startBtn.Size = new System.Drawing.Size(494, 26);
+            this.startBtn.Size = new System.Drawing.Size(525, 26);
             this.startBtn.TabIndex = 5;
             this.startBtn.Text = "Найти решение";
             this.startBtn.UseVisualStyleBackColor = true;
@@ -323,7 +327,7 @@
             this.resultsFormToolStripMenuItem});
             this.menuStrip2.Location = new System.Drawing.Point(0, 324);
             this.menuStrip2.Name = "menuStrip2";
-            this.menuStrip2.Size = new System.Drawing.Size(519, 24);
+            this.menuStrip2.Size = new System.Drawing.Size(549, 24);
             this.menuStrip2.TabIndex = 15;
             this.menuStrip2.Text = "menuStrip2";
             // 
@@ -350,7 +354,7 @@
             this.groupBox3.Controls.Add(this.fileOutputLink);
             this.groupBox3.Location = new System.Drawing.Point(260, 147);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(246, 53);
+            this.groupBox3.Size = new System.Drawing.Size(277, 53);
             this.groupBox3.TabIndex = 20;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Выходные данные";
@@ -360,7 +364,7 @@
             this.outPathBox.Location = new System.Drawing.Point(8, 21);
             this.outPathBox.Name = "outPathBox";
             this.outPathBox.ReadOnly = true;
-            this.outPathBox.Size = new System.Drawing.Size(171, 20);
+            this.outPathBox.Size = new System.Drawing.Size(209, 20);
             this.outPathBox.TabIndex = 20;
             // 
             // fileOutputLink
@@ -368,7 +372,7 @@
             this.fileOutputLink.ActiveLinkColor = System.Drawing.Color.Maroon;
             this.fileOutputLink.AutoSize = true;
             this.fileOutputLink.LinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.fileOutputLink.Location = new System.Drawing.Point(185, 25);
+            this.fileOutputLink.Location = new System.Drawing.Point(223, 25);
             this.fileOutputLink.Name = "fileOutputLink";
             this.fileOutputLink.Size = new System.Drawing.Size(48, 13);
             this.fileOutputLink.TabIndex = 19;
@@ -379,9 +383,9 @@
             // 
             // MethodProgressBar
             // 
-            this.MethodProgressBar.Location = new System.Drawing.Point(12, 262);
+            this.MethodProgressBar.Location = new System.Drawing.Point(12, 294);
             this.MethodProgressBar.Name = "MethodProgressBar";
-            this.MethodProgressBar.Size = new System.Drawing.Size(494, 19);
+            this.MethodProgressBar.Size = new System.Drawing.Size(525, 19);
             this.MethodProgressBar.TabIndex = 21;
             // 
             // label4
@@ -396,22 +400,59 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(472, 245);
+            this.label5.Location = new System.Drawing.Point(500, 244);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(37, 13);
+            this.label5.Size = new System.Drawing.Size(19, 13);
             this.label5.TabIndex = 22;
-            this.label5.Text = "1 из 4";
+            this.label5.Text = "из";
             this.label5.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.label5.Visible = false;
             // 
             // timerHightlight
             // 
             this.timerHightlight.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // done_label
+            // 
+            this.done_label.AutoSize = true;
+            this.done_label.Location = new System.Drawing.Point(483, 244);
+            this.done_label.Name = "done_label";
+            this.done_label.Size = new System.Drawing.Size(13, 13);
+            this.done_label.TabIndex = 23;
+            this.done_label.Text = "0";
+            this.done_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.done_label.Visible = false;
+            // 
+            // need_label
+            // 
+            this.need_label.AutoSize = true;
+            this.need_label.Location = new System.Drawing.Point(524, 244);
+            this.need_label.Name = "need_label";
+            this.need_label.Size = new System.Drawing.Size(13, 13);
+            this.need_label.TabIndex = 24;
+            this.need_label.Text = "0";
+            this.need_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.need_label.Visible = false;
+            // 
+            // residual_label
+            // 
+            this.residual_label.AutoSize = true;
+            this.residual_label.Location = new System.Drawing.Point(115, 244);
+            this.residual_label.Name = "residual_label";
+            this.residual_label.Size = new System.Drawing.Size(13, 13);
+            this.residual_label.TabIndex = 25;
+            this.residual_label.Text = "0";
+            this.residual_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            this.residual_label.Visible = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(519, 348);
+            this.ClientSize = new System.Drawing.Size(549, 348);
+            this.Controls.Add(this.residual_label);
+            this.Controls.Add(this.need_label);
+            this.Controls.Add(this.done_label);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.MethodProgressBar);
@@ -421,8 +462,8 @@
             this.Controls.Add(this.inputData);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
-            this.MaximumSize = new System.Drawing.Size(535, 387);
-            this.MinimumSize = new System.Drawing.Size(535, 387);
+            this.MaximumSize = new System.Drawing.Size(565, 387);
+            this.MinimumSize = new System.Drawing.Size(565, 387);
             this.Name = "MainForm";
             this.Text = "Решение СЛАУ";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -482,6 +523,9 @@
         private System.Windows.Forms.NumericUpDown iterBox;
         private System.Windows.Forms.Timer timerHightlight;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label done_label;
+        private System.Windows.Forms.Label need_label;
+        private System.Windows.Forms.Label residual_label;
     }
 }
 

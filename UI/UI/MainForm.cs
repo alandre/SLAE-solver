@@ -24,18 +24,16 @@ namespace UI
         public IVector x0;
 
 
-        public SLAE(IMatrix _matrix, IVector _b, IVector _x0)
+        public SLAE(IMatrix matrix, IVector b, IVector x0)
         {
-            matrix = _matrix;
-            b = _b;
-            x0 = _x0;
+            this.matrix = matrix;
+            this.b = b;
+            this.x0 = x0;
         }
     }
 
     public partial class MainForm : Form
     {
-        private MatrixInitialazer Input = new MatrixInitialazer();
-
         bool inputChecked = false;
         bool methodChecked = false;
         bool manualInputNotNull = false;
@@ -88,16 +86,16 @@ namespace UI
                     string dataInput = sr.ReadToEnd();
                     sr.Close();
 
-                    Input = MatrixInitialazer.Input(dataInput, sim.Checked);
+                    var input = MatrixInitialazer.Input(dataInput, sim.Checked);
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
-                    fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], Input, Input.symmetry);
-                    fileInputedSLAE.b = new Vector(Input.b);
-                    if (Input.x0 != null)
-                        fileInputedSLAE.x0 = new Vector(Input.x0);
+                    fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], input, input.symmetry);
+                    fileInputedSLAE.b = new Vector(input.b);
+                    if (input.x0 != null)
+                        fileInputedSLAE.x0 = new Vector(input.x0);
                     else
                     {
-                        double[] tmpx0 = new double[fileInputedSLAE.matrix.Size];
+                        var tmpx0 = new double[fileInputedSLAE.matrix.Size];
                         for (int i = 0; i < tmpx0.Length; i++)
                             tmpx0[i] = 0;
                         fileInputedSLAE.x0 = new Vector(tmpx0);
@@ -179,17 +177,14 @@ namespace UI
 
         private void toolStripMenuOpenOutput_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", fullDirectoryName);
-            /*OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.InitialDirectory = path;
-            openFileDialog1.ShowDialog();*/
+            Process.Start("explorer.exe", FullDirectoryName);
         }
 
         private void resultsFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //на вход нужен массив кортежей: (string, savebufferloger, double time)
-            //строка - название, логер и понятия не имею какого фомата время, потому дабл
-            //никто не может обещать, что функция работает, более вероятно что она не работает
+            // на вход нужен массив кортежей: (string, savebufferloger, double time)
+            // строка - название, логер и понятия не имею какого фомата время, потому дабл
+            // никто не может обещать, что функция работает, более вероятно что она не работает
             try
             {
                 ResultsForm resultsForm = new ResultsForm(_Methods);
@@ -229,18 +224,17 @@ namespace UI
             SolveAsync();
         }
 
-        string fullDirectoryName = "";
+        public string FullDirectoryName = "";
 
         private async void SolveAsync()
         {
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
-            //var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
-            fullDirectoryName = path + uniqueDirectoryName;
+            FullDirectoryName = path + uniqueDirectoryName;
             
             _Methods = new(string name, SaveBufferLogger log, double time)[methodListBox.CheckedItems.Count];
 
             
-            Directory.CreateDirectory(fullDirectoryName);
+            Directory.CreateDirectory(FullDirectoryName);
 
             MethodProgressBar.Value = 0;
             MethodProgressBar.Maximum = methodListBox.CheckedItems.Count;
@@ -273,7 +267,7 @@ namespace UI
 
                 _Methods[i].time = 0;
                 
-                _Methods[i].log = (SaveBufferLogger)Logger;
+                _Methods[i].log = Logger;
 
                 MethodProgressBar.Increment(1);
                 var LogList = Logger.GetList();
@@ -282,7 +276,7 @@ namespace UI
                 
                 count++;
                 done_label.Text = Convert.ToString(count);
-                WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
+                WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], FullDirectoryName);
                 i++;
             }
 
@@ -336,16 +330,12 @@ namespace UI
 
         private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
         {
-            return Task.Run(() =>
-           {
-                return loggingSolver.Solve((ILinearOperator)matrix, x0, b,(int)iterBox.Value, double.Parse(epsBox.Text.Replace(".", ",")));
-           });
+            return Task.Run(() => loggingSolver.Solve((ILinearOperator)matrix, x0, b,(int)iterBox.Value, double.Parse(epsBox.Text)));
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FolderBrowserDialog FBD = new FolderBrowserDialog();
-            FBD.SelectedPath = path;
+            FolderBrowserDialog FBD = new FolderBrowserDialog {SelectedPath = path};
             if (FBD.ShowDialog() == DialogResult.OK)
             {
                 path = FBD.SelectedPath;

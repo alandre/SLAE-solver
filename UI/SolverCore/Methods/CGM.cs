@@ -10,10 +10,7 @@ namespace SolverCore.Methods
         int currentIter;
         bool init;
         public IVector x { get; private set; }
-        public CGM()
-        {
-            init = false;
-        }
+
         //не предобусловленная система
         public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {

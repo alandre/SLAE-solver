@@ -19,11 +19,6 @@ namespace SolverCore.Methods
 
         public IVector x { get; private set; }
 
-        public GaussianSeidelMethod()
-        {
-            init = false;
-        }
-
         public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
         {
             if (malloc)

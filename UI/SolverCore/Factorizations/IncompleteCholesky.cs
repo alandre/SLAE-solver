@@ -32,7 +32,7 @@ namespace SolverCore.Factorizations
             {
                 double sumD = 0;
 
-                var columns = factorizedMatix.GetMatrixCollumnsForRow(i);
+                var columns = factorizedMatix.GetMatrixColumnsForRow(i);
 
                 foreach (var j in columns)
                 {

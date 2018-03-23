@@ -59,7 +59,6 @@
     <Compile Include="Interfaces\ISolver.cs" />
     <Compile Include="Interfaces\MatrixFormats\ITransposeLinearOperator.cs" />
     <Compile Include="Loggers\SaveBufferLogger.cs" />
-    <Compile Include="MatrixFormats\BCGStab.cs" />
     <Compile Include="MatrixFormats\Sorter.cs" />
     <Compile Include="MatrixFormats\Coordinational\CoordinationalMatrix.cs" />
     <Compile Include="MatrixFormats\Dense\DenseMatrix.cs" />

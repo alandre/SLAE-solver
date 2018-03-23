@@ -485,7 +485,7 @@ namespace SolverCore
             return rows;
         }
 
-        public SortedSet<int> GetMatrixCollumnsForRow(int row)
+        public SortedSet<int> GetMatrixColumnsForRow(int row)
         {
             var colls = new SortedSet<int>();
             List<(int, int)> Keys = new List<(int, int)>(matrix.Keys);
@@ -497,7 +497,7 @@ namespace SolverCore
             return colls;
         }
 
-        public SortedSet<int> GetMatrixRowsForCollumn(int col)
+        public SortedSet<int> GetMatrixRowsForColumn(int col)
         {
             var rows = new SortedSet<int>();
             List<(int, int)> Keys = new List<(int, int)>(matrix.Keys);

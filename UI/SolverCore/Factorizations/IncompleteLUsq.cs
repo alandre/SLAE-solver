@@ -30,7 +30,7 @@ namespace SolverCore.Factorizations
             foreach (var i in rows)
             {
                 double sumD = 0;
-                var cols_i = FA.GetMatrixCollumnsForRow(i);
+                var cols_i = FA.GetMatrixColumnsForRow(i);
                 foreach (var j in cols_i)
                 {
                     if (j >= i)
@@ -42,7 +42,7 @@ namespace SolverCore.Factorizations
                             break;
                         sumL += FA[i, k] * FA[k, j];
                     }
-                    foreach (var k in FA.GetMatrixRowsForCollumn(j))
+                    foreach (var k in FA.GetMatrixRowsForColumn(j))
                     {
                         if (k >= i - 1)
                             break;

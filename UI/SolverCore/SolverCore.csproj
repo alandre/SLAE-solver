@@ -47,7 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fabrics\LoggingSolversFabric.cs" />
+    <Compile Include="Factories\LoggingSolversFabric.cs" />
     <Compile Include="Interfaces\IFactorization.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Interfaces\ILogger.cs" />

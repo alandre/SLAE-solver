@@ -150,7 +150,6 @@
             this.methodListBox.Size = new System.Drawing.Size(260, 60);
             this.methodListBox.Sorted = true;
             this.methodListBox.TabIndex = 27;
-            this.methodListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
             this.methodListBox.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
             // label2
@@ -411,6 +410,11 @@
             // timerHightlight
             // 
             this.timerHightlight.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // timer1
+            // 
+            this.timer1.Interval = 1;
+            this.timer1.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // done_label
             // 

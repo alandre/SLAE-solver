@@ -64,7 +64,7 @@ namespace UI
             formatBox.Text = formatBox.Items[0].ToString();
 
             methodListBox.DataSource = Enum.GetValues(typeof(MethodsEnum));
-
+            factorizerBox.DataSource = Enum.GetValues(typeof(FactorizersEnum));
             var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   //get path with .exe file
             path = Path.GetDirectoryName(location);
             outPathBox.Text = path;

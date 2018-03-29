@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolverCore.Factorizations
 {
-    class IncompleteCholesky
+    public class IncompleteCholesky
     {
         CoordinationalMatrix factorizedMatix;
 

@@ -48,9 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factories\LoggingSolversFabric.cs" />
+    <Compile Include="Factorizations\DioganalFactorization.cs" />
     <Compile Include="Factorizations\IncompleteCholesky.cs" />
     <Compile Include="Factorizations\IncompleteLU.cs" />
     <Compile Include="Factorizations\IncompleteLUsq.cs" />
+    <Compile Include="Factorizations\SimpleFactorization.cs" />
     <Compile Include="Interfaces\IFactorization.cs" />
     <Compile Include="Extensions\MatrixExtensions.cs" />
     <Compile Include="Interfaces\ILogger.cs" />

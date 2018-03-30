@@ -276,7 +276,7 @@ namespace UI
                 
                 count++;
                 done_label.Text = Convert.ToString(count);
-                WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], FullDirectoryName);
+                WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, FullDirectoryName, LogList);
                 i++;
             }
 
@@ -286,19 +286,23 @@ namespace UI
           IVector result,
           string method,
           long time,
-          int iterationCount,
-          double residual,
-          string pathToDirectory)
+          string pathToDirectory,
+          IImmutableList<double> LogList)
         {
+            int iterationCount = LogList.Count;
+            double resultResidual = LogList[LogList.Count - 1];
+
             var directory = $"{pathToDirectory}\\{method}";
             Directory.CreateDirectory(directory);
 
             var pathToTotalFile = $"{pathToDirectory}\\Сводные данные.txt";
+            var pathToResultFile = $"{pathToDirectory}\\Решение.txt";
             var pathToSolveReportFile = $"{directory}\\Информация о решении.txt";
             var pathToVectorFile = $"{directory}\\Вектор решения.txt";
 
             var totalString = new StringBuilder();
             var resultReportString = new StringBuilder();
+            var resultTotalString = new StringBuilder();
 
             var solve = string.Join(" ", result);
 
@@ -307,16 +311,30 @@ namespace UI
                 .AppendLine($"Время решения в миллисекундах: {time}")
                 .AppendLine($"Вектор решения: {solve}")
                 .AppendLine($"Число итераций: {iterationCount}")
-                .AppendLine($"Невязка: {residual}\r\n");
+                .AppendLine($"Невязка: {resultResidual}\r\n");
 
             resultReportString
                .AppendLine($"Число итераций: {iterationCount}")
-               .AppendLine($"Невязка: {residual}");
+               .AppendLine($"Невязка: {resultResidual}");
 
+            resultTotalString
+              .AppendLine($"{method}\r")
+              .AppendLine($"Итерация\tНевязка");
+
+           
+            File.AppendAllText(pathToTotalFile, resultTotalString.ToString());
+            int i = 1;
+            foreach (double element in LogList)
+            {
+                File.AppendAllText(pathToTotalFile, $"{i}\t\t");
+                File.AppendAllText(pathToTotalFile, $"{element}\r\n");
+                i++;
+            }
+            File.AppendAllText(pathToTotalFile, "\r\n");
 
             File.WriteAllText(pathToSolveReportFile, resultReportString.ToString());
             File.WriteAllText(pathToVectorFile, solve.ToString());
-            File.AppendAllText(pathToTotalFile, totalString.ToString());
+            File.AppendAllText(pathToResultFile, totalString.ToString());
         }
 
 

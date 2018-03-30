@@ -293,7 +293,10 @@ namespace UI
           IImmutableList<double> LogList)
         {
             int iterationCount = LogList.Count;
-            double resultResidual = LogList[LogList.Count - 1];
+            double resultResidual;
+            if (LogList.Count>0)
+                resultResidual = LogList[LogList.Count - 1];
+            else resultResidual = -1;
 
             var directory = $"{pathToDirectory}\\{method}";
             Directory.CreateDirectory(directory);

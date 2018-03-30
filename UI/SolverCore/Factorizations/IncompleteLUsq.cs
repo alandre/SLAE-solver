@@ -8,19 +8,19 @@ namespace SolverCore.Factorizations
 {
     public class IncompleteLUsq: IFactorization
     {
-        CoordinationalMatrix FA;
+        static CoordinationalMatrix FA;
 
-        public IncompleteLUsq(CoordinationalMatrix M)
+        public static CoordinationalMatrix IncompleteLUsqMethod(CoordinationalMatrix M)
         {
-            Factorize(M);
+            return Factorize(M);
         }
 
-        public void Factorize(CoordinationalMatrix M)
+        public static CoordinationalMatrix Factorize(CoordinationalMatrix M)
         {
             FA = (CoordinationalMatrix)M.Clone();
             var rows = FA.GetMatrixRows();
             if (Math.Abs(FA[0, 0]) < 1.0E-14)
-                return;
+                return M;
 
             foreach (var i in rows)
             {
@@ -49,6 +49,7 @@ namespace SolverCore.Factorizations
                 }
                 FA.Set(i, i, Math.Sqrt(M[i, i] - sumD));
             }
+            return FA;
 
         }
 

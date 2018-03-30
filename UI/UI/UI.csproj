@@ -61,7 +61,6 @@
     <Compile Include="ConstructorForm.Designer.cs">
       <DependentUpon>ConstructorForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="FactorizerFactory.cs" />
     <Compile Include="FormatForm.cs">
       <SubType>Form</SubType>
     </Compile>

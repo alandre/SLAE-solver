@@ -30,6 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.factorizerBox = new System.Windows.Forms.ComboBox();
             this.iterBox = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
             this.methodCheckedImg = new System.Windows.Forms.PictureBox();
@@ -63,10 +65,6 @@
             this.done_label = new System.Windows.Forms.Label();
             this.need_label = new System.Windows.Forms.Label();
             this.residual_label = new System.Windows.Forms.Label();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.factorizerBox = new System.Windows.Forms.ComboBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
@@ -75,12 +73,12 @@
             this.fileInputPanel.SuspendLayout();
             this.menuStrip2.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.groupBox4.SuspendLayout();
-            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.factorizerBox);
             this.groupBox2.Controls.Add(this.iterBox);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.methodCheckedImg);
@@ -90,10 +88,28 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox2.Location = new System.Drawing.Point(260, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(277, 139);
+            this.groupBox2.Size = new System.Drawing.Size(277, 156);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Выбор методов решения";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(5, 101);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(123, 13);
+            this.label6.TabIndex = 31;
+            this.label6.Text = "Способ факторизации:";
+            // 
+            // factorizerBox
+            // 
+            this.factorizerBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.factorizerBox.FormattingEnabled = true;
+            this.factorizerBox.Location = new System.Drawing.Point(6, 118);
+            this.factorizerBox.Name = "factorizerBox";
+            this.factorizerBox.Size = new System.Drawing.Size(197, 21);
+            this.factorizerBox.TabIndex = 4;
             // 
             // iterBox
             // 
@@ -153,7 +169,7 @@
             this.methodListBox.Location = new System.Drawing.Point(8, 53);
             this.methodListBox.MultiColumn = true;
             this.methodListBox.Name = "methodListBox";
-            this.methodListBox.Size = new System.Drawing.Size(260, 75);
+            this.methodListBox.Size = new System.Drawing.Size(260, 45);
             this.methodListBox.Sorted = true;
             this.methodListBox.TabIndex = 27;
             this.methodListBox.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
@@ -187,7 +203,7 @@
             this.inputData.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.inputData.Location = new System.Drawing.Point(12, 12);
             this.inputData.Name = "inputData";
-            this.inputData.Size = new System.Drawing.Size(237, 194);
+            this.inputData.Size = new System.Drawing.Size(237, 213);
             this.inputData.TabIndex = 3;
             this.inputData.TabStop = false;
             this.inputData.Text = "Входные данные";
@@ -307,7 +323,7 @@
             // 
             // IterProgressBar
             // 
-            this.IterProgressBar.Location = new System.Drawing.Point(12, 316);
+            this.IterProgressBar.Location = new System.Drawing.Point(12, 276);
             this.IterProgressBar.Name = "IterProgressBar";
             this.IterProgressBar.Size = new System.Drawing.Size(525, 19);
             this.IterProgressBar.TabIndex = 4;
@@ -315,7 +331,7 @@
             // startBtn
             // 
             this.startBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.startBtn.Location = new System.Drawing.Point(12, 271);
+            this.startBtn.Location = new System.Drawing.Point(12, 231);
             this.startBtn.Name = "startBtn";
             this.startBtn.Size = new System.Drawing.Size(525, 26);
             this.startBtn.TabIndex = 5;
@@ -330,7 +346,7 @@
             this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuOpenOutput,
             this.resultsFormToolStripMenuItem});
-            this.menuStrip2.Location = new System.Drawing.Point(0, 374);
+            this.menuStrip2.Location = new System.Drawing.Point(0, 334);
             this.menuStrip2.Name = "menuStrip2";
             this.menuStrip2.Size = new System.Drawing.Size(549, 24);
             this.menuStrip2.TabIndex = 15;
@@ -357,7 +373,7 @@
             // 
             this.groupBox3.Controls.Add(this.outPathBox);
             this.groupBox3.Controls.Add(this.fileOutputLink);
-            this.groupBox3.Location = new System.Drawing.Point(260, 153);
+            this.groupBox3.Location = new System.Drawing.Point(260, 172);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(277, 53);
             this.groupBox3.TabIndex = 20;
@@ -388,7 +404,7 @@
             // 
             // MethodProgressBar
             // 
-            this.MethodProgressBar.Location = new System.Drawing.Point(12, 341);
+            this.MethodProgressBar.Location = new System.Drawing.Point(12, 301);
             this.MethodProgressBar.Name = "MethodProgressBar";
             this.MethodProgressBar.Size = new System.Drawing.Size(525, 19);
             this.MethodProgressBar.TabIndex = 21;
@@ -396,7 +412,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(10, 300);
+            this.label4.Location = new System.Drawing.Point(9, 260);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 13);
             this.label4.TabIndex = 19;
@@ -405,7 +421,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(502, 300);
+            this.label5.Location = new System.Drawing.Point(502, 260);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(19, 13);
             this.label5.TabIndex = 22;
@@ -425,7 +441,7 @@
             // done_label
             // 
             this.done_label.AutoSize = true;
-            this.done_label.Location = new System.Drawing.Point(483, 300);
+            this.done_label.Location = new System.Drawing.Point(483, 260);
             this.done_label.Name = "done_label";
             this.done_label.Size = new System.Drawing.Size(13, 13);
             this.done_label.TabIndex = 23;
@@ -436,7 +452,7 @@
             // need_label
             // 
             this.need_label.AutoSize = true;
-            this.need_label.Location = new System.Drawing.Point(524, 300);
+            this.need_label.Location = new System.Drawing.Point(524, 260);
             this.need_label.Name = "need_label";
             this.need_label.Size = new System.Drawing.Size(13, 13);
             this.need_label.TabIndex = 24;
@@ -447,7 +463,7 @@
             // residual_label
             // 
             this.residual_label.AutoSize = true;
-            this.residual_label.Location = new System.Drawing.Point(116, 300);
+            this.residual_label.Location = new System.Drawing.Point(115, 260);
             this.residual_label.Name = "residual_label";
             this.residual_label.Size = new System.Drawing.Size(13, 13);
             this.residual_label.TabIndex = 25;
@@ -455,51 +471,11 @@
             this.residual_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.residual_label.Visible = false;
             // 
-            // groupBox4
-            // 
-            this.groupBox4.Controls.Add(this.factorizerBox);
-            this.groupBox4.Location = new System.Drawing.Point(13, 210);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(234, 54);
-            this.groupBox4.TabIndex = 26;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Выбор факторизации";
-            // 
-            // factorizerBox
-            // 
-            this.factorizerBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.factorizerBox.FormattingEnabled = true;
-            this.factorizerBox.Location = new System.Drawing.Point(25, 17);
-            this.factorizerBox.Name = "factorizerBox";
-            this.factorizerBox.Size = new System.Drawing.Size(197, 21);
-            this.factorizerBox.TabIndex = 4;
-            // 
-            // groupBox5
-            // 
-            this.groupBox5.Controls.Add(this.comboBox2);
-            this.groupBox5.Location = new System.Drawing.Point(260, 210);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(277, 54);
-            this.groupBox5.TabIndex = 27;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Выбор размерности подпространства Крылова";
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(25, 17);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(236, 21);
-            this.comboBox2.TabIndex = 4;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(549, 398);
-            this.Controls.Add(this.groupBox5);
-            this.Controls.Add(this.groupBox4);
+            this.ClientSize = new System.Drawing.Size(549, 358);
             this.Controls.Add(this.residual_label);
             this.Controls.Add(this.need_label);
             this.Controls.Add(this.done_label);
@@ -512,8 +488,8 @@
             this.Controls.Add(this.inputData);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
-            this.MaximumSize = new System.Drawing.Size(565, 437);
-            this.MinimumSize = new System.Drawing.Size(565, 437);
+            this.MaximumSize = new System.Drawing.Size(565, 397);
+            this.MinimumSize = new System.Drawing.Size(565, 397);
             this.Name = "MainForm";
             this.Text = "Решение СЛАУ";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -530,8 +506,6 @@
             this.menuStrip2.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -578,10 +552,8 @@
         private System.Windows.Forms.Label done_label;
         private System.Windows.Forms.Label need_label;
         private System.Windows.Forms.Label residual_label;
-        private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.ComboBox factorizerBox;
-        private System.Windows.Forms.GroupBox groupBox5;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Label label6;
     }
 }
 

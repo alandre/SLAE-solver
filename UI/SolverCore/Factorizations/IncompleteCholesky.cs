@@ -8,20 +8,20 @@ namespace SolverCore.Factorizations
 {
     public class IncompleteCholesky
     {
-        CoordinationalMatrix factorizedMatix;
+        static CoordinationalMatrix factorizedMatix;
 
-        public IncompleteCholesky(CoordinationalMatrix M)
+        public static CoordinationalMatrix IncompleteCholeskyMethod(CoordinationalMatrix M)
         {
-            Factorize(M);
+            return Factorize(M);
         }
 
-        public void Factorize(CoordinationalMatrix M)
+        public static CoordinationalMatrix Factorize(CoordinationalMatrix M)
         {
             factorizedMatix = (CoordinationalMatrix)M.Clone();
             var rows = factorizedMatix.GetMatrixRows();
 
             if (Math.Abs(factorizedMatix[0, 0]) < 1.0E-14)
-                return;
+                return M;
 
             foreach (var i in rows)
             {
@@ -53,6 +53,7 @@ namespace SolverCore.Factorizations
 
                 factorizedMatix.Set(i, i, Math.Sqrt(M[i, i] - sumD));
             }
+            return factorizedMatix;
 
         }
 

@@ -228,6 +228,8 @@ namespace UI
 
         private async void SolveAsync()
         {
+            FactorizersEnum FactorizerName = (FactorizersEnum)factorizerBox.SelectedValue;
+            IMatrix factorizedMatrix = FactorizerFactory.Factorize_it(FactorizerName,currentSLAE.matrix);
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
             FullDirectoryName = path + uniqueDirectoryName;
             
@@ -259,7 +261,7 @@ namespace UI
                 timer1.Start();
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                IVector result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                IVector result = await RunAsync((LoggingSolver)loggingSolver, factorizedMatrix, currentSLAE.x0, currentSLAE.b);
                 sw.Stop();
                
                 timer1.Stop();
@@ -271,12 +273,13 @@ namespace UI
 
                 MethodProgressBar.Increment(1);
                 var LogList = Logger.GetList();
-                residual_label.Text = Convert.ToString(LogList[LogList.Count-1]);
+                if (!LogList.IsEmpty) residual_label.Text = Convert.ToString(LogList[LogList.Count - 1]);
+                
                 IterProgressBar.Value = (int)iterBox.Value;
                 
                 count++;
                 done_label.Text = Convert.ToString(count);
-                WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], FullDirectoryName);
+                if (!LogList.IsEmpty) WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], FullDirectoryName);
                 i++;
             }
 

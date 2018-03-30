@@ -8,7 +8,9 @@ using SolverCore.Methods;
 
 namespace SolverCore
 {
-    public enum MethodsEnum { CGMethod, GaussianSeidelMethod, JacobiMethod, LOSMethod, BCGStabMethod, GMResMethod }
+   // public enum MethodsEnum { CG, GaussianSeidel, Jacobi, LOS, BCGStab, GMRes }
+    public enum MethodsEnum { CG,GaussianSeidel, Jacobi, LOS, BCGStab}
+
     public class LoggingSolversFabric
     {
         static List<String> Types = null;
@@ -38,12 +40,11 @@ namespace SolverCore
             IMethod method = null;
             switch (type)
             {
-                case MethodsEnum.CGMethod: break;
-                case MethodsEnum.GaussianSeidelMethod: method = new GaussianSeidelMethod(); break;
-                case MethodsEnum.JacobiMethod: method = new JacobiMethod(); break;
-                case MethodsEnum.LOSMethod: break;
-                case MethodsEnum.BCGStabMethod: break;
-                case MethodsEnum.GMResMethod: break;
+                case MethodsEnum.CG: method = new CGM(); break;
+                case MethodsEnum.GaussianSeidel: method = new GaussianSeidelMethod(); break;
+                case MethodsEnum.Jacobi: method = new JacobiMethod(); break;
+                case MethodsEnum.LOS: method = new LOS(); break;
+                case MethodsEnum.BCGStab: method = new BCGStab(); break;
 
                 default: return null;
             }

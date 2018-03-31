@@ -168,5 +168,16 @@ namespace MF.Skyline
             Assert.True(new HashSet<(double, int, int)>(skylineMatrix).SetEquals(elemList));
 
         }
+
+        [Fact]
+        public void Multiply()
+        {
+            var vector = new Vector(new double[] { 1, 1, 1 });
+            var result = skylineMatrix.Multiply(vector);
+            Vector resultActual = new Vector(new double[] { 6, 4, 8 });
+
+            for (int i = 0; i < resultActual.Size; i++)
+                Assert.Equal(result[i], resultActual[i], 8);
+        }
     }
 }

@@ -164,5 +164,20 @@ namespace MF.SymmetricSkyline
 
         }
 
+        [Fact]
+        public void Multyply()
+        {
+            Vector vector = new Vector(new double[] { 1, 1, 1 });
+
+            var result = symmetricSkylineMatrix.Multiply(vector);
+            var resultActual = new Vector(new double[] { 4, 6, 8 });
+
+            for (int i = 0; i < resultActual.Size; i++)
+            {
+                Assert.Equal(result[i], resultActual[i], 8);
+            }
+        }
+
+
     }
 }

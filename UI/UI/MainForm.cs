@@ -8,9 +8,7 @@ using System.Windows.Forms;
 using SolverCore;
 using SolverCore.Loggers;
 using SolverCore.Solvers;
-using SolverCore.Methods;
 using System.Collections.Immutable;
-using System.ServiceModel.Channels;
 using System.Diagnostics;
 using UI.Properties;
 using System.Text;
@@ -49,6 +47,8 @@ namespace UI
         private string path;
         ConstructorForm constructorForm;
 
+        public string FullDirectoryName = "";
+
         (string name, SolverCore.Loggers.SaveBufferLogger log, double time)[] _Methods;
 
 
@@ -64,8 +64,8 @@ namespace UI
             formatBox.Text = formatBox.Items[0].ToString();
 
             methodListBox.DataSource = Enum.GetValues(typeof(MethodsEnum));
-            factorizerBox.DataSource = Enum.GetValues(typeof(FactorizersEnum));
-            var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   //get path with .exe file
+            factorizerBox.DataSource = Enum.GetValues(typeof(FactorizerFactory.FactorizersEnum));
+            var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   
             path = Path.GetDirectoryName(location);
             outPathBox.Text = path;
         }
@@ -79,7 +79,7 @@ namespace UI
         {
             try
             {
-                var file = new OpenFileDialog {Filter = "Text file|*.txt"};
+                var file = new OpenFileDialog {Filter = "Text file |*.txt|JSON file |*.json"};
                 if (file.ShowDialog() == DialogResult.OK)
                 {
                     StreamReader sr = new StreamReader(file.FileName);
@@ -100,9 +100,6 @@ namespace UI
                             tmpx0[i] = 0;
                         fileInputedSLAE.x0 = new Vector(tmpx0);
                     }
-
-                    var a = FormatFactory.PatternRequired(FormatFactory.FormatsDictionary[formatBox.SelectedItem.ToString()]);
-
                     fileInputBtn.Text = file.FileName;
                     fileInputNotNull = true;
                     CheckedChanged(inputCheckedImg, inputChecked = true);
@@ -224,12 +221,11 @@ namespace UI
             SolveAsync();
         }
 
-        public string FullDirectoryName = "";
 
         private async void SolveAsync()
         {
-            FactorizersEnum FactorizerName = (FactorizersEnum)factorizerBox.SelectedValue;
-            IMatrix factorizedMatrix = FactorizerFactory.Factorize_it(FactorizerName,currentSLAE.matrix);
+            FactorizerFactory.FactorizersEnum factorizerName = (FactorizerFactory.FactorizersEnum)factorizerBox.SelectedValue;
+            IMatrix factorizedMatrix = FactorizerFactory.Factorize_it(factorizerName,currentSLAE.matrix);
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
             FullDirectoryName = path + uniqueDirectoryName;
             
@@ -254,9 +250,8 @@ namespace UI
                 currentSLAE.x0 = x0_tmp;
                 _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
-                MethodsEnum method =(MethodsEnum)methodName;
                 Logger = new SaveBufferLogger();
-                var loggingSolver = LoggingSolversFabric.Spawn(method, Logger);
+                var loggingSolver = LoggingSolversFabric.Spawn((MethodsEnum)methodName, Logger);
                 timer1.Enabled = true;
                 timer1.Start();
                 Stopwatch sw = new Stopwatch();
@@ -290,12 +285,12 @@ namespace UI
           string method,
           long time,
           string pathToDirectory,
-          IImmutableList<double> LogList)
+          IImmutableList<double> logList)
         {
-            int iterationCount = LogList.Count;
+            int iterationCount = logList.Count;
             double resultResidual;
-            if (LogList.Count>0)
-                resultResidual = LogList[LogList.Count - 1];
+            if (logList.Count>0)
+                resultResidual = logList[logList.Count - 1];
             else resultResidual = -1;
 
             var directory = $"{pathToDirectory}\\{method}";
@@ -330,7 +325,7 @@ namespace UI
            
             File.AppendAllText(pathToTotalFile, resultTotalString.ToString());
             int i = 1;
-            foreach (double element in LogList)
+            foreach (double element in logList)
             {
                 File.AppendAllText(pathToTotalFile, $"{i}\t\t");
                 File.AppendAllText(pathToTotalFile, $"{element}\r\n");

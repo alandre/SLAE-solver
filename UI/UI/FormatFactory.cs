@@ -5,8 +5,6 @@ using SolverCore;
 
 namespace UI
 {
-    
-    
     public class FormatFactory
     {
         public enum Formats { Coordinational = 0, Dense = 1, Skyline = 2, SparseRow = 3, SparseRowColumn = 4 }

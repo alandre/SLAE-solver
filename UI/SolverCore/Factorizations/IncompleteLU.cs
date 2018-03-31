@@ -38,13 +38,14 @@ namespace SolverCore.Factorizations
 
                         sumL += FA[i, k] * FA[k, j];
                     }
-                    foreach(var k in FA.GetMatrixRowsForColumn(j))
-                    {
-                        if (k > i - 1)
-                            break;
-                        sumU += FA[i, k] * FA[k, j];
-                    }
                     FA.Set(i, j, (M[i, j] - sumL) / FA[j, j]);
+                    foreach (var k in FA.GetMatrixRowsForColumn(j))
+                    {
+                        if (k > j - 1)
+                            break;
+                        sumU += FA[k, i] * FA[j, k];
+                    }
+                    
                     FA.Set(j, i, (M[j, i] - sumU));
                     sumD += FA[i, j] * FA[j, i];
                 }

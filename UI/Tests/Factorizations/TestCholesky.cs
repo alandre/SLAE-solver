@@ -31,7 +31,7 @@ namespace Factorizations
             double[] resultActual = new double[]
             {
                 Math.Sqrt(10),
-                Math.Sqrt(10) / 10 + 3 * Math.Sqrt(10) / 10,
+                Math.Sqrt(10) / 10 + 3 * Math.Sqrt(110) / 10,
                 Math.Sqrt(10) / 5 + 14*Math.Sqrt(110) / 165 + 2 * Math.Sqrt(2398) / 33
             };
             

@@ -75,6 +75,11 @@
     <Compile Include="Extensions\FakeLog.cs" />
     <Compile Include="Extensions\ProxyMatrix.cs" />
     <Compile Include="Extensions\ProxyMethod.cs" />
+    <Compile Include="Factorizations\Diagonal.cs" />
+    <Compile Include="Factorizations\TestCholesky.cs" />
+    <Compile Include="Factorizations\TestLU.cs" />
+    <Compile Include="Factorizations\TestLUsq.cs" />
+    <Compile Include="Factorizations\TestSimple.cs" />
     <Compile Include="Methods\TestBCGStabMethod.cs" />
     <Compile Include="Methods\TestJacobiMethod.cs" />
     <Compile Include="Methods\TestsCGMMethod.cs" />

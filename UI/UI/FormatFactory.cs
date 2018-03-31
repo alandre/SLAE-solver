@@ -45,7 +45,7 @@ namespace UI
                     case Formats.Dense:
                         return new DenseMatrix(initialazer.dense);
                     case Formats.Skyline:
-                        return new SkylineMatrix(initialazer.di, initialazer.ia, initialazer.al, initialazer.al);
+                        return new SkylineMatrix(initialazer.di, initialazer.ia, initialazer.al, initialazer.au);
                     case Formats.SparseRow:
                         return new SparseRowMatrix(initialazer.gg, initialazer.ja, initialazer.ia);
                     case Formats.SparseRowColumn:

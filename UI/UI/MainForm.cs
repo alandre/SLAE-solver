@@ -147,7 +147,6 @@ namespace UI
         public void SetSLAE(IMatrix _mat, IVector _b, IVector _x0)
         {
             manualInputedSLAE = new SLAE(_mat, _b, _x0);
-            x0_tmp = _x0;
             manualInputNotNull = true;
             CheckedChanged(inputCheckedImg, inputChecked = true);
         }
@@ -228,6 +227,7 @@ namespace UI
 
         private async void SolveAsync()
         {
+            x0_tmp = currentSLAE.x0.Clone();
             FactorizerFactory.FactorizersEnum factorizerName = (FactorizerFactory.FactorizersEnum)factorizerBox.SelectedValue;
             IMatrix factorizedMatrix = FactorizerFactory.Factorize_it(factorizerName,currentSLAE.matrix);
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
@@ -251,7 +251,7 @@ namespace UI
             int i = 0;
             foreach (var methodName in methodListBox.CheckedItems)
             {
-                currentSLAE.x0 = x0_tmp;
+                currentSLAE.x0 = x0_tmp.Clone();
                 _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
                 Logger = new SaveBufferLogger();

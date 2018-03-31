@@ -41,11 +41,12 @@ namespace UI
         SLAE currentSLAE;
         SLAE manualInputedSLAE;
         SLAE fileInputedSLAE;
-
+        int Krylov;
         static List<String> Types = null;
 
         private string path;
         ConstructorForm constructorForm;
+        Krylov KrylovForm;
 
         public string FullDirectoryName = "";
 
@@ -56,20 +57,26 @@ namespace UI
         {
             InitializeComponent();
             var keyList = new List<string>(FormatFactory.FormatsDictionary.Keys);
-            Types = new List<string>();
             foreach (var format in keyList)
             {
                 formatBox.Items.Add(format);
             }
             formatBox.Text = formatBox.Items[0].ToString();
             var FactList = new List<string>(FactorizerFactory.FactorizersDictionary.Keys);
+            var Type = new List<MethodsEnum>(LoggingSolversFabric.MethodsDictionary.Values);
+            foreach (var Method in Type)
+            {
+                methodListBox.Items.Add(Method);
+            }
             Types = new List<string>();
+
+
             foreach (var factorizer in FactList)
             {
                 factorizerBox.Items.Add(factorizer);
             }
             factorizerBox.Text = factorizerBox.Items[0].ToString();
-            methodListBox.DataSource = Enum.GetValues(typeof(MethodsEnum));
+            //methodListBox.DataSource = Enum.GetValues(typeof(MethodsEnum));
             var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   
             path = Path.GetDirectoryName(location);
             outPathBox.Text = path;
@@ -156,6 +163,11 @@ namespace UI
             CheckedChanged(inputCheckedImg, inputChecked = true);
         }
 
+        public void SetKrylov(int _Krylov)
+        {
+            Krylov = _Krylov;
+        }
+
         private void CheckedChanged(PictureBox pictureBox, bool check)
         {
             pictureBox.Image = check ? Resources.CheckMark : Resources.UnabledCheckMark;
@@ -204,10 +216,27 @@ namespace UI
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string method = methodListBox.SelectedItem.ToString();
+          
             if (Types.Contains(method)) Types.Remove(method);
             else
             {
                 Types.Add(method);
+                switch (method)
+
+                {
+                    case "BCGStab":
+                        {
+                            if (KrylovForm == null || KrylovForm.IsDisposed)
+                                KrylovForm = new Krylov();
+
+                            KrylovForm.Owner = this;
+                            KrylovForm.Show();
+                            Hide();
+                            break;
+                        }
+                    default: break;
+                }
+
             }
             if (methodListBox.CheckedItems.Count > 0)
             {
@@ -232,6 +261,7 @@ namespace UI
 
         private async void SolveAsync()
         {
+
             x0_tmp = currentSLAE.x0.Clone();
             FactorizerFactory.FactorizersEnum factorizerName = FactorizerFactory.FactorizersDictionary[factorizerBox.Text];
             IMatrix factorizedMatrix = FactorizerFactory.Factorize_it(factorizerName,currentSLAE.matrix);
@@ -254,13 +284,14 @@ namespace UI
             need_label.Visible = true;
             label5.Visible = true;
             int i = 0;
-            foreach (var methodName in methodListBox.CheckedItems)
+            foreach (MethodsEnum methodName in methodListBox.CheckedItems)
             {
+              
                 currentSLAE.x0 = x0_tmp.Clone();
                 _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
                 Logger = new SaveBufferLogger();
-                var loggingSolver = LoggingSolversFabric.Spawn((MethodsEnum)methodName, Logger);
+                var loggingSolver = LoggingSolversFabric.Spawn( methodName, Logger);
                 timer1.Enabled = true;
                 timer1.Start();
                 Stopwatch sw = new Stopwatch();

@@ -10,9 +10,20 @@ using SolverCore.Factorizations;
 
 namespace SolverCore
 {
-    public enum MethodsEnum { CGM, GaussianSeidel, Jacobi, LOS, BCGStab}
+    public enum MethodsEnum { CGM, GaussianSeidel, Jacobi, BCGStab, LOS }
+   
     public class LoggingSolversFabric
     {
+        public static Dictionary<string, MethodsEnum> MethodsDictionary { get; } = new Dictionary<string, MethodsEnum>
+        {
+            {"CGM",MethodsEnum.CGM},
+            {"GaussianSeidel", MethodsEnum.GaussianSeidel},
+            {"Jacobi", MethodsEnum.Jacobi},
+            {"LOS", MethodsEnum.LOS},
+            {"BCGStab", MethodsEnum.BCGStab}
+
+
+        };
         /// <summary>
         /// Создаёт решатель для метода с указанным логером
         /// </summary>

@@ -312,10 +312,10 @@ namespace SolverCore
                 int k = ia[i];
                 for (int j = i - (ia[i + 1] - k); j < i; j++, k++)
                 {
-                    vector[i] += al[k] * vector[j];
-                    vector[j] += al[k] * vector[i];
+                    result[i] += al[k] * vector[j];
+                    result[j] += al[k] * vector[i];
                 }
-                vector[i] += di[i] * vector[i];
+                result[i] += di[i] * vector[i];
             }
             return result;
         }

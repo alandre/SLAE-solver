@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Factorizations\DioganalFactorization.cs" />
     <Compile Include="Factories\LoggingSolversFabric.cs" />
-    <Compile Include="Factorizations\DioganalFactorization.cs" />
     <Compile Include="Factorizations\IncompleteCholesky.cs" />
     <Compile Include="Factorizations\IncompleteLU.cs" />
     <Compile Include="Factorizations\IncompleteLUsq.cs" />

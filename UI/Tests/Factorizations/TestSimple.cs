@@ -11,7 +11,6 @@ using Xunit;
 
 namespace Factorizations
 {
-    // https://sun9-8.userapi.com/c840438/v840438364/6c285/ERyLqvUKAps.jpg
 
     public class TestSimple
     {

@@ -18,8 +18,7 @@ namespace Factorizations
         {
             int[] rows = new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
             int[] collumns = new int[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
-            double[] values = new double[] { 10, 1, 2, 1, 10, 3, 2, 3, 10 };
-            //double[] values = new double[] { 16,24,8,8,21,13,12,30,22 };
+            double[] values = new double[] { 4, 8, 12, 6, 28, 46, 10, 44, 121 };
             FA = new CoordinationalMatrix(rows, collumns, values, 3); // симметричная или нет?
         }
 
@@ -31,20 +30,15 @@ namespace Factorizations
             var result = incompleteLUsq.LMult(new Vector(new double[] { 1, 1, 1 }));
             double[] resultActual = new double[]
             {
-                Math.Sqrt(10),
-                1.0/Math.Sqrt(10) + Math.Sqrt(9.9),
-                Math.Sqrt(2.0 / Math.Sqrt(10) +
-                (3.0 - 2.0/10 ) / Math.Sqrt(9.9)
-                + Math.Sqrt(10 - 0.4 - Math.Pow((3.0 - 2.0 / 10 ) / Math.Sqrt(9.9), 2)))
+                2,
+                7,
+                18
             };
 
             for (int i = 0; i < result.Size; i++)
             {
                 Assert.Equal(result[i], resultActual[i], 8);
             }
-
-
-
         }
 
         [Fact]
@@ -54,11 +48,9 @@ namespace Factorizations
             var result = incompleteLUsq.UMult(new Vector(new double[] { 1, 1, 1 }));
             double[] resultActual = new double[]
             {
-                Math.Sqrt(10),
-                1.0/Math.Sqrt(10) + Math.Sqrt(9.9),
-                Math.Sqrt(2.0 / Math.Sqrt(10) +
-                (3.0 - 2.0/10 ) / Math.Sqrt(9.9)
-                + Math.Sqrt(10 - 0.4 - Math.Pow((3.0 - 2.0 / 10 ) / Math.Sqrt(9.9), 2)))
+               12,
+               11,
+               7
             };
 
             for (int i = 0; i < result.Size; i++)
@@ -66,13 +58,7 @@ namespace Factorizations
                 Assert.Equal(result[i], resultActual[i], 8);
             }
 
-
-
         }
-
-
-
-
 
     }
 

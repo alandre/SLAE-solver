@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Factorizations\DioganalFactorization.cs" />
     <Compile Include="Factories\LoggingSolversFabric.cs" />
     <Compile Include="Factorizations\DioganalFactorization.cs" />
     <Compile Include="Factorizations\IncompleteCholesky.cs" />

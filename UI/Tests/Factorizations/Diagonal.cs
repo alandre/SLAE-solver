@@ -11,11 +11,11 @@ namespace Factorizations
 {
     // профиль с нулями захерачить
 
-    public class TestCholesky
+    public class TestDiagonal
     {
         CoordinationalMatrix FA;
 
-        public TestCholesky()
+        public TestDiagonal()
         {
             int[] rows = new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
             int[] collumns = new int[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
@@ -24,38 +24,33 @@ namespace Factorizations
         }
 
         [Fact]
-        public void Factorization()
+        public void FactorizationDiag()
         {
-            IncompleteCholesky incompleteCholesky = new IncompleteCholesky(FA);
-            var result = incompleteCholesky.LMult(new Vector(new double[] { 1, 1, 1 }));
+            DioganalFactorization diag = new DioganalFactorization(FA);
+            var result = diag.LMult(new Vector(new double[] { 1, 1, 1 }));
             double[] resultActual = new double[]
             {
                 Math.Sqrt(10),
-                Math.Sqrt(10) / 10 + 3 * Math.Sqrt(110) / 10,
-                Math.Sqrt(10) / 5 + 14*Math.Sqrt(110) / 165 + 2 * Math.Sqrt(2398) / 33
+                Math.Sqrt(10),
+                Math.Sqrt(10)
             };
-            
-            for(int i=0;i< result.Size;i++)
+
+            for (int i = 0; i < result.Size; i++)
             {
                 Assert.Equal(result[i], resultActual[i], 8);
             }
         }
 
         [Fact]
-        public void FactorizationDiag()
+        public void FactorizationSolve()
         {
-            int[] rows = new int[] { 0, 1, 2};
-            int[] collumns = new int[] { 0, 1, 2};
-            double[] values = new double[] { 10, 5, 7};
-            FA = new CoordinationalMatrix(rows, collumns, values, 3); // симметричная или нет?
-
-            IncompleteCholesky incompleteCholesky = new IncompleteCholesky(FA);
-            var result = incompleteCholesky.LMult(new Vector(new double[] { 1, 1, 1 }));
+            DioganalFactorization diag = new DioganalFactorization(FA);
+            var result = diag.LSolve(new Vector(new double[] { 2, 3, 4 }));
             double[] resultActual = new double[]
             {
-                Math.Sqrt(10),
-                Math.Sqrt(5),
-                Math.Sqrt(7)
+                2.0 / Math.Sqrt(10),
+                3.0 / Math.Sqrt(10),
+                4.0 / Math.Sqrt(10)
             };
 
             for (int i = 0; i < result.Size; i++)

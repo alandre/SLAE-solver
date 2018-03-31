@@ -205,6 +205,20 @@ namespace MF.SymmetricDense
         }
 
         [Fact]
+        public void Multyply()
+        {
+            Vector vector = new Vector(new double[] { 1, 1, 1 });
+
+            var result = denseSymmetricMatrix.Multiply(vector);
+            var resultActual = new Vector(new double[] { 5, 12, 11 });
+
+            for (int i = 0; i < resultActual.Size; i++)
+            {
+                Assert.Equal(result[i], resultActual[i], 8);
+            }
+        }
+
+        [Fact]
         public void Fill()
         {
             FillFunc fillFunc = (row, col) => { return (row + 1) + (col + 1); };

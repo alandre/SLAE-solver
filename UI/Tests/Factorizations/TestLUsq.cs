@@ -19,7 +19,7 @@ namespace Factorizations
             int[] rows = new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
             int[] collumns = new int[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
             double[] values = new double[] { 4, 8, 12, 6, 28, 46, 10, 44, 121 };
-            FA = new CoordinationalMatrix(rows, collumns, values, 3); // симметричная или нет?
+            FA = new CoordinationalMatrix(rows, collumns, values, 3); 
         }
 
 

@@ -90,23 +90,22 @@ namespace UI
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
                     fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], input, input.symmetry);
-                    if (fileInputedSLAE.matrix != null)
+                    if(fileInputedSLAE.matrix != null)
+                    { 
+                    fileInputedSLAE.b = new Vector(input.b);
+                    if (input.x0 != null)
+                        fileInputedSLAE.x0 = new Vector(input.x0);
+                    else
                     {
-                        fileInputedSLAE.b = new Vector(input.b);
-                        if (input.x0 != null)
-                            fileInputedSLAE.x0 = new Vector(input.x0);
-                        else
-                        {
-                            var tmpx0 = new double[fileInputedSLAE.matrix.Size];
-                            for (int i = 0; i < tmpx0.Length; i++)
-                                tmpx0[i] = 0;
-                            fileInputedSLAE.x0 = new Vector(tmpx0);
-                        }
-
-                        fileInputBtn.Text = file.FileName;
-                        fileInputNotNull = true;
-                        CheckedChanged(inputCheckedImg, inputChecked = true);
+                        var tmpx0 = new double[fileInputedSLAE.matrix.Size];
+                        for (int i = 0; i < tmpx0.Length; i++)
+                            tmpx0[i] = 0;
+                        fileInputedSLAE.x0 = new Vector(tmpx0);
                     }
+                    fileInputBtn.Text = file.FileName;
+                    fileInputNotNull = true;
+                    CheckedChanged(inputCheckedImg, inputChecked = true);
+                        }
                 }
             }
             catch (Exception)

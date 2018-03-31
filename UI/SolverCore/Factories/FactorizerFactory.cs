@@ -9,7 +9,16 @@ namespace SolverCore
 {
     public class FactorizerFactory
     {
-        public enum FactorizersEnum { IncompleteCholesky = 0, IncompleteLU = 1, IncompleteLUsq = 2, WithoutFactorization = 3 }
+        public static Dictionary<string, FactorizersEnum> FactorizersDictionary { get; } = new Dictionary<string, FactorizersEnum>
+        {
+            {"Без факторизации",FactorizersEnum.WithoutFactorization},
+            {"Неполный Холецкий", FactorizersEnum.IncompleteCholesky},
+            {"Неполный LU", FactorizersEnum.IncompleteLU},
+            {"Неполный LUsq", FactorizersEnum.IncompleteLUsq}
+           
+          
+        };
+        public enum FactorizersEnum { WithoutFactorization, IncompleteCholesky, IncompleteLU, IncompleteLUsq }
         public static IMatrix Factorize_it(FactorizersEnum type, IMatrix matrix)
         {
             switch (type)

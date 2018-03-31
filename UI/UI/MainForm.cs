@@ -62,9 +62,14 @@ namespace UI
                 formatBox.Items.Add(format);
             }
             formatBox.Text = formatBox.Items[0].ToString();
-
+            var FactList = new List<string>(FactorizerFactory.FactorizersDictionary.Keys);
+            Types = new List<string>();
+            foreach (var factorizer in FactList)
+            {
+                factorizerBox.Items.Add(factorizer);
+            }
+            factorizerBox.Text = factorizerBox.Items[0].ToString();
             methodListBox.DataSource = Enum.GetValues(typeof(MethodsEnum));
-            factorizerBox.DataSource = Enum.GetValues(typeof(FactorizerFactory.FactorizersEnum));
             var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   
             path = Path.GetDirectoryName(location);
             outPathBox.Text = path;
@@ -228,7 +233,7 @@ namespace UI
         private async void SolveAsync()
         {
             x0_tmp = currentSLAE.x0.Clone();
-            FactorizerFactory.FactorizersEnum factorizerName = (FactorizerFactory.FactorizersEnum)factorizerBox.SelectedValue;
+            FactorizerFactory.FactorizersEnum factorizerName = FactorizerFactory.FactorizersDictionary[factorizerBox.Text];
             IMatrix factorizedMatrix = FactorizerFactory.Factorize_it(factorizerName,currentSLAE.matrix);
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
             FullDirectoryName = path + uniqueDirectoryName;

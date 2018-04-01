@@ -45,6 +45,8 @@ namespace UI
                 dataGridView1.Rows[i].Cells["itercount"].Value = item_num;
                 dataGridView1.Rows[i].Cells["time"].Value = _Methods[i].time;
             }
+            dataGridView1.Height += dataGridView1.RowTemplate.Height * dataGridView1.Rows.Count;
+            Height += dataGridView1.Height;
 
             ChartArea chartArea1 = new ChartArea();
             Legend legend1 = new Legend();
@@ -74,6 +76,11 @@ namespace UI
                 chart1.Series.Add(myGraphics[i]);
             }
        }
+
+        private void ResultsForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
  
 }

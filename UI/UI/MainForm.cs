@@ -202,15 +202,9 @@ namespace UI
             // на вход нужен массив кортежей: (string, savebufferloger, double time)
             // строка - название, логер и понятия не имею какого фомата время, потому дабл
             // никто не может обещать, что функция работает, более вероятно что она не работает
-            try
-            {
-                ResultsForm resultsForm = new ResultsForm(_Methods);
-                resultsForm.Show();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Нет данных для решений");
-            }
+
+            ResultsForm resultsForm = new ResultsForm(_Methods);
+            resultsForm.Show();
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -250,12 +244,15 @@ namespace UI
             }
 
             startBtn.Enabled = inputChecked && methodChecked;
+
         }
 
         private void Start_Click(object sender, EventArgs e)
         {
+            menuStrip2.Enabled = false;
             currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
             SolveAsync();
+            menuStrip2.Enabled = true;
         }
 
 

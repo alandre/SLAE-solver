@@ -343,6 +343,7 @@
             // 
             this.menuStrip2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.menuStrip2.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.menuStrip2.Enabled = false;
             this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuOpenOutput,
             this.resultsFormToolStripMenuItem});

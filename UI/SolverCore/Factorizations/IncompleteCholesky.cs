@@ -38,7 +38,7 @@ namespace SolverCore.Factorizations
 
                     foreach (var k in columns)
                     {
-                        if (k >= j - 1)
+                        if (k > j - 1)
                             break;
 
                         sumL += factorizedMatix[i, k] * factorizedMatix[j, k];

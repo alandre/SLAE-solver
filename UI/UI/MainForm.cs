@@ -505,7 +505,7 @@ namespace UI
         {
             var location = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string path_help = Path.GetDirectoryName(location);
-            string comandText = path_help + "\\Help1.chm";
+            string comandText = path_help + "\\Help.chm";
             if (File.Exists(path_help))
             {
                 var proc = new System.Diagnostics.Process();

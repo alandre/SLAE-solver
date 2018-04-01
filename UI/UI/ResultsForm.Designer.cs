@@ -42,20 +42,23 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToResizeColumns = false;
+            this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
-            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.method,
             this.res_res,
             this.itercount,
             this.time});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 317);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 421);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridView1.Size = new System.Drawing.Size(398, 36);
+            this.dataGridView1.Size = new System.Drawing.Size(578, 22);
             this.dataGridView1.TabIndex = 0;
             // 
             // method
@@ -86,17 +89,19 @@
             // 
             this.chart1.Location = new System.Drawing.Point(12, 12);
             this.chart1.Name = "chart1";
-            this.chart1.Size = new System.Drawing.Size(398, 299);
+            this.chart1.Size = new System.Drawing.Size(578, 403);
             this.chart1.TabIndex = 0;
+            this.chart1.Click += new System.EventHandler(this.chart1_Click);
             // 
             // ResultsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(422, 365);
+            this.ClientSize = new System.Drawing.Size(602, 456);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.dataGridView1);
             this.Name = "ResultsForm";
+            this.ShowIcon = false;
             this.Text = "Результаты";
             this.Load += new System.EventHandler(this.ResultsForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();

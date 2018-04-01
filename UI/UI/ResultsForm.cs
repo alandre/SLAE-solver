@@ -46,8 +46,12 @@ namespace UI
                 dataGridView1.Rows[i].Cells["time"].Value = _Methods[i].time;
             }
             var addHeight = dataGridView1.RowTemplate.Height * dataGridView1.Rows.Count;
-            dataGridView1.Height += addHeight;
+            var loc = dataGridView1.Location;
             Height += addHeight;
+            dataGridView1.Height += addHeight;
+            dataGridView1.Location = loc;
+            chart1.Height -= addHeight;
+            MinimumSize = Size;
 
             int maxiter = 0;
             for (int i = 0; i < methods_number; i++)
@@ -60,8 +64,6 @@ namespace UI
                 ChartArea chartArea1 = new ChartArea();
                 chartArea1.AxisX.Minimum = 1;
                 chartArea1.AxisX.Maximum = maxiter;
-                //chartArea1.AxisX.ScaleView.Zoomable = true;
-                //chartArea1.AxisY.ScaleView.Zoomable = true;
                 chart1.ChartAreas.Add(chartArea1);
 
                 Legend legend1 = new Legend();

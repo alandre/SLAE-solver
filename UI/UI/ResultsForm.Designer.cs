@@ -44,6 +44,8 @@
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.AllowUserToResizeColumns = false;
             this.dataGridView1.AllowUserToResizeRows = false;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
             this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -87,7 +89,11 @@
             // 
             // chart1
             // 
+            this.chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.chart1.Location = new System.Drawing.Point(12, 12);
+            this.chart1.MinimumSize = new System.Drawing.Size(578, 403);
             this.chart1.Name = "chart1";
             this.chart1.Size = new System.Drawing.Size(578, 403);
             this.chart1.TabIndex = 0;
@@ -100,6 +106,7 @@
             this.ClientSize = new System.Drawing.Size(602, 456);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.dataGridView1);
+            this.MinimumSize = new System.Drawing.Size(618, 495);
             this.Name = "ResultsForm";
             this.ShowIcon = false;
             this.Text = "Результаты";

@@ -65,6 +65,7 @@
             this.done_label = new System.Windows.Forms.Label();
             this.need_label = new System.Windows.Forms.Label();
             this.residual_label = new System.Windows.Forms.Label();
+            this.Help = new System.Windows.Forms.Button();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
@@ -473,11 +474,23 @@
             this.residual_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.residual_label.Visible = false;
             // 
+            // Help
+            // 
+            this.Help.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.Help.Location = new System.Drawing.Point(448, 334);
+            this.Help.Name = "Help";
+            this.Help.Size = new System.Drawing.Size(89, 24);
+            this.Help.TabIndex = 26;
+            this.Help.Text = "Справка";
+            this.Help.UseVisualStyleBackColor = true;
+            this.Help.Click += new System.EventHandler(this.button1_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(549, 358);
+            this.Controls.Add(this.Help);
             this.Controls.Add(this.residual_label);
             this.Controls.Add(this.need_label);
             this.Controls.Add(this.done_label);
@@ -556,6 +569,7 @@
         private System.Windows.Forms.Label residual_label;
         private System.Windows.Forms.ComboBox factorizerBox;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button Help;
     }
 }
 

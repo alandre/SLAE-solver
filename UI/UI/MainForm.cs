@@ -500,6 +500,18 @@ namespace UI
                 factorizerBox.Text = factorizerBox.Items[0].ToString();
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var location = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string path_help = Path.GetDirectoryName(location);
+            string comandText = path_help + "\\Help.chm";
+
+            var proc = new System.Diagnostics.Process();
+            proc.StartInfo.FileName = comandText;
+            proc.StartInfo.UseShellExecute = true;
+            proc.Start();
+        }
     }
 }
  

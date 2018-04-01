@@ -302,6 +302,7 @@
             this.sim.TabIndex = 16;
             this.sim.Text = "Симметричная матрица";
             this.sim.UseVisualStyleBackColor = true;
+            this.sim.CheckedChanged += new System.EventHandler(this.sim_CheckedChanged);
             // 
             // label1
             // 

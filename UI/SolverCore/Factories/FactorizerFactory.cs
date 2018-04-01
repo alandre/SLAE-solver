@@ -12,13 +12,28 @@ namespace SolverCore
         public static Dictionary<string, FactorizersEnum> FactorizersDictionary { get; } = new Dictionary<string, FactorizersEnum>
         {
             {"Без факторизации",FactorizersEnum.WithoutFactorization},
+            //{"Неполный Холецкий", FactorizersEnum.IncompleteCholesky},
+            {"Неполный LU", FactorizersEnum.IncompleteLU},
+            {"Неполный LUsq", FactorizersEnum.IncompleteLUsq},
+            //{"Диагональная", FactorizersEnum.DiagonalFactorization},
+            //{"Простая", FactorizersEnum.SimpleFactorization}
+
+
+
+        };
+        public static Dictionary<string, FactorizersEnum> FactorizersSimDictionary { get; } = new Dictionary<string, FactorizersEnum>
+        {
+            {"Без факторизации",FactorizersEnum.WithoutFactorization},
             {"Неполный Холецкий", FactorizersEnum.IncompleteCholesky},
             {"Неполный LU", FactorizersEnum.IncompleteLU},
-            {"Неполный LUsq", FactorizersEnum.IncompleteLUsq}
-           
-          
+            {"Неполный LUsq", FactorizersEnum.IncompleteLUsq},
+            //{"Диагональная", FactorizersEnum.DiagonalFactorization},
+            //{"Простая", FactorizersEnum.SimpleFactorization}
+
+
+
         };
-        public enum FactorizersEnum { WithoutFactorization, IncompleteCholesky, IncompleteLU, IncompleteLUsq }
+        public enum FactorizersEnum { WithoutFactorization, IncompleteCholesky, IncompleteLU, IncompleteLUsq }//, DiagonalFactorization, SimpleFactorization }
         public static IMatrix Factorize_it(FactorizersEnum type, IMatrix matrix)
         {
             switch (type)
@@ -29,6 +44,10 @@ namespace SolverCore
                     return IncompleteLU.IncompleteLUMethod(matrix.ConvertToCoordinationalMatrix());
                 case FactorizersEnum.IncompleteLUsq:
                     return IncompleteLUsq.IncompleteLUsqMethod(matrix.ConvertToCoordinationalMatrix());
+              //  case FactorizersEnum.DiagonalFactorization:
+                //    return IncompleteLUsq.IncompleteLUsqMethod(matrix.ConvertToCoordinationalMatrix());
+              //  case FactorizersEnum.SimpleFactorization:
+                //    return IncompleteLUsq.IncompleteLUsqMethod(matrix.ConvertToCoordinationalMatrix());
                 case FactorizersEnum.WithoutFactorization:
                     return matrix;
                 default: return null;

@@ -32,6 +32,7 @@ namespace UI
 
     public partial class MainForm : Form
     {
+        bool needFactorization = false;
         bool inputChecked = false;
         bool methodChecked = false;
         bool manualInputNotNull = false;
@@ -62,7 +63,7 @@ namespace UI
                 formatBox.Items.Add(format);
             }
             formatBox.Text = formatBox.Items[0].ToString();
-            var FactList = new List<string>(FactorizerFactory.FactorizersDictionary.Keys);
+           
             var Type = new List<MethodsEnum>(LoggingSolversFabric.MethodsDictionary.Values);
             foreach (var Method in Type)
             {
@@ -70,7 +71,7 @@ namespace UI
             }
             Types = new List<string>();
 
-
+            var FactList = new List<string>(FactorizerFactory.FactorizersDictionary.Keys);
             foreach (var factorizer in FactList)
             {
                 factorizerBox.Items.Add(factorizer);
@@ -140,6 +141,7 @@ namespace UI
 
         private void fileInputRadioBtn_CheckedChanged(object sender, EventArgs e)
         {
+            sim_CheckedChanged(sender, e);
             fileInputPanel.Enabled = fileInputRadioBtn.Checked;
             manualInpitRadioBtn.Checked = !fileInputRadioBtn.Checked;
             inputChecked = fileInputRadioBtn.Checked && fileInputNotNull;
@@ -149,6 +151,8 @@ namespace UI
 
         private void manualInpitRadioBtn_CheckedChanged(object sender, EventArgs e)
         {
+            if (!(constructorForm == null || constructorForm.IsDisposed)) Sym(constructorForm.IsSymmetric);
+
             manualInputBtn.Enabled = manualInpitRadioBtn.Checked;
             fileInputRadioBtn.Checked = !manualInpitRadioBtn.Checked;
             inputChecked = manualInpitRadioBtn.Checked && manualInputNotNull;
@@ -162,7 +166,30 @@ namespace UI
             manualInputNotNull = true;
             CheckedChanged(inputCheckedImg, inputChecked = true);
         }
-
+        public void Sym(bool symmetry)
+        {
+            if (symmetry)
+            {
+                factorizerBox.Items.Clear();
+                var FactList = new List<string>(FactorizerFactory.FactorizersSimDictionary.Keys);
+                foreach (var factorizer in FactList)
+                {
+                    factorizerBox.Items.Add(factorizer);
+                }
+                factorizerBox.Text = factorizerBox.Items[0].ToString();
+            }
+            else
+            {
+                factorizerBox.Items.Clear();
+                var FactList = new List<string>(FactorizerFactory.FactorizersDictionary.Keys);
+                foreach (var factorizer in FactList)
+                {
+                    factorizerBox.Items.Add(factorizer);
+                }
+                factorizerBox.Text = factorizerBox.Items[0].ToString();
+            }
+          
+        }
         public void SetKrylov(int _Krylov)
         {
             Krylov = _Krylov;
@@ -218,7 +245,7 @@ namespace UI
                 switch (method)
 
                 {
-                    case "BCGStab":
+                    case "GMRes":
                         {
                             if (KrylovForm == null || KrylovForm.IsDisposed)
                                 KrylovForm = new Krylov();
@@ -230,6 +257,7 @@ namespace UI
                         }
                     default: break;
                 }
+                
 
             }
             if (methodListBox.CheckedItems.Count > 0)
@@ -249,18 +277,39 @@ namespace UI
 
         private void Start_Click(object sender, EventArgs e)
         {
+            needFactorization = false;
             menuStrip2.Enabled = false;
             currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
+            foreach (MethodsEnum methodName in methodListBox.CheckedItems)
+            {
+                switch (methodName)
+                {
+                    case MethodsEnum.BCGStab:
+                        needFactorization = true;
+                        break;
+                    case MethodsEnum.CGM:
+                        needFactorization = true;
+                        break;
+                    case MethodsEnum.LOS:
+                        needFactorization = true;
+                        break;
+                    default: break;
+                }
+               
+            }
+            if (!needFactorization)
+                MessageBox.Show("Факторизация для выбранных методов не требуется");
             SolveAsync();
             menuStrip2.Enabled = true;
-        }
+            
 
+        }
 
         private async void SolveAsync()
         {
 
             x0_tmp = currentSLAE.x0.Clone();
-            FactorizerFactory.FactorizersEnum factorizerName = FactorizerFactory.FactorizersDictionary[factorizerBox.Text];
+            FactorizerFactory.FactorizersEnum factorizerName = FactorizerFactory.FactorizersSimDictionary[factorizerBox.Text];
             IMatrix factorizedMatrix = FactorizerFactory.Factorize_it(factorizerName,currentSLAE.matrix);
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
             FullDirectoryName = path + uniqueDirectoryName;
@@ -283,7 +332,20 @@ namespace UI
             int i = 0;
             foreach (MethodsEnum methodName in methodListBox.CheckedItems)
             {
-              
+                bool needFactorization_method = false;
+                switch (methodName)
+                {
+                    case MethodsEnum.BCGStab:
+                        needFactorization_method = true;
+                        break;
+                    case MethodsEnum.CGM:
+                        needFactorization_method = true;
+                        break;
+                    case MethodsEnum.LOS:
+                        needFactorization_method = true;
+                        break;
+                }
+                
                 currentSLAE.x0 = x0_tmp.Clone();
                 _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
@@ -293,7 +355,17 @@ namespace UI
                 timer1.Start();
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                IVector result = await RunAsync((LoggingSolver)loggingSolver, factorizedMatrix, currentSLAE.x0, currentSLAE.b);
+                IVector result;
+                result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                
+                if (needFactorization_method)
+                {
+                    result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                }
+                else
+                {
+                    result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                }
                 sw.Stop();
                
                 timer1.Stop();
@@ -341,8 +413,9 @@ namespace UI
             var totalString = new StringBuilder();
             var resultReportString = new StringBuilder();
             var resultTotalString = new StringBuilder();
-
-            var solve = string.Join(" ", result);
+            string solve;
+            if (result != null) {  solve = string.Join(" ", result); }
+            else {  solve = string.Join(" ","нет решения"); }
 
             totalString
                 .AppendLine($"{method}")
@@ -403,5 +476,30 @@ namespace UI
         {
 
         }
+
+        private void sim_CheckedChanged(object sender, EventArgs e)
+        {
+            if (sim.Checked)
+            {
+                factorizerBox.Items.Clear();
+                var FactList = new List<string>(FactorizerFactory.FactorizersSimDictionary.Keys);
+                foreach (var factorizer in FactList)
+                {
+                    factorizerBox.Items.Add(factorizer);
+                }
+                factorizerBox.Text = factorizerBox.Items[0].ToString();
+            }
+            else
+            {
+                factorizerBox.Items.Clear();
+                var FactList = new List<string>(FactorizerFactory.FactorizersDictionary.Keys);
+                foreach (var factorizer in FactList)
+                {
+                    factorizerBox.Items.Add(factorizer);
+                }
+                factorizerBox.Text = factorizerBox.Items[0].ToString();
+            }
+        }
     }
 }
+ 

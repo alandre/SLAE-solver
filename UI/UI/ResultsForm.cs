@@ -45,35 +45,66 @@ namespace UI
                 dataGridView1.Rows[i].Cells["itercount"].Value = item_num;
                 dataGridView1.Rows[i].Cells["time"].Value = _Methods[i].time;
             }
-
-            ChartArea chartArea1 = new ChartArea();
-            Legend legend1 = new Legend();
-            chartArea1.Name = "Графики невязок";
-            chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            chart1.Legends.Add(legend1);
-
-            Series[] myGraphics = new Series[methods_number];
+            var addHeight = dataGridView1.RowTemplate.Height * dataGridView1.Rows.Count;
+            var loc = dataGridView1.Location;
+            Height += addHeight;
+            dataGridView1.Height += addHeight;
+            dataGridView1.Location = loc;
+            chart1.Height -= addHeight;
+            MinimumSize = Size;
 
             int maxiter = 0;
             for (int i = 0; i < methods_number; i++)
                 if (Methods[i].residual.Count > maxiter)
                     maxiter = Methods[i].residual.Count;
 
-                for (int i = 0; i < methods_number; i++)
+            if (maxiter > 1)
             {
-                myGraphics[i] = new Series();
-                int m = Methods[i].residual.Count;
-                myGraphics[i].Name = myGraphics[i].LegendText = Methods[i].name;
-                for (int j = 0; j < m; j++)
-                    myGraphics[i].Points.AddXY(j, Methods[i].residual[j]);
-                for (int j = m; j < maxiter; j++)
-                    myGraphics[i].Points.AddXY(j, Methods[i].residual[m - 1]);
-                myGraphics[i].ChartType = SeriesChartType.Line;
 
-                chart1.Series.Add(myGraphics[i]);
+                ChartArea chartArea1 = new ChartArea();
+                chartArea1.AxisX.Minimum = 1;
+                chartArea1.AxisX.Maximum = maxiter;
+                chart1.ChartAreas.Add(chartArea1);
+
+                Legend legend1 = new Legend();
+                chartArea1.Name = "Графики невязок";
+                legend1.Docking = Docking.Bottom;
+                chart1.Legends.Add(legend1);
+
+                Series[] myGraphics = new Series[methods_number];
+
+                for (int i = 0; i < methods_number; i++)
+                {
+                    myGraphics[i] = new Series();
+                    int m = Methods[i].residual.Count;
+                    myGraphics[i].Name = myGraphics[i].LegendText = Methods[i].name;
+                    for (int j = 1; j <= m; j++)
+                        myGraphics[i].Points.AddXY(j, Methods[i].residual[j - 1]);
+                    for (int j = m + 1; j <= maxiter; j++)
+                        myGraphics[i].Points.AddXY(j, Methods[i].residual[m - 1]);
+                    myGraphics[i].ChartType = SeriesChartType.Line;
+
+                    chart1.Series.Add(myGraphics[i]);
+                }
             }
+            else
+            {
+                chart1.Visible = false;
+                dataGridView1.Location = chart1.Location;
+                Height -= chart1.Height;
+            }
+
        }
+
+        private void ResultsForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
  
 }

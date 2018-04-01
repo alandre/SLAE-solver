@@ -70,7 +70,7 @@
             0});
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(39, 20);
-            this.numericUpDown1.TabIndex = 1;
+            this.numericUpDown1.TabIndex = 0;
             this.numericUpDown1.Value = new decimal(new int[] {
             2,
             0,
@@ -95,7 +95,7 @@
             this.sizePanel.Location = new System.Drawing.Point(3, 3);
             this.sizePanel.Name = "sizePanel";
             this.sizePanel.Size = new System.Drawing.Size(183, 65);
-            this.sizePanel.TabIndex = 2;
+            this.sizePanel.TabIndex = 0;
             // 
             // symCheckBox
             // 
@@ -103,7 +103,7 @@
             this.symCheckBox.Location = new System.Drawing.Point(12, 40);
             this.symCheckBox.Name = "symCheckBox";
             this.symCheckBox.Size = new System.Drawing.Size(147, 17);
-            this.symCheckBox.TabIndex = 15;
+            this.symCheckBox.TabIndex = 1;
             this.symCheckBox.Text = "Симметричная матрица";
             this.symCheckBox.UseVisualStyleBackColor = true;
             this.symCheckBox.CheckedChanged += new System.EventHandler(this.symCheckBox_CheckedChanged);
@@ -134,7 +134,7 @@
             this.A.RowHeadersVisible = false;
             this.A.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.A.Size = new System.Drawing.Size(71, 45);
-            this.A.TabIndex = 0;
+            this.A.TabIndex = 2;
             this.A.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.CellBeginEdit);
             this.A.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellEndEdit);
             this.A.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.A_CellEnter);
@@ -156,7 +156,7 @@
             this.F.RowHeadersVisible = false;
             this.F.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.F.Size = new System.Drawing.Size(36, 45);
-            this.F.TabIndex = 13;
+            this.F.TabIndex = 3;
             this.F.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.CellBeginEdit);
             this.F.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellEndEdit);
             this.F.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.CellValidating);
@@ -206,7 +206,7 @@
             this.x0.RowHeadersVisible = false;
             this.x0.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.x0.Size = new System.Drawing.Size(71, 23);
-            this.x0.TabIndex = 15;
+            this.x0.TabIndex = 4;
             this.x0.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.CellBeginEdit);
             this.x0.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.CellEndEdit);
             this.x0.CellValidating += new System.Windows.Forms.DataGridViewCellValidatingEventHandler(this.CellValidating);
@@ -230,7 +230,7 @@
             this.CleanF_Btn.Location = new System.Drawing.Point(195, 83);
             this.CleanF_Btn.Name = "CleanF_Btn";
             this.CleanF_Btn.Size = new System.Drawing.Size(20, 20);
-            this.CleanF_Btn.TabIndex = 18;
+            this.CleanF_Btn.TabIndex = 6;
             this.CleanF_Btn.UseVisualStyleBackColor = true;
             this.CleanF_Btn.Click += new System.EventHandler(this.CleanF_Btn_Click);
             // 
@@ -242,7 +242,7 @@
             this.CleanMatrix_Btn.Location = new System.Drawing.Point(90, 83);
             this.CleanMatrix_Btn.Name = "CleanMatrix_Btn";
             this.CleanMatrix_Btn.Size = new System.Drawing.Size(20, 20);
-            this.CleanMatrix_Btn.TabIndex = 17;
+            this.CleanMatrix_Btn.TabIndex = 5;
             this.CleanMatrix_Btn.UseVisualStyleBackColor = true;
             this.CleanMatrix_Btn.Click += new System.EventHandler(this.CleanMatrix_Btn_Click);
             // 
@@ -254,7 +254,7 @@
             this.CleanX0_Btn.Location = new System.Drawing.Point(90, 163);
             this.CleanX0_Btn.Name = "CleanX0_Btn";
             this.CleanX0_Btn.Size = new System.Drawing.Size(20, 20);
-            this.CleanX0_Btn.TabIndex = 16;
+            this.CleanX0_Btn.TabIndex = 7;
             this.CleanX0_Btn.UseVisualStyleBackColor = true;
             this.CleanX0_Btn.Click += new System.EventHandler(this.CleanX0_Btn_Click);
             // 

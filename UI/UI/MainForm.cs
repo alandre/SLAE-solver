@@ -356,8 +356,7 @@ namespace UI
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 IVector result;
-                result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
-                
+
                 if (needFactorization_method)
                 {
                     result = await RunAsync((LoggingSolver)loggingSolver, factorizedMatrix, currentSLAE.x0, currentSLAE.b);

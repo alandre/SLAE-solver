@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 
 namespace SolverCore
 {
@@ -295,6 +296,18 @@ namespace SolverCore
             var obj = new { b, x0, denseL = matrix };
             return JsonConvert.SerializeObject(obj);
 
+        }
+
+        public string BinarySerialize(IVector b, IVector x0)
+        {
+            var obj = new { b, x0, denseL = matrix };
+            MemoryStream ms = new MemoryStream();
+            using (BsonWriter writer = new BsonWriter(ms))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(writer, obj);
+            }
+            return Convert.ToBase64String(ms.ToArray());
         }
     }
 }

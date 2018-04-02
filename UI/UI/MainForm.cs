@@ -505,11 +505,16 @@ namespace UI
             var location = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string path_help = Path.GetDirectoryName(location);
             string comandText = path_help + "\\Help.chm";
+            if (File.Exists(path_help))
+            {
+                var proc = new System.Diagnostics.Process();
+                proc.StartInfo.FileName = comandText;
+                proc.StartInfo.UseShellExecute = true;
+                proc.Start();
+            }
+            else
+                MessageBox.Show("Загрузите файл Help.chm в папку с исполняемым файлом", "Справка не найдена", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
-            var proc = new System.Diagnostics.Process();
-            proc.StartInfo.FileName = comandText;
-            proc.StartInfo.UseShellExecute = true;
-            proc.Start();
         }
     }
 }

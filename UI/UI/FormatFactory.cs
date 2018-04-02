@@ -34,7 +34,7 @@ namespace UI
                         case Formats.SparseRow:
                             return new SymmetricSparseRowMatrix(initialazer.gg, initialazer.ja, initialazer.ia);
                         case Formats.SparseRowColumn:
-                            return new SymmetricSparseRowColumnMatrix(initialazer.di, initialazer.gg, initialazer.ia, initialazer.ia);
+                            return new SymmetricSparseRowColumnMatrix(initialazer.di, initialazer.gg, initialazer.ia, initialazer.ja);
                         default:
                             throw new ArgumentOutOfRangeException(nameof(type), type, null);
                     }

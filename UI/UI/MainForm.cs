@@ -360,7 +360,7 @@ namespace UI
                 
                 if (needFactorization_method)
                 {
-                    result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                    result = await RunAsync((LoggingSolver)loggingSolver, factorizedMatrix, currentSLAE.x0, currentSLAE.b);
                 }
                 else
                 {

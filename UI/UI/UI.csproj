@@ -143,6 +143,7 @@
     <None Include="Resources\CleanIcon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Help1.chm" />
     <None Include="Resources\Галочка.png" />
   </ItemGroup>
   <ItemGroup>

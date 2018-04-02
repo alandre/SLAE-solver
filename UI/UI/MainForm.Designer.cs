@@ -33,7 +33,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.factorizerBox = new System.Windows.Forms.ComboBox();
             this.iterBox = new System.Windows.Forms.NumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
             this.methodCheckedImg = new System.Windows.Forms.PictureBox();
             this.methodListBox = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -65,7 +64,7 @@
             this.done_label = new System.Windows.Forms.Label();
             this.need_label = new System.Windows.Forms.Label();
             this.residual_label = new System.Windows.Forms.Label();
-            this.Help = new System.Windows.Forms.Button();
+            this.label7 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
@@ -89,7 +88,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.groupBox2.Location = new System.Drawing.Point(260, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(277, 156);
+            this.groupBox2.Size = new System.Drawing.Size(277, 217);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Выбор методов решения";
@@ -97,7 +96,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(5, 101);
+            this.label6.Location = new System.Drawing.Point(9, 167);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(123, 13);
             this.label6.TabIndex = 31;
@@ -107,7 +106,7 @@
             // 
             this.factorizerBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.factorizerBox.FormattingEnabled = true;
-            this.factorizerBox.Location = new System.Drawing.Point(6, 118);
+            this.factorizerBox.Location = new System.Drawing.Point(10, 184);
             this.factorizerBox.Name = "factorizerBox";
             this.factorizerBox.Size = new System.Drawing.Size(197, 21);
             this.factorizerBox.TabIndex = 4;
@@ -119,7 +118,7 @@
             0,
             0,
             0});
-            this.iterBox.Location = new System.Drawing.Point(49, 22);
+            this.iterBox.Location = new System.Drawing.Point(100, 32);
             this.iterBox.Maximum = new decimal(new int[] {
             1000000000,
             0,
@@ -140,15 +139,6 @@
             0,
             0});
             // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 25);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(43, 13);
-            this.label7.TabIndex = 29;
-            this.label7.Text = "maxiter:";
-            // 
             // methodCheckedImg
             // 
             this.methodCheckedImg.Enabled = false;
@@ -167,10 +157,10 @@
             this.methodListBox.CheckOnClick = true;
             this.methodListBox.ColumnWidth = 130;
             this.methodListBox.FormattingEnabled = true;
-            this.methodListBox.Location = new System.Drawing.Point(8, 53);
+            this.methodListBox.Location = new System.Drawing.Point(10, 69);
             this.methodListBox.MultiColumn = true;
             this.methodListBox.Name = "methodListBox";
-            this.methodListBox.Size = new System.Drawing.Size(260, 45);
+            this.methodListBox.Size = new System.Drawing.Size(260, 90);
             this.methodListBox.Sorted = true;
             this.methodListBox.TabIndex = 27;
             this.methodListBox.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
@@ -178,7 +168,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(106, 25);
+            this.label2.Location = new System.Drawing.Point(163, 34);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(16, 13);
             this.label2.TabIndex = 21;
@@ -186,7 +176,7 @@
             // 
             // epsBox
             // 
-            this.epsBox.Location = new System.Drawing.Point(124, 22);
+            this.epsBox.Location = new System.Drawing.Point(181, 31);
             this.epsBox.Name = "epsBox";
             this.epsBox.Size = new System.Drawing.Size(55, 20);
             this.epsBox.TabIndex = 8;
@@ -204,7 +194,7 @@
             this.inputData.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.inputData.Location = new System.Drawing.Point(12, 12);
             this.inputData.Name = "inputData";
-            this.inputData.Size = new System.Drawing.Size(237, 213);
+            this.inputData.Size = new System.Drawing.Size(237, 158);
             this.inputData.TabIndex = 3;
             this.inputData.TabStop = false;
             this.inputData.Text = "Входные данные";
@@ -226,7 +216,7 @@
             this.manualInputBtn.AutoSize = true;
             this.manualInputBtn.Enabled = false;
             this.manualInputBtn.LinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.manualInputBtn.Location = new System.Drawing.Point(23, 160);
+            this.manualInputBtn.Location = new System.Drawing.Point(103, 135);
             this.manualInputBtn.Name = "manualInputBtn";
             this.manualInputBtn.Size = new System.Drawing.Size(126, 13);
             this.manualInputBtn.TabIndex = 19;
@@ -238,7 +228,7 @@
             // manualInpitRadioBtn
             // 
             this.manualInpitRadioBtn.AutoSize = true;
-            this.manualInpitRadioBtn.Location = new System.Drawing.Point(7, 139);
+            this.manualInpitRadioBtn.Location = new System.Drawing.Point(7, 133);
             this.manualInpitRadioBtn.Name = "manualInpitRadioBtn";
             this.manualInpitRadioBtn.Size = new System.Drawing.Size(87, 17);
             this.manualInpitRadioBtn.TabIndex = 18;
@@ -259,7 +249,7 @@
             // 
             this.fileInputRadioBtn.AutoSize = true;
             this.fileInputRadioBtn.Checked = true;
-            this.fileInputRadioBtn.Location = new System.Drawing.Point(7, 47);
+            this.fileInputRadioBtn.Location = new System.Drawing.Point(7, 43);
             this.fileInputRadioBtn.Name = "fileInputRadioBtn";
             this.fileInputRadioBtn.Size = new System.Drawing.Size(74, 17);
             this.fileInputRadioBtn.TabIndex = 10;
@@ -274,9 +264,9 @@
             this.fileInputPanel.Controls.Add(this.sim);
             this.fileInputPanel.Controls.Add(this.label1);
             this.fileInputPanel.Controls.Add(this.formatBox);
-            this.fileInputPanel.Location = new System.Drawing.Point(12, 46);
+            this.fileInputPanel.Location = new System.Drawing.Point(12, 42);
             this.fileInputPanel.Name = "fileInputPanel";
-            this.fileInputPanel.Size = new System.Drawing.Size(224, 93);
+            this.fileInputPanel.Size = new System.Drawing.Size(224, 91);
             this.fileInputPanel.TabIndex = 19;
             // 
             // fileInputBtn
@@ -325,7 +315,7 @@
             // 
             // IterProgressBar
             // 
-            this.IterProgressBar.Location = new System.Drawing.Point(12, 276);
+            this.IterProgressBar.Location = new System.Drawing.Point(12, 281);
             this.IterProgressBar.Name = "IterProgressBar";
             this.IterProgressBar.Size = new System.Drawing.Size(525, 19);
             this.IterProgressBar.TabIndex = 4;
@@ -333,7 +323,7 @@
             // startBtn
             // 
             this.startBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.startBtn.Location = new System.Drawing.Point(12, 231);
+            this.startBtn.Location = new System.Drawing.Point(12, 236);
             this.startBtn.Name = "startBtn";
             this.startBtn.Size = new System.Drawing.Size(525, 26);
             this.startBtn.TabIndex = 5;
@@ -349,7 +339,7 @@
             this.menuStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripMenuOpenOutput,
             this.resultsFormToolStripMenuItem});
-            this.menuStrip2.Location = new System.Drawing.Point(0, 334);
+            this.menuStrip2.Location = new System.Drawing.Point(0, 337);
             this.menuStrip2.Name = "menuStrip2";
             this.menuStrip2.Size = new System.Drawing.Size(549, 24);
             this.menuStrip2.TabIndex = 15;
@@ -376,9 +366,9 @@
             // 
             this.groupBox3.Controls.Add(this.outPathBox);
             this.groupBox3.Controls.Add(this.fileOutputLink);
-            this.groupBox3.Location = new System.Drawing.Point(260, 172);
+            this.groupBox3.Location = new System.Drawing.Point(12, 176);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(277, 53);
+            this.groupBox3.Size = new System.Drawing.Size(237, 53);
             this.groupBox3.TabIndex = 20;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Выходные данные";
@@ -388,7 +378,7 @@
             this.outPathBox.Location = new System.Drawing.Point(8, 21);
             this.outPathBox.Name = "outPathBox";
             this.outPathBox.ReadOnly = true;
-            this.outPathBox.Size = new System.Drawing.Size(209, 20);
+            this.outPathBox.Size = new System.Drawing.Size(165, 20);
             this.outPathBox.TabIndex = 20;
             // 
             // fileOutputLink
@@ -396,7 +386,7 @@
             this.fileOutputLink.ActiveLinkColor = System.Drawing.Color.Maroon;
             this.fileOutputLink.AutoSize = true;
             this.fileOutputLink.LinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.fileOutputLink.Location = new System.Drawing.Point(223, 25);
+            this.fileOutputLink.Location = new System.Drawing.Point(182, 24);
             this.fileOutputLink.Name = "fileOutputLink";
             this.fileOutputLink.Size = new System.Drawing.Size(48, 13);
             this.fileOutputLink.TabIndex = 19;
@@ -407,7 +397,7 @@
             // 
             // MethodProgressBar
             // 
-            this.MethodProgressBar.Location = new System.Drawing.Point(12, 301);
+            this.MethodProgressBar.Location = new System.Drawing.Point(12, 306);
             this.MethodProgressBar.Name = "MethodProgressBar";
             this.MethodProgressBar.Size = new System.Drawing.Size(525, 19);
             this.MethodProgressBar.TabIndex = 21;
@@ -415,7 +405,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(9, 260);
+            this.label4.Location = new System.Drawing.Point(9, 265);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(100, 13);
             this.label4.TabIndex = 19;
@@ -424,7 +414,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(502, 260);
+            this.label5.Location = new System.Drawing.Point(502, 265);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(19, 13);
             this.label5.TabIndex = 22;
@@ -444,7 +434,7 @@
             // done_label
             // 
             this.done_label.AutoSize = true;
-            this.done_label.Location = new System.Drawing.Point(483, 260);
+            this.done_label.Location = new System.Drawing.Point(483, 265);
             this.done_label.Name = "done_label";
             this.done_label.Size = new System.Drawing.Size(13, 13);
             this.done_label.TabIndex = 23;
@@ -455,7 +445,7 @@
             // need_label
             // 
             this.need_label.AutoSize = true;
-            this.need_label.Location = new System.Drawing.Point(524, 260);
+            this.need_label.Location = new System.Drawing.Point(524, 265);
             this.need_label.Name = "need_label";
             this.need_label.Size = new System.Drawing.Size(13, 13);
             this.need_label.TabIndex = 24;
@@ -466,7 +456,7 @@
             // residual_label
             // 
             this.residual_label.AutoSize = true;
-            this.residual_label.Location = new System.Drawing.Point(115, 260);
+            this.residual_label.Location = new System.Drawing.Point(115, 265);
             this.residual_label.Name = "residual_label";
             this.residual_label.Size = new System.Drawing.Size(13, 13);
             this.residual_label.TabIndex = 25;
@@ -474,23 +464,20 @@
             this.residual_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.residual_label.Visible = false;
             // 
-            // Help
+            // label7
             // 
-            this.Help.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.Help.Location = new System.Drawing.Point(448, 334);
-            this.Help.Name = "Help";
-            this.Help.Size = new System.Drawing.Size(89, 24);
-            this.Help.TabIndex = 26;
-            this.Help.Text = "Справка";
-            this.Help.UseVisualStyleBackColor = true;
-            this.Help.Click += new System.EventHandler(this.button1_Click);
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 27);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(89, 26);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "Максимальное \r\nчисло итераций:";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(549, 358);
-            this.Controls.Add(this.Help);
+            this.ClientSize = new System.Drawing.Size(549, 361);
             this.Controls.Add(this.residual_label);
             this.Controls.Add(this.need_label);
             this.Controls.Add(this.done_label);
@@ -503,10 +490,15 @@
             this.Controls.Add(this.inputData);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox3);
-            this.MaximumSize = new System.Drawing.Size(565, 397);
+            this.HelpButton = true;
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(565, 450);
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(565, 397);
             this.Name = "MainForm";
+            this.ShowIcon = false;
             this.Text = "Решение СЛАУ";
+            this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.MainForm_HelpButtonClicked);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -560,7 +552,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.PictureBox inputCheckedImg;
         private System.Windows.Forms.PictureBox methodCheckedImg;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.NumericUpDown iterBox;
         private System.Windows.Forms.Timer timerHightlight;
         private System.Windows.Forms.Timer timer1;
@@ -569,7 +560,7 @@
         private System.Windows.Forms.Label residual_label;
         private System.Windows.Forms.ComboBox factorizerBox;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button Help;
+        private System.Windows.Forms.Label label7;
     }
 }
 

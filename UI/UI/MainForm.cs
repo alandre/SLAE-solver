@@ -500,21 +500,19 @@ namespace UI
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void MainForm_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-            var location = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            string path_help = Path.GetDirectoryName(location);
-            string comandText = path_help + "\\Help.chm";
-            if (File.Exists(path_help))
+            string url = path + "\\Help.chm";
+            var data = Resources.Help;
+            if (!File.Exists(url))
             {
-                var proc = new System.Diagnostics.Process();
-                proc.StartInfo.FileName = comandText;
-                proc.StartInfo.UseShellExecute = true;
-                proc.Start();
+                using (var stream = new FileStream("Help.chm", FileMode.Create))
+                {
+                    stream.Write(data, 0, data.Length);
+                    stream.Flush();
+                }
             }
-            else
-                MessageBox.Show("Загрузите файл Help.chm в папку с исполняемым файлом", "Справка не найдена", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-
+            Help.ShowHelp(this, url);
         }
     }
 }

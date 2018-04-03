@@ -131,6 +131,7 @@ namespace UI
 
         private void symCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            mainForm = (MainForm)Owner;
             if (symCheckBox.Checked)
             {
 
@@ -153,8 +154,7 @@ namespace UI
 
 
                 Symmetrize();
-                mainForm = (MainForm)Owner;
-                 mainForm.Sym(true);
+                mainForm.Sym(true);
 
             }
             else

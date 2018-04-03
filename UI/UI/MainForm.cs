@@ -376,7 +376,7 @@ namespace UI
                 MethodProgressBar.Increment(1);
                 timer1.Enabled = false;
 
-                _Methods[i].time = 0;
+                _Methods[i].time = sw.ElapsedMilliseconds;
                 
                 _Methods[i].log = Logger;
 

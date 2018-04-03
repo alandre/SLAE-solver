@@ -63,23 +63,31 @@ namespace SolverCore.Methods
 
             LAUp = A.LSolve(A.Multiply(A.USolve(p, true)), true);
             var gamma = (LAUp.DotProduct(p)) / (LAUp.DotProduct(LAUp));
+            if (Double.IsNaN(gamma) || Double.IsInfinity(gamma))
+            {
+                gamma = 0.0;
+            }
 
-            xk = xk.Add(z, alpha).Add(p, gamma);
+            xk = xk.Add(z, alpha);
+            xk = xk.Add(p, gamma);
+            x = A.USolve(xk, true);
+           
             r = p.Add(LAUp, -gamma);
 
             dotproduct_rkr0 = r.DotProduct(r0);
             var beta = alpha * dotproduct_rkr0 / (gamma * dotproduct_rprevr0);
+            if (Double.IsNaN(beta) || Double.IsInfinity(beta))
+            {
+                residual = -1;
+                return;
+            }
             z = r.Add(z, beta).Add(LAUz, -beta * gamma);
 
             dotproduct_rprevr0 = dotproduct_rkr0;
             r_prev = r;
             dotproduct_rr = r.DotProduct(r);
 
-            if (Double.IsNaN(beta) || Double.IsInfinity(beta))
-            {
-                residual = -1;
-                return;
-            }
+         
 
             x = A.USolve(xk, true);
             residual = Math.Sqrt(dotproduct_rr) / norm_b;

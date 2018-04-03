@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SolverCore.Factorizations
 {
-    public class IncompleteLUsq: IFactorization
+    public class IncompleteLUsq : IFactorization
     {
         CoordinationalMatrix FA;
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 
 namespace SolverCore
 {
@@ -510,8 +511,20 @@ namespace SolverCore
 
         public string Serialize(IVector b, IVector x0)
         {
-            var obj = new { ia, b, x0, al, au, ja, di };
+            var obj = new { ia, b, x0, al, au, ja, di  };
             return JsonConvert.SerializeObject(obj);
+        }
+
+        public string BinarySerialize(IVector b, IVector x0)
+        {
+            var obj = new { ia, b, x0, al, au, ja, di  };
+            MemoryStream ms = new MemoryStream();
+            using (BsonWriter writer = new BsonWriter(ms))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(writer, obj);
+            }
+            return Convert.ToBase64String(ms.ToArray());
         }
     }
 }

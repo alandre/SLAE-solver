@@ -61,6 +61,12 @@
     <Compile Include="ConstructorForm.Designer.cs">
       <DependentUpon>ConstructorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Krylov.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Krylov.Designer.cs">
+      <DependentUpon>Krylov.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormatForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,6 +101,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormatForm.resx">
       <DependentUpon>FormatForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Krylov.resx">
+      <DependentUpon>Krylov.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -134,6 +143,7 @@
     <None Include="Resources\CleanIcon.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Help1.chm" />
     <None Include="Resources\Галочка.png" />
   </ItemGroup>
   <ItemGroup>

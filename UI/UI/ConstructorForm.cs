@@ -16,7 +16,7 @@ namespace UI
         int n = 2; // размерность матрицы
         int width, height; // базовые ширина и высота формы
         int cellWidth, cellHeight; // ширина и высота ячеек
-
+        MainForm mainForm;
         FormatForm formatForm;
 
         public bool IsSymmetric { get; private set; } // является ли матрица симметричной
@@ -131,8 +131,10 @@ namespace UI
 
         private void symCheckBox_CheckedChanged(object sender, EventArgs e)
         {
+            mainForm = (MainForm)Owner;
             if (symCheckBox.Checked)
             {
+
                 bool conflicts = false;
 
                 for (int i = 0; i < n; i++)
@@ -142,19 +144,24 @@ namespace UI
                             conflicts = true;
 
                 if (conflicts)
-                    if(MessageBox.Show("Введенная матрица не является симметричной. " +
+                    if (MessageBox.Show("Введенная матрица не является симметричной. " +
                         "Заполнить верхний треугольник матрицы в соответствии с нижним?",
                         "Предупреждение", MessageBoxButtons.YesNo) == DialogResult.No)
                     {
                         symCheckBox.Checked = false;
                         return;
                     }
-                        
+
 
                 Symmetrize();
+                mainForm.Sym(true);
+
             }
             else
+            {
                 Unsymmetrize();
+                mainForm.Sym(false);
+            }
         }
 
         private void Symmetrize()

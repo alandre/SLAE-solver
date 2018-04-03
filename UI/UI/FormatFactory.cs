@@ -5,8 +5,6 @@ using SolverCore;
 
 namespace UI
 {
-    
-    
     public class FormatFactory
     {
         public enum Formats { Coordinational = 0, Dense = 1, Skyline = 2, SparseRow = 3, SparseRowColumn = 4 }
@@ -36,7 +34,7 @@ namespace UI
                         case Formats.SparseRow:
                             return new SymmetricSparseRowMatrix(initialazer.gg, initialazer.ja, initialazer.ia);
                         case Formats.SparseRowColumn:
-                            return new SymmetricSparseRowColumnMatrix(initialazer.di, initialazer.gg, initialazer.ia, initialazer.ia);
+                            return new SymmetricSparseRowColumnMatrix(initialazer.di, initialazer.gg, initialazer.ia, initialazer.ja);
                         default:
                             throw new ArgumentOutOfRangeException(nameof(type), type, null);
                     }
@@ -47,7 +45,7 @@ namespace UI
                     case Formats.Dense:
                         return new DenseMatrix(initialazer.dense);
                     case Formats.Skyline:
-                        return new SkylineMatrix(initialazer.di, initialazer.ia, initialazer.al, initialazer.al);
+                        return new SkylineMatrix(initialazer.di, initialazer.ia, initialazer.al, initialazer.au);
                     case Formats.SparseRow:
                         return new SparseRowMatrix(initialazer.gg, initialazer.ja, initialazer.ia);
                     case Formats.SparseRowColumn:

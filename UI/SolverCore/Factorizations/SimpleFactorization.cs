@@ -8,7 +8,7 @@ namespace SolverCore.Factorizations
 {
     public class SimpleFactorization : IFactorization
     {
-        // M = L*(U+D)
+        // M = [L+sqrt(D)]*[U+sqrt(D)]
         CoordinationalMatrix FactorizedMatrix;
         public SimpleFactorization(CoordinationalMatrix M)
         {
@@ -17,25 +17,27 @@ namespace SolverCore.Factorizations
         public void Factorize(CoordinationalMatrix M)
         {
             FactorizedMatrix = (CoordinationalMatrix) M.Clone();
+            for (int i = 0; i < FactorizedMatrix.Size; i++)
+                FactorizedMatrix.Set(i, i, 1 / FactorizedMatrix[i,i]);
         }
         public IVector LMult(IVector x)
         {
-            return FactorizedMatrix.LMult(x, false, DiagonalElement.One);
+            return FactorizedMatrix.LMult(x, true);
         }
 
         public IVector LSolve(IVector x)
         {
-            return FactorizedMatrix.LSolve(x, false);
+            return FactorizedMatrix.LSolve(x, true);
         }
 
         public IVector LTransposeMult(IVector x)
         {
-            return FactorizedMatrix.LMultTranspose(x, false, DiagonalElement.One);
+            return FactorizedMatrix.LMultTranspose(x, true);
         }
 
         public IVector LTransposeSolve(IVector x)
         {
-            return FactorizedMatrix.LSolveTranspose(x, false);
+            return FactorizedMatrix.LSolveTranspose(x, true);
         }
 
         public IVector UMult(IVector x)

@@ -8,22 +8,22 @@ namespace SolverCore.Factorizations
 {
     public class IncompleteLU : IFactorization
     {
-        static CoordinationalMatrix FA;
+        CoordinationalMatrix FA;
 
-        public static CoordinationalMatrix IncompleteLUMethod(CoordinationalMatrix M)
+        public IncompleteLU(CoordinationalMatrix M)
         {
-            return Factorize(M);
+            Factorize(M);
         }
 
-        public static CoordinationalMatrix Factorize(CoordinationalMatrix M)
+        public void Factorize(CoordinationalMatrix M)
         {
-            FA = (CoordinationalMatrix) M.Clone();
+            FA = (CoordinationalMatrix)M.Clone();
             var rows = FA.GetMatrixRows();
             if (Math.Abs(FA[0, 0]) < 1.0E-14)
-                return M;
+                return;
 
-            foreach(var i in rows)
-            { 
+            foreach (var i in rows)
+            {
                 double sumD = 0;
                 var cols_i = FA.GetMatrixColumnsForRow(i);
                 foreach (var j in cols_i)
@@ -33,7 +33,7 @@ namespace SolverCore.Factorizations
                     double sumL = 0, sumU = 0;
                     foreach (var k in cols_i)
                     {
-                        if (k > j-1)
+                        if (k > j - 1)
                             break;
 
                         sumL += FA[i, k] * FA[k, j];
@@ -45,14 +45,13 @@ namespace SolverCore.Factorizations
                             break;
                         sumU += FA[k, i] * FA[j, k];
                     }
-                    
+
                     FA.Set(j, i, (M[j, i] - sumU));
                     sumD += FA[i, j] * FA[j, i];
                 }
                 FA.Set(i, i, M[i, i] - sumD);
             }
-            return FA;
-              
+
         }
 
         public IVector LMult(IVector x)

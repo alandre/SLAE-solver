@@ -6,22 +6,22 @@ using System.Threading.Tasks;
 
 namespace SolverCore.Factorizations
 {
-    public class IncompleteCholesky
+    public class IncompleteCholesky : IFactorization
     {
-        static CoordinationalMatrix factorizedMatix;
+        CoordinationalMatrix factorizedMatix;
 
-        public static CoordinationalMatrix IncompleteCholeskyMethod(CoordinationalMatrix M)
+        public IncompleteCholesky(CoordinationalMatrix M)
         {
-            return Factorize(M);
+            Factorize(M);
         }
 
-        public static CoordinationalMatrix Factorize(CoordinationalMatrix M)
+        public void Factorize(CoordinationalMatrix M)
         {
             factorizedMatix = (CoordinationalMatrix)M.Clone();
             var rows = factorizedMatix.GetMatrixRows();
 
             if (Math.Abs(factorizedMatix[0, 0]) < 1.0E-14)
-                return M;
+                return;
 
             foreach (var i in rows)
             {
@@ -43,7 +43,7 @@ namespace SolverCore.Factorizations
 
                         sumL += factorizedMatix[i, k] * factorizedMatix[j, k];
                     }
-                    
+
                     var value = (M[i, j] - sumL) / factorizedMatix[j, j];
                     factorizedMatix.Set(i, j, value);
                     factorizedMatix.Set(j, i, value);
@@ -53,7 +53,6 @@ namespace SolverCore.Factorizations
 
                 factorizedMatix.Set(i, i, Math.Sqrt(M[i, i] - sumD));
             }
-            return factorizedMatix;
 
         }
 

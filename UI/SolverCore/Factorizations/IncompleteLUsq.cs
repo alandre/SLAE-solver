@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace SolverCore.Factorizations
 {
-    public class IncompleteLUsq: IFactorization
+    public class IncompleteLUsq : IFactorization
     {
-        static CoordinationalMatrix FA;
+        CoordinationalMatrix FA;
 
-        public static CoordinationalMatrix IncompleteLUsqMethod(CoordinationalMatrix M)
+        public IncompleteLUsq(CoordinationalMatrix M)
         {
-            return Factorize(M);
+            Factorize(M);
         }
 
-        public static CoordinationalMatrix Factorize(CoordinationalMatrix M)
+        public void Factorize(CoordinationalMatrix M)
         {
             FA = (CoordinationalMatrix)M.Clone();
             var rows = FA.GetMatrixRows();
             if (Math.Abs(FA[0, 0]) < 1.0E-14)
-                return M;
+                return;
 
             foreach (var i in rows)
             {
@@ -49,7 +49,6 @@ namespace SolverCore.Factorizations
                 }
                 FA.Set(i, i, Math.Sqrt(M[i, i] - sumD));
             }
-            return FA;
 
         }
 

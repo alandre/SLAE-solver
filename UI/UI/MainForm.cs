@@ -73,7 +73,7 @@ namespace UI
             }
             Types = new List<string>();
 
-            var FactList = new List<string>(FactorizerFactory.FactorizersDictionary.Keys);
+            var FactList = new List<string>(LoggingSolversFabric.FactorizersDictionary.Keys);
             foreach (var factorizer in FactList)
             {
                 factorizerBox.Items.Add(factorizer);
@@ -173,7 +173,7 @@ namespace UI
             if (symmetry)
             {
                 factorizerBox.Items.Clear();
-                var FactList = new List<string>(FactorizerFactory.FactorizersSimDictionary.Keys);
+                var FactList = new List<string>(LoggingSolversFabric.FactorizersSimDictionary.Keys);
                 foreach (var factorizer in FactList)
                 {
                     factorizerBox.Items.Add(factorizer);
@@ -183,7 +183,7 @@ namespace UI
             else
             {
                 factorizerBox.Items.Clear();
-                var FactList = new List<string>(FactorizerFactory.FactorizersDictionary.Keys);
+                var FactList = new List<string>(LoggingSolversFabric.FactorizersDictionary.Keys);
                 foreach (var factorizer in FactList)
                 {
                     factorizerBox.Items.Add(factorizer);
@@ -316,8 +316,7 @@ namespace UI
             inputData.Enabled = false;
             startBtn.Enabled = false;
             x0_tmp = currentSLAE.x0.Clone();
-            FactorizerFactory.FactorizersEnum factorizerName = FactorizerFactory.FactorizersSimDictionary[factorizerBox.Text];
-            IMatrix factorizedMatrix = FactorizerFactory.Factorize_it(factorizerName,currentSLAE.matrix);
+            FactorizersEnum factorizerName = LoggingSolversFabric.FactorizersSimDictionary[factorizerBox.Text];
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
             FullDirectoryName = path + uniqueDirectoryName;
             
@@ -357,20 +356,19 @@ namespace UI
                 IterProgressBar.Value = 0;
                 Logger = new SaveBufferLogger();
                 IVector result;
-                var loggingSolver = LoggingSolversFabric.Spawn( methodName, Logger);
+                ISolver loggingSolver;
+                if (needFactorization_method)
+                {
+                     loggingSolver = LoggingSolversFabric.Spawn(methodName, Logger, currentSLAE.matrix.ConvertToCoordinationalMatrix(), factorizerName);
+                }
+                else loggingSolver = LoggingSolversFabric.Spawn(methodName, Logger, currentSLAE.matrix.ConvertToCoordinationalMatrix());
+
                 timer1.Enabled = true;
                 
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 timer1.Start();
-                if (needFactorization_method)
-                {
-                   result = await RunAsync((LoggingSolver)loggingSolver, factorizedMatrix, currentSLAE.x0, currentSLAE.b);
-                }
-                else
-                {
-                    result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
-                }
+                result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 sw.Stop();
                 timer1.Stop();
                 MethodProgressBar.Increment(1);
@@ -490,7 +488,7 @@ namespace UI
             if (sim.Checked)
             {
                 factorizerBox.Items.Clear();
-                var FactList = new List<string>(FactorizerFactory.FactorizersSimDictionary.Keys);
+                var FactList = new List<string>(LoggingSolversFabric.FactorizersSimDictionary.Keys);
                 foreach (var factorizer in FactList)
                 {
                     factorizerBox.Items.Add(factorizer);
@@ -500,7 +498,7 @@ namespace UI
             else
             {
                 factorizerBox.Items.Clear();
-                var FactList = new List<string>(FactorizerFactory.FactorizersDictionary.Keys);
+                var FactList = new List<string>(LoggingSolversFabric.FactorizersDictionary.Keys);
                 foreach (var factorizer in FactList)
                 {
                     factorizerBox.Items.Add(factorizer);

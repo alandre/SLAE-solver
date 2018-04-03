@@ -62,16 +62,7 @@ namespace SolverCore
         {
             IMethod method;
             IFactorization factorization;
-            switch (type)
-            {
-                case MethodsEnum.CGM: method = new CGM(); break;
-                case MethodsEnum.GaussianSeidel: method = new GaussianSeidelMethod(); break;
-                case MethodsEnum.Jacobi: method = new JacobiMethod(); break;
-                case MethodsEnum.LOS: method = new LOS(); break;
-                case MethodsEnum.BCGStab: method = new BCGStab(); break;
-                default: return null;
-            }
-            switch (factorizer)
+             switch (factorizer)
             
             {
                 case FactorizersEnum.IncompleteCholesky:
@@ -89,6 +80,16 @@ namespace SolverCore
                     factorization = null; break;
                 default: return null;
             }
+            switch (type)
+            {
+                case MethodsEnum.CGM: method = new CGM(); break;
+                case MethodsEnum.GaussianSeidel: method = new GaussianSeidelMethod(); break;
+                case MethodsEnum.Jacobi: method = new JacobiMethod(); break;
+                case MethodsEnum.LOS: method = new LOS(); break;
+                case MethodsEnum.BCGStab: method = new BCGStab(); break;
+                default: return null;
+            }
+           
         
             
             return new LoggingSolver(method, logger);

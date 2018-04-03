@@ -43,7 +43,7 @@ namespace SolverCore.Factorizations
 
                         sumL += factorizedMatix[i, k] * factorizedMatix[j, k];
                     }
-
+                    
                     var value = (M[i, j] - sumL) / factorizedMatix[j, j];
                     factorizedMatix.Set(i, j, value);
                     factorizedMatix.Set(j, i, value);

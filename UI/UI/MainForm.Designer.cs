@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.methodsData = new System.Windows.Forms.GroupBox();
             this.label6 = new System.Windows.Forms.Label();
             this.factorizerBox = new System.Windows.Forms.ComboBox();
             this.iterBox = new System.Windows.Forms.NumericUpDown();
@@ -45,7 +45,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.fileInputRadioBtn = new System.Windows.Forms.RadioButton();
             this.fileInputPanel = new System.Windows.Forms.Panel();
-            this.fileInputBtn = new System.Windows.Forms.LinkLabel();
             this.sim = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.formatBox = new System.Windows.Forms.ComboBox();
@@ -54,7 +53,7 @@
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuOpenOutput = new System.Windows.Forms.ToolStripMenuItem();
             this.resultsFormToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.outputData = new System.Windows.Forms.GroupBox();
             this.outPathBox = new System.Windows.Forms.TextBox();
             this.fileOutputLink = new System.Windows.Forms.LinkLabel();
             this.MethodProgressBar = new System.Windows.Forms.ProgressBar();
@@ -65,38 +64,39 @@
             this.done_label = new System.Windows.Forms.Label();
             this.need_label = new System.Windows.Forms.Label();
             this.residual_label = new System.Windows.Forms.Label();
-            this.groupBox2.SuspendLayout();
+            this.fileInputBtn = new System.Windows.Forms.LinkLabel();
+            this.methodsData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
             this.inputData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).BeginInit();
             this.fileInputPanel.SuspendLayout();
             this.menuStrip2.SuspendLayout();
-            this.groupBox3.SuspendLayout();
+            this.outputData.SuspendLayout();
             this.SuspendLayout();
             // 
-            // groupBox2
+            // methodsData
             // 
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.factorizerBox);
-            this.groupBox2.Controls.Add(this.iterBox);
-            this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Controls.Add(this.methodCheckedImg);
-            this.groupBox2.Controls.Add(this.methodListBox);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.epsBox);
-            this.groupBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.groupBox2.Location = new System.Drawing.Point(260, 12);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(277, 217);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Выбор методов решения";
+            this.methodsData.Controls.Add(this.label6);
+            this.methodsData.Controls.Add(this.factorizerBox);
+            this.methodsData.Controls.Add(this.iterBox);
+            this.methodsData.Controls.Add(this.label7);
+            this.methodsData.Controls.Add(this.methodCheckedImg);
+            this.methodsData.Controls.Add(this.methodListBox);
+            this.methodsData.Controls.Add(this.label2);
+            this.methodsData.Controls.Add(this.epsBox);
+            this.methodsData.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.methodsData.Location = new System.Drawing.Point(260, 12);
+            this.methodsData.Name = "methodsData";
+            this.methodsData.Size = new System.Drawing.Size(277, 217);
+            this.methodsData.TabIndex = 2;
+            this.methodsData.TabStop = false;
+            this.methodsData.Text = "Выбор методов решения";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(9, 167);
+            this.label6.Location = new System.Drawing.Point(9, 165);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(123, 13);
             this.label6.TabIndex = 31;
@@ -108,7 +108,7 @@
             this.factorizerBox.FormattingEnabled = true;
             this.factorizerBox.Location = new System.Drawing.Point(10, 184);
             this.factorizerBox.Name = "factorizerBox";
-            this.factorizerBox.Size = new System.Drawing.Size(197, 21);
+            this.factorizerBox.Size = new System.Drawing.Size(260, 21);
             this.factorizerBox.TabIndex = 4;
             // 
             // iterBox
@@ -278,21 +278,6 @@
             this.fileInputPanel.Size = new System.Drawing.Size(224, 91);
             this.fileInputPanel.TabIndex = 19;
             // 
-            // fileInputBtn
-            // 
-            this.fileInputBtn.ActiveLinkColor = System.Drawing.Color.Maroon;
-            this.fileInputBtn.AutoSize = true;
-            this.fileInputBtn.LinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.fileInputBtn.Location = new System.Drawing.Point(75, 3);
-            this.fileInputBtn.Name = "fileInputBtn";
-            this.fileInputBtn.Size = new System.Drawing.Size(48, 13);
-            this.fileInputBtn.TabIndex = 18;
-            this.fileInputBtn.TabStop = true;
-            this.fileInputBtn.Text = "Обзор...";
-            this.fileInputBtn.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.fileInputBtn.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.fileInputBtn_LinkClicked);
-            this.fileInputBtn.Click += new System.EventHandler(this.fileInput_Click);
-            // 
             // sim
             // 
             this.sim.AutoSize = true;
@@ -372,16 +357,16 @@
             this.resultsFormToolStripMenuItem.Text = "Сводные данные";
             this.resultsFormToolStripMenuItem.Click += new System.EventHandler(this.resultsFormToolStripMenuItem_Click);
             // 
-            // groupBox3
+            // outputData
             // 
-            this.groupBox3.Controls.Add(this.outPathBox);
-            this.groupBox3.Controls.Add(this.fileOutputLink);
-            this.groupBox3.Location = new System.Drawing.Point(12, 176);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(237, 53);
-            this.groupBox3.TabIndex = 20;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Выходные данные";
+            this.outputData.Controls.Add(this.outPathBox);
+            this.outputData.Controls.Add(this.fileOutputLink);
+            this.outputData.Location = new System.Drawing.Point(12, 176);
+            this.outputData.Name = "outputData";
+            this.outputData.Size = new System.Drawing.Size(237, 53);
+            this.outputData.TabIndex = 20;
+            this.outputData.TabStop = false;
+            this.outputData.Text = "Выходные данные";
             // 
             // outPathBox
             // 
@@ -474,6 +459,21 @@
             this.residual_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.residual_label.Visible = false;
             // 
+            // fileInputBtn
+            // 
+            this.fileInputBtn.ActiveLinkColor = System.Drawing.Color.Maroon;
+            this.fileInputBtn.AutoSize = true;
+            this.fileInputBtn.LinkColor = System.Drawing.SystemColors.MenuHighlight;
+            this.fileInputBtn.Location = new System.Drawing.Point(75, 3);
+            this.fileInputBtn.MaximumSize = new System.Drawing.Size(133, 13);
+            this.fileInputBtn.Name = "fileInputBtn";
+            this.fileInputBtn.Size = new System.Drawing.Size(48, 13);
+            this.fileInputBtn.TabIndex = 18;
+            this.fileInputBtn.TabStop = true;
+            this.fileInputBtn.Text = "Обзор...";
+            this.fileInputBtn.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
+            this.fileInputBtn.Click += new System.EventHandler(this.fileInput_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -489,8 +489,8 @@
             this.Controls.Add(this.startBtn);
             this.Controls.Add(this.IterProgressBar);
             this.Controls.Add(this.inputData);
-            this.Controls.Add(this.groupBox2);
-            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.methodsData);
+            this.Controls.Add(this.outputData);
             this.HelpButton = true;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(565, 450);
@@ -501,8 +501,8 @@
             this.Text = "Решение СЛАУ";
             this.HelpButtonClicked += new System.ComponentModel.CancelEventHandler(this.MainForm_HelpButtonClicked);
             this.Load += new System.EventHandler(this.MainForm_Load);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
+            this.methodsData.ResumeLayout(false);
+            this.methodsData.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).EndInit();
             this.inputData.ResumeLayout(false);
@@ -512,8 +512,8 @@
             this.fileInputPanel.PerformLayout();
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.outputData.ResumeLayout(false);
+            this.outputData.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -526,7 +526,7 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Button Hand;
         private System.Windows.Forms.Button File_enter;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox methodsData;
         private System.Windows.Forms.GroupBox inputData;
         private System.Windows.Forms.ComboBox formatBox;
         private System.Windows.Forms.ProgressBar IterProgressBar;
@@ -541,10 +541,9 @@
         private System.Windows.Forms.RadioButton manualInpitRadioBtn;
         private System.Windows.Forms.Panel fileInputPanel;
         private System.Windows.Forms.CheckBox sim;
-        private System.Windows.Forms.LinkLabel fileInputBtn;
         private System.Windows.Forms.LinkLabel manualInputBtn;
         private System.Windows.Forms.CheckedListBox methodListBox;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox outputData;
         private System.Windows.Forms.TextBox outPathBox;
         private System.Windows.Forms.LinkLabel fileOutputLink;
         private System.Windows.Forms.ProgressBar MethodProgressBar;
@@ -562,6 +561,7 @@
         private System.Windows.Forms.ComboBox factorizerBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.LinkLabel fileInputBtn;
     }
 }
 

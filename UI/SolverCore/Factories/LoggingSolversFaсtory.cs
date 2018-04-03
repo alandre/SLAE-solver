@@ -11,7 +11,7 @@ using SolverCore.Factorizations;
 namespace SolverCore
 {
     public enum MethodsEnum { CGM, GaussianSeidel, Jacobi, BCGStab, LOS }
-    public enum FactorizersEnum { WithoutFactorization, IncompleteCholesky, IncompleteLU, IncompleteLUsq , DiagonalFactorization, SimpleFactorization }
+   
 
     public class LoggingSolversFabric
     {
@@ -26,30 +26,7 @@ namespace SolverCore
 
 
         };
-        public static Dictionary<string, FactorizersEnum> FactorizersSimDictionary { get; } = new Dictionary<string, FactorizersEnum>
-        {
-            {"Без факторизации",FactorizersEnum.WithoutFactorization},
-            {"Неполный Холецкий", FactorizersEnum.IncompleteCholesky},
-            {"Неполный LU", FactorizersEnum.IncompleteLU},
-            {"Неполный LUsq", FactorizersEnum.IncompleteLUsq},
-            {"Диагональная", FactorizersEnum.DiagonalFactorization},
-            {"Простая", FactorizersEnum.SimpleFactorization}
-
-
-
-        };
-        public static Dictionary<string, FactorizersEnum> FactorizersDictionary { get; } = new Dictionary<string, FactorizersEnum>
-        {
-            {"Без факторизации",FactorizersEnum.WithoutFactorization},
-            //{"Неполный Холецкий", FactorizersEnum.IncompleteCholesky},
-            {"Неполный LU", FactorizersEnum.IncompleteLU},
-            {"Неполный LUsq", FactorizersEnum.IncompleteLUsq},
-            {"Диагональная", FactorizersEnum.DiagonalFactorization},
-            {"Простая", FactorizersEnum.SimpleFactorization}
-
-
-
-        };
+        
         /// <summary>
         /// Создаёт решатель для метода с указанным логером
         /// </summary>
@@ -58,28 +35,10 @@ namespace SolverCore
         /// <param name="factorizer">Разложение</param>
         /// <param name="krylovSubspaceDimension">Размерность подпространства Крылова</param>
         /// <returns></returns>
-        public static ISolver Spawn(MethodsEnum type, ILogger logger, CoordinationalMatrix M, FactorizersEnum factorizer=FactorizersEnum.WithoutFactorization, int krylovSubspaceDimension = 4)
+        public static ISolver Spawn(MethodsEnum type, ILogger logger,int krylovSubspaceDimension = 4)
         {
             IMethod method;
-            IFactorization factorization;
-             switch (factorizer)
-            
-            {
-                case FactorizersEnum.IncompleteCholesky:
-                    factorization = new IncompleteCholesky(M); break;
-                case FactorizersEnum.IncompleteLU:
-                    factorization = new IncompleteLU(M); break;
-                case FactorizersEnum.IncompleteLUsq:
-                    factorization = new IncompleteLUsq(M); break;
-                case FactorizersEnum.DiagonalFactorization:
-                    factorization = new DioganalFactorization(M); break;
-                case FactorizersEnum.SimpleFactorization:
-                    factorization = new SimpleFactorization(M); break;
-               
-                case FactorizersEnum.WithoutFactorization:
-                    factorization = null; break;
-                default: return null;
-            }
+           
             switch (type)
             {
                 case MethodsEnum.CGM: method = new CGM(); break;

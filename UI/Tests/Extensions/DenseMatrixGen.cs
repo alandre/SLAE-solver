@@ -80,7 +80,7 @@ namespace Extensions
 
             for (int i = 0; i < size; i++)
             {
-                matrix[0, i] = 0;
+                matrix[i, 0] = 0;
             }
 
             return new DenseMatrix(matrix);

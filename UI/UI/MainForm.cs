@@ -509,7 +509,10 @@ namespace UI
 
         private void MainForm_HelpButtonClicked(object sender, CancelEventArgs e)
         {
-            string url = path + "\\Help.chm";
+            string path_to_exe = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string path_to_help = Path.GetDirectoryName(path_to_exe);
+
+            string url = path_to_help + "\\Help.chm";
             var data = Resources.Help;
             if (!File.Exists(url))
             {

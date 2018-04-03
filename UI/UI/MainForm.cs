@@ -123,7 +123,6 @@ namespace UI
                             fileInputedSLAE.x0 = new Vector(tmpx0);
                         }
 
-                        fileInputBtn.Text = file.FileName;
                         fileInputNotNull = true;
                         CheckedChanged(inputCheckedImg, inputChecked = true);
                     }
@@ -284,6 +283,7 @@ namespace UI
 
         private void Start_Click(object sender, EventArgs e)
         {
+            inputData.Enabled = outputData.Enabled = methodsData.Enabled = false;
             needFactorization = false;
             menuStrip2.Enabled = false;
             currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
@@ -308,16 +308,12 @@ namespace UI
             if (!needFactorization)
                 MessageBox.Show("Факторизация для выбранных методов не требуется");
             SolveAsync();
-           
-            menuStrip2.Enabled = true;
-            
-
         }
 
         private async void SolveAsync()
         {
-            groupBox2.Enabled = false;
-            groupBox3.Enabled = false;
+            methodsData.Enabled = false;
+            outputData.Enabled = false;
             inputData.Enabled = false;
             startBtn.Enabled = false;
             x0_tmp = currentSLAE.x0.Clone();
@@ -395,8 +391,8 @@ namespace UI
                 i++;
             }
             startBtn.Enabled = true;
-            groupBox2.Enabled = true;
-            groupBox3.Enabled = true;
+            methodsData.Enabled = true;
+            outputData.Enabled = true;
             inputData.Enabled = true;
         }
 
@@ -483,11 +479,6 @@ namespace UI
             }
         }
 
-        private void fileInputBtn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-
-        }
-
         private void sim_CheckedChanged(object sender, EventArgs e)
         {
             if (sim.Checked)
@@ -528,11 +519,6 @@ namespace UI
                 }
             }
             Help.ShowHelp(this, url);
-        }
-
-        private void cancel_Click(object sender, EventArgs e)
-        {
-            cts.Cancel();
         }
     }
 }

@@ -133,7 +133,7 @@ namespace Methods
                                          { 0, 6, 3, 6, 0 },
                                          { 9, 0, 7, 0, 0 },
                                          { 8, 3, 4, 2, 0 },
-                                         { 1, 2, 0, 1, 0 }};
+                                         { 1, 2, 0, 1, 5 }};
 
             IVector resultActual = new Vector(new double[] { 1, 1, 1, 1, 1 });
 
@@ -157,7 +157,7 @@ namespace Methods
                                          { 0, -6, -3, -6, 0 },
                                          { -9, 0, 7, 0, 0 },
                                          { -8, -3, -4, -2, 0 },
-                                         { -1, -2, 0, -1, 0 }};
+                                         {1, 2, 0, 1, -3 }};
 
             IVector resultActual = new Vector(new double[] { 1, 1, 1, 1, 1});
 

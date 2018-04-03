@@ -11,6 +11,7 @@ namespace UI
     {
         (string name, List<double> residual, double time)[] Methods;
         int methods_number;
+        ChartArea chartArea1;
 
         public ResultsForm()
         {
@@ -50,7 +51,7 @@ namespace UI
             Height += addHeight;
             dataGridView1.Height += addHeight;
             dataGridView1.Location = loc;
-            chart1.Height -= addHeight;
+            panel1.Height -= addHeight;
             MinimumSize = Size;
 
             int maxiter = 0;
@@ -61,9 +62,12 @@ namespace UI
             if (maxiter > 1)
             {
 
-                ChartArea chartArea1 = new ChartArea();
+                chartArea1 = new ChartArea();
                 chartArea1.AxisX.Minimum = 1;
                 chartArea1.AxisX.Maximum = maxiter;
+                chartArea1.AxisX.Title = "Итерации";
+                chartArea1.AxisX.LabelStyle.Format = "0";
+                chartArea1.AxisY.Title = "Невязка";
                 chart1.ChartAreas.Add(chartArea1);
 
                 Legend legend1 = new Legend();
@@ -89,9 +93,9 @@ namespace UI
             }
             else
             {
-                chart1.Visible = false;
-                dataGridView1.Location = chart1.Location;
-                Height -= chart1.Height;
+                panel1.Visible = false;
+                dataGridView1.Location = panel1.Location;
+                Height -= panel1.Height;
             }
 
        }
@@ -104,6 +108,11 @@ namespace UI
         private void chart1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            chartArea1.AxisY.IsLogarithmic = checkBox1.Checked;
         }
     }
  

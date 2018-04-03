@@ -12,8 +12,10 @@ namespace SolverCore
 {
     public enum MethodsEnum { CGM, GaussianSeidel, Jacobi, BCGStab, LOS }
    
+
     public class LoggingSolversFabric
     {
+
         public static Dictionary<string, MethodsEnum> MethodsDictionary { get; } = new Dictionary<string, MethodsEnum>
         {
             {"CGM",MethodsEnum.CGM},
@@ -24,6 +26,7 @@ namespace SolverCore
 
 
         };
+        
         /// <summary>
         /// Создаёт решатель для метода с указанным логером
         /// </summary>
@@ -32,9 +35,10 @@ namespace SolverCore
         /// <param name="factorizer">Разложение</param>
         /// <param name="krylovSubspaceDimension">Размерность подпространства Крылова</param>
         /// <returns></returns>
-        public static ISolver Spawn(MethodsEnum type, ILogger logger, IFactorization factorizer = null, int krylovSubspaceDimension = 4)
+        public static ISolver Spawn(MethodsEnum type, ILogger logger,int krylovSubspaceDimension = 4)
         {
             IMethod method;
+           
             switch (type)
             {
                 case MethodsEnum.CGM: method = new CGM(); break;
@@ -44,6 +48,8 @@ namespace SolverCore
                 case MethodsEnum.BCGStab: method = new BCGStab(); break;
                 default: return null;
             }
+           
+        
             
             return new LoggingSolver(method, logger);
         }

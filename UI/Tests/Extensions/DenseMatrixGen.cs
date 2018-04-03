@@ -68,6 +68,23 @@ namespace Extensions
                 
             return new DenseMatrix(matrix);
         }
+        public static DenseMatrix SingularMatrix(int size)
+        {
+            double[,] matrix = new double[size, size];
+
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                {
+                    matrix[i, j] = rand.Next(1, 10);
+                }
+
+            for (int i = 0; i < size; i++)
+            {
+                matrix[0, i] = 0;
+            }
+
+            return new DenseMatrix(matrix);
+        }
 
 
     }

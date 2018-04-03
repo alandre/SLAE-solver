@@ -33,6 +33,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.factorizerBox = new System.Windows.Forms.ComboBox();
             this.iterBox = new System.Windows.Forms.NumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             this.methodCheckedImg = new System.Windows.Forms.PictureBox();
             this.methodListBox = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -64,7 +65,6 @@
             this.done_label = new System.Windows.Forms.Label();
             this.need_label = new System.Windows.Forms.Label();
             this.residual_label = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
@@ -138,6 +138,15 @@
             0,
             0,
             0});
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 27);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(89, 26);
+            this.label7.TabIndex = 29;
+            this.label7.Text = "Максимальное \r\nчисло итераций:";
             // 
             // methodCheckedImg
             // 
@@ -322,6 +331,7 @@
             // 
             // startBtn
             // 
+            this.startBtn.Enabled = false;
             this.startBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.startBtn.Location = new System.Drawing.Point(12, 236);
             this.startBtn.Name = "startBtn";
@@ -463,15 +473,6 @@
             this.residual_label.Text = "0";
             this.residual_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.residual_label.Visible = false;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 27);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(89, 26);
-            this.label7.TabIndex = 29;
-            this.label7.Text = "Максимальное \r\nчисло итераций:";
             // 
             // MainForm
             // 

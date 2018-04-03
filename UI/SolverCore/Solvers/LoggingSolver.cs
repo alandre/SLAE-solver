@@ -34,7 +34,7 @@ namespace SolverCore.Solvers
         /// <param name="eps">Относительня невязка для выхода</param>
         /// <param name="malloc">false - результат сохранится в x0, true - результат сохранится в новый вектор</param>
         /// <returns></returns>
-        public IVector Solve(ILinearOperator A, IVector x0, IVector b, int maxIter = (int) 1E+4, double eps = 1.0E-14, bool malloc = false)
+        public IVector Solve(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, bool malloc = false)
         {
             IVector result;
             int iter;
@@ -55,7 +55,7 @@ namespace SolverCore.Solvers
                 }
 
                 Logger.Write(residual);
-                if (iter > maxIter || residual <= eps)
+                if (iter >= maxIter || residual <= eps)
                     break;
             }
 

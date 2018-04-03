@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
@@ -32,6 +33,7 @@ namespace UI
 
     public partial class MainForm : Form
     {
+        CancellationTokenSource cts;
         bool needFactorization = false;
         bool inputChecked = false;
         bool methodChecked = false;
@@ -44,7 +46,6 @@ namespace UI
         SLAE fileInputedSLAE;
         int Krylov;
         static List<String> Types = null;
-
         private string path;
         ConstructorForm constructorForm;
         Krylov KrylovForm;
@@ -56,6 +57,7 @@ namespace UI
 
         public MainForm()
         {
+            cts = new CancellationTokenSource();
             InitializeComponent();
             var keyList = new List<string>(FormatFactory.FormatsDictionary.Keys);
             foreach (var format in keyList)
@@ -297,9 +299,11 @@ namespace UI
                 }
                
             }
+          
             if (!needFactorization)
                 MessageBox.Show("Факторизация для выбранных методов не требуется");
             SolveAsync();
+           
             menuStrip2.Enabled = true;
             
 
@@ -307,7 +311,10 @@ namespace UI
 
         private async void SolveAsync()
         {
-
+            groupBox2.Enabled = false;
+            groupBox3.Enabled = false;
+            inputData.Enabled = false;
+            startBtn.Enabled = false;
             x0_tmp = currentSLAE.x0.Clone();
             FactorizerFactory.FactorizersEnum factorizerName = FactorizerFactory.FactorizersSimDictionary[factorizerBox.Text];
             IMatrix factorizedMatrix = FactorizerFactory.Factorize_it(factorizerName,currentSLAE.matrix);
@@ -321,7 +328,6 @@ namespace UI
 
             MethodProgressBar.Value = 0;
             MethodProgressBar.Maximum = methodListBox.CheckedItems.Count;
-
             IterProgressBar.Maximum = (int)iterBox.Value;
             int count = 0;
             done_label.Text = Convert.ToString(count);
@@ -350,31 +356,31 @@ namespace UI
                 _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
                 Logger = new SaveBufferLogger();
+                IVector result;
                 var loggingSolver = LoggingSolversFabric.Spawn( methodName, Logger);
                 timer1.Enabled = true;
-                timer1.Start();
+                
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                IVector result;
-
+                timer1.Start();
                 if (needFactorization_method)
                 {
-                    result = await RunAsync((LoggingSolver)loggingSolver, factorizedMatrix, currentSLAE.x0, currentSLAE.b);
+                   result = await RunAsync((LoggingSolver)loggingSolver, factorizedMatrix, currentSLAE.x0, currentSLAE.b);
                 }
                 else
                 {
                     result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 }
                 sw.Stop();
-               
                 timer1.Stop();
+                MethodProgressBar.Increment(1);
                 timer1.Enabled = false;
 
                 _Methods[i].time = 0;
                 
                 _Methods[i].log = Logger;
 
-                MethodProgressBar.Increment(1);
+               
                 var LogList = Logger.GetList();
                 if (!LogList.IsEmpty) residual_label.Text = Convert.ToString(LogList[LogList.Count - 1]);
                 
@@ -385,7 +391,10 @@ namespace UI
                 WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, FullDirectoryName, LogList);
                 i++;
             }
-
+            startBtn.Enabled = true;
+            groupBox2.Enabled = true;
+            groupBox3.Enabled = true;
+            inputData.Enabled = true;
         }
 
         private void WriteResultToFile(
@@ -458,7 +467,7 @@ namespace UI
 
         private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
         {
-            return Task.Run(() => loggingSolver.Solve((ILinearOperator)matrix, x0, b,(int)iterBox.Value, double.Parse(epsBox.Text)));
+            return Task.Run(() => loggingSolver.Solve((ILinearOperator)matrix, x0, b, (int)iterBox.Value, double.Parse(epsBox.Text)));
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -513,6 +522,11 @@ namespace UI
                 }
             }
             Help.ShowHelp(this, url);
+        }
+
+        private void cancel_Click(object sender, EventArgs e)
+        {
+            cts.Cancel();
         }
     }
 }

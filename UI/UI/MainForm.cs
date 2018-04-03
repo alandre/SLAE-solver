@@ -94,16 +94,21 @@ namespace UI
         {
             try
             {
-                var file = new OpenFileDialog {Filter = "Text file |*.txt|JSON file |*.json"};
+                var file = new OpenFileDialog {Filter = "Text file |*.txt|JSON file |*.json|Binary file | *.dat"};
                 if (file.ShowDialog() == DialogResult.OK)
                 {
                     StreamReader sr = new StreamReader(file.FileName);
                     string dataInput = sr.ReadToEnd();
-                    sr.Close();
 
-                    var input = MatrixInitialazer.Input(dataInput, sim.Checked);
+                    sr.Close();
+                    MatrixInitialazer input;
+                    if (Path.GetExtension(file.FileName) != ".dat")
+                        input = MatrixInitialazer.Input(dataInput, sim.Checked);
+                    else
+                        input = MatrixInitialazer.InputB(dataInput, sim.Checked);
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
+
                     fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], input, input.symmetry);
                     if (fileInputedSLAE.matrix != null)
                     {

@@ -43,6 +43,10 @@ namespace Methods
             IVector b = denseMatrix.Multiply(resultActual);
 
             var result = loggingSolver.Solve(denseMatrix, x0, b);
+
+            foreach (var elem in result)
+                _testOutputHelper.WriteLine(elem.ToString());
+
             Assert.NotEmpty(result);
 
         }

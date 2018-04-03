@@ -44,6 +44,9 @@ namespace Methods
 
             var result = loggingSolver.Solve(denseMatrix, x0, b);
 
+            foreach (var elem in result)
+                _testOutputHelper.WriteLine(elem.ToString());
+
             for (int i = 0; i < resultActual.Size; i++)
                 Assert.Equal(result[i], resultActual[i], 8);
 

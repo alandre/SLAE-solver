@@ -44,9 +44,9 @@ namespace Extensions
                 MultCount[1] = Counters.GetCount("Mult");
         }
 
-        bool IMethod.InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc)
+        bool IMethod.InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc, IFactorization Factorizer = null)
         {
-            return method.InitMethod(A, x0, b, malloc);
+            return method.InitMethod(A, x0, b, malloc, Factorizer);
         }
     }
 

@@ -6,13 +6,28 @@ namespace SolverCore.Methods
     public class BCGStab : IMethod
     {
         IFactorization Factorizer;
-        IVector xk, b, z, r0, r, LAUz, LAUp, r_prev, s, p, Az, Ap;
+        IVector xk, b, z, r0, r, LAUz, LAUp, r_prev, p, Az, Ap;
         ILinearOperator A;
         double norm_b, dotproduct_rr, dotproduct_rkr0, dotproduct_rprevr0;
         int currentIter;
         bool init = false;
 
-        public IVector x { get; private set; }
+        public IVector x
+        {
+            get
+            {
+                if (Factorizer == null)
+                {
+                    return xk;
+                }
+                else
+                {
+                    return Factorizer.USolve(xk);
+                }
+
+            }
+            private set { }
+        }
 
         public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false, IFactorization Factorizer = null)
         {
@@ -96,8 +111,6 @@ namespace SolverCore.Methods
                     residual = -1;
                     return;
                 }
-
-                x = Factorizer.USolve(xk);
             }
             else
             {
@@ -133,8 +146,6 @@ namespace SolverCore.Methods
                     residual = -1;
                     return;
                 }
-
-                x = xk;
             }
 
             dotproduct_rr = r.DotProduct(r);

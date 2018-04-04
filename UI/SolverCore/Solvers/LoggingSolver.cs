@@ -13,7 +13,6 @@ namespace SolverCore.Solvers
     {
         IMethod Method;
         ILogger Logger;
-        IFactorization Factorizer;
         /// <summary>
         /// Констуктор решателя
         /// </summary>

@@ -19,7 +19,9 @@ namespace Factorizations
         {
             int[] rows = new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
             int[] collumns = new int[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
-            double[] values = new double[] { 10, 1, 2, 1, 10, 3, 2, 3, 10 };
+            double[] values = new double[] { 10, 1, 2,
+                                             1, 10, 3,
+                                             2, 3, 10 };
             FA = new CoordinationalMatrix(rows, collumns, values, 3); 
         }
 
@@ -71,7 +73,9 @@ namespace Factorizations
         {
             int[] rows = new int[] { 0, 0, 1, 1, 1, 2, 2 };
             int[] collumns = new int[] { 0, 1, 0, 1, 2, 1, 2 };
-            double[] values = new double[] { 10, 1, 1, 10, 2, 2, 10 };
+            double[] values = new double[] { 10, 1,
+                                              1, 10, 2,
+                                                  2, 10 };
             FA = new CoordinationalMatrix(rows, collumns, values, 3); 
 
             IncompleteCholesky incompleteCholesky = new IncompleteCholesky(FA);
@@ -95,7 +99,10 @@ namespace Factorizations
         {
             int[] rows = new int[] { 0, 0, 1, 1, 1, 2, 2, 2, 3, 3 };
             int[] collumns = new int[] { 0, 1, 0, 1, 2, 1, 2, 3, 2, 3 };
-            double[] values = new double[] { 100, 10, 10, 101, 20, 20, 104, 30, 30, 109 };
+            double[] values = new double[] { 100, 10,
+                                              10, 101, 20,
+                                                   20, 104, 30,
+                                                        30, 109 };
             FA = new CoordinationalMatrix(rows, collumns, values, 4); 
 
             IncompleteCholesky incompleteCholesky = new IncompleteCholesky(FA);

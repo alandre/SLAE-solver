@@ -37,6 +37,22 @@ namespace Extensions
             return new DenseMatrix(matrix);
         }
 
+        public static DenseMatrix SymmetricMatrix(int size)
+        {
+            double[,] matrix = new double[size, size];
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    matrix[i, j] = matrix[j, i] = rand.Next(-10, -1);
+                }
+                matrix[i, i] = rand.Next(1, 50);
+
+            }
+            return new DenseMatrix(matrix);
+        }
+
         public static DenseMatrix HightCondMatrix(int size)
         {
             double[,] matrix = new double[size, size];

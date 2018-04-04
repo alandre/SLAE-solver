@@ -32,10 +32,9 @@ namespace SolverCore
         /// </summary>
         /// <param name="type">Метод</param>
         /// <param name="Logger">Логер</param>
-        /// <param name="Factorizer">Разложение</param>
         /// <param name="KrylovSubspaceDimension">Размерность подпространства Крылова</param>
         /// <returns></returns>
-        public static ISolver Spawn(MethodsEnum type, ILogger Logger, IFactorization Factorizer = null, int KrylovSubspaceDimension = 4)
+        public static ISolver Spawn(MethodsEnum type, ILogger Logger, int KrylovSubspaceDimension = 4)
         {
             IMethod method = null;
             switch (type)
@@ -57,17 +56,16 @@ namespace SolverCore
         /// </summary>
         /// <param name="type">Метод</param>
         /// <param name="Logger">Логер</param>
-        /// <param name="Factorizer">Разложение</param>
         /// <param name="KrylovSubspaceDimension">Размерность подпространства Крылова</param>
         /// <returns></returns>
-        public static ISolver Spawn(String type, ILogger Logger, IFactorization Factorizer = null, int KrylovSubspaceDimension = 4)
+        public static ISolver Spawn(String type, ILogger Logger, int KrylovSubspaceDimension = 4)
         {
             try
             {
                 MethodsEnum method = (MethodsEnum)Enum.Parse(typeof(MethodsEnum), type);
                 if (Enum.IsDefined(typeof(MethodsEnum), method))
                 {
-                    return Spawn(method, Logger, Factorizer, KrylovSubspaceDimension);
+                    return Spawn(method, Logger, KrylovSubspaceDimension);
                 }
                 else return null;
             }

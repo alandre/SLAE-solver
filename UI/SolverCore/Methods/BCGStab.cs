@@ -59,7 +59,6 @@ namespace SolverCore.Methods
                 z = r_prev.Clone();
             }
 
-
             dotproduct_rr = r_prev.DotProduct(r_prev);
             dotproduct_rprevr0 = dotproduct_rr;
             init = true;

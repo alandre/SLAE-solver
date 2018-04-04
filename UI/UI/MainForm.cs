@@ -2,15 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
 using SolverCore;
 using SolverCore.Loggers;
 using SolverCore.Solvers;
-using SolverCore.Methods;
 using System.Collections.Immutable;
-using System.ServiceModel.Channels;
 using System.Diagnostics;
 using UI.Properties;
 using System.Text;
@@ -24,18 +23,18 @@ namespace UI
         public IVector x0;
 
 
-        public SLAE(IMatrix _matrix, IVector _b, IVector _x0)
+        public SLAE(IMatrix matrix, IVector b, IVector x0)
         {
-            matrix = _matrix;
-            b = _b;
-            x0 = _x0;
+            this.matrix = matrix;
+            this.b = b;
+            this.x0 = x0;
         }
     }
 
     public partial class MainForm : Form
     {
-        private MatrixInitialazer Input = new MatrixInitialazer();
-
+        CancellationTokenSource cts;
+        bool needFactorization = false;
         bool inputChecked = false;
         bool methodChecked = false;
         bool manualInputNotNull = false;
@@ -45,29 +44,43 @@ namespace UI
         SLAE currentSLAE;
         SLAE manualInputedSLAE;
         SLAE fileInputedSLAE;
-
+        int Krylov;
         static List<String> Types = null;
-
         private string path;
         ConstructorForm constructorForm;
+        Krylov KrylovForm;
+
+        public string FullDirectoryName = "";
 
         (string name, SolverCore.Loggers.SaveBufferLogger log, double time)[] _Methods;
 
 
         public MainForm()
         {
+            cts = new CancellationTokenSource();
             InitializeComponent();
             var keyList = new List<string>(FormatFactory.FormatsDictionary.Keys);
-            Types = new List<string>();
             foreach (var format in keyList)
             {
                 formatBox.Items.Add(format);
             }
             formatBox.Text = formatBox.Items[0].ToString();
+           
+            var Type = new List<MethodsEnum>(LoggingSolversFabric.MethodsDictionary.Values);
+            foreach (var Method in Type)
+            {
+                methodListBox.Items.Add(Method);
+            }
+            Types = new List<string>();
 
-            methodListBox.DataSource = Enum.GetValues(typeof(MethodsEnum));
-
-            var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   //get path with .exe file
+            var FactList = new List<string>(FactorizersFactory.FactorizersDictionary.Keys);
+            foreach (var factorizer in FactList)
+            {
+                factorizerBox.Items.Add(factorizer);
+            }
+            factorizerBox.Text = factorizerBox.Items[0].ToString();
+            //methodListBox.DataSource = Enum.GetValues(typeof(MethodsEnum));
+            var location = System.Reflection.Assembly.GetExecutingAssembly().Location;   
             path = Path.GetDirectoryName(location);
             outPathBox.Text = path;
         }
@@ -81,33 +94,38 @@ namespace UI
         {
             try
             {
-                var file = new OpenFileDialog {Filter = "Text file|*.txt"};
+                var file = new OpenFileDialog {Filter = "Text file |*.txt|JSON file |*.json|Binary file | *.dat"};
                 if (file.ShowDialog() == DialogResult.OK)
                 {
                     StreamReader sr = new StreamReader(file.FileName);
                     string dataInput = sr.ReadToEnd();
-                    sr.Close();
 
-                    Input = MatrixInitialazer.Input(dataInput, sim.Checked);
+                    sr.Close();
+                    MatrixInitialazer input;
+                    if (Path.GetExtension(file.FileName) != ".dat")
+                        input = MatrixInitialazer.Input(dataInput, sim.Checked);
+                    else
+                        input = MatrixInitialazer.InputB(dataInput, sim.Checked);
                     epsBox.Enabled = true;
                     iterBox.Enabled = true;
-                    fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], Input, Input.symmetry);
-                    fileInputedSLAE.b = new Vector(Input.b);
-                    if (Input.x0 != null)
-                        fileInputedSLAE.x0 = new Vector(Input.x0);
-                    else
+
+                    fileInputedSLAE.matrix = FormatFactory.Init(FormatFactory.FormatsDictionary[formatBox.Text], input, input.symmetry);
+                    if (fileInputedSLAE.matrix != null)
                     {
-                        double[] tmpx0 = new double[fileInputedSLAE.matrix.Size];
-                        for (int i = 0; i < tmpx0.Length; i++)
-                            tmpx0[i] = 0;
-                        fileInputedSLAE.x0 = new Vector(tmpx0);
+                        fileInputedSLAE.b = new Vector(input.b);
+                        if (input.x0 != null)
+                            fileInputedSLAE.x0 = new Vector(input.x0);
+                        else
+                        {
+                            var tmpx0 = new double[fileInputedSLAE.matrix.Size];
+                            for (int i = 0; i < tmpx0.Length; i++)
+                                tmpx0[i] = 0;
+                            fileInputedSLAE.x0 = new Vector(tmpx0);
+                        }
+
+                        fileInputNotNull = true;
+                        CheckedChanged(inputCheckedImg, inputChecked = true);
                     }
-
-                    var a = FormatFactory.PatternRequired(FormatFactory.FormatsDictionary[formatBox.SelectedItem.ToString()]);
-
-                    fileInputBtn.Text = file.FileName;
-                    fileInputNotNull = true;
-                    CheckedChanged(inputCheckedImg, inputChecked = true);
                 }
             }
             catch (Exception)
@@ -129,6 +147,7 @@ namespace UI
 
         private void fileInputRadioBtn_CheckedChanged(object sender, EventArgs e)
         {
+            sim_CheckedChanged(sender, e);
             fileInputPanel.Enabled = fileInputRadioBtn.Checked;
             manualInpitRadioBtn.Checked = !fileInputRadioBtn.Checked;
             inputChecked = fileInputRadioBtn.Checked && fileInputNotNull;
@@ -138,6 +157,8 @@ namespace UI
 
         private void manualInpitRadioBtn_CheckedChanged(object sender, EventArgs e)
         {
+            if (!(constructorForm == null || constructorForm.IsDisposed)) Sym(constructorForm.IsSymmetric);
+
             manualInputBtn.Enabled = manualInpitRadioBtn.Checked;
             fileInputRadioBtn.Checked = !manualInpitRadioBtn.Checked;
             inputChecked = manualInpitRadioBtn.Checked && manualInputNotNull;
@@ -148,9 +169,36 @@ namespace UI
         public void SetSLAE(IMatrix _mat, IVector _b, IVector _x0)
         {
             manualInputedSLAE = new SLAE(_mat, _b, _x0);
-            x0_tmp = _x0;
             manualInputNotNull = true;
             CheckedChanged(inputCheckedImg, inputChecked = true);
+        }
+        public void Sym(bool symmetry)
+        {
+            if (symmetry)
+            {
+                factorizerBox.Items.Clear();
+                var FactList = new List<string>(FactorizersFactory.FactorizersSimDictionary.Keys);
+                foreach (var factorizer in FactList)
+                {
+                    factorizerBox.Items.Add(factorizer);
+                }
+                factorizerBox.Text = factorizerBox.Items[0].ToString();
+            }
+            else
+            {
+                factorizerBox.Items.Clear();
+                var FactList = new List<string>(FactorizersFactory.FactorizersDictionary.Keys);
+                foreach (var factorizer in FactList)
+                {
+                    factorizerBox.Items.Add(factorizer);
+                }
+                factorizerBox.Text = factorizerBox.Items[0].ToString();
+            }
+          
+        }
+        public void SetKrylov(int _Krylov)
+        {
+            Krylov = _Krylov;
         }
 
         private void CheckedChanged(PictureBox pictureBox, bool check)
@@ -179,33 +227,45 @@ namespace UI
 
         private void toolStripMenuOpenOutput_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", fullDirectoryName);
-            /*OpenFileDialog openFileDialog1 = new OpenFileDialog();
-            openFileDialog1.InitialDirectory = path;
-            openFileDialog1.ShowDialog();*/
+            Process.Start("explorer.exe", FullDirectoryName);
         }
 
         private void resultsFormToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //на вход нужен массив кортежей: (string, savebufferloger, double time)
-            //строка - название, логер и понятия не имею какого фомата время, потому дабл
-            //никто не может обещать, что функция работает, более вероятно что она не работает
-            try
-            {
-                ResultsForm resultsForm = new ResultsForm(_Methods);
-                resultsForm.Show();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Нет данных для решений");
-            }
+            // на вход нужен массив кортежей: (string, savebufferloger, double time)
+            // строка - название, логер и понятия не имею какого фомата время, потому дабл
+            // никто не может обещать, что функция работает, более вероятно что она не работает
+
+            ResultsForm resultsForm = new ResultsForm(_Methods);
+            resultsForm.Show();
         }
 
         private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string method = methodListBox.SelectedItem.ToString();
+          
             if (Types.Contains(method)) Types.Remove(method);
-            else Types.Add(method);
+            else
+            {
+                Types.Add(method);
+                switch (method)
+
+                {
+                    case "GMRes":
+                        {
+                            if (KrylovForm == null || KrylovForm.IsDisposed)
+                                KrylovForm = new Krylov();
+
+                            KrylovForm.Owner = this;
+                            KrylovForm.Show();
+                            Hide();
+                            break;
+                        }
+                    default: break;
+                }
+                
+
+            }
             if (methodListBox.CheckedItems.Count > 0)
             {
                 methodCheckedImg.Image = Resources.CheckMark;
@@ -218,30 +278,56 @@ namespace UI
             }
 
             startBtn.Enabled = inputChecked && methodChecked;
+
         }
 
         private void Start_Click(object sender, EventArgs e)
         {
+            inputData.Enabled = outputData.Enabled = methodsData.Enabled = false;
+            needFactorization = false;
+            menuStrip2.Enabled = false;
             currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
+            foreach (MethodsEnum methodName in methodListBox.CheckedItems)
+            {
+                switch (methodName)
+                {
+                    case MethodsEnum.BCGStab:
+                        needFactorization = true;
+                        break;
+                    case MethodsEnum.CGM:
+                        needFactorization = true;
+                        break;
+                    case MethodsEnum.LOS:
+                        needFactorization = true;
+                        break;
+                    default: break;
+                }
+               
+            }
+          
+            if (!needFactorization)
+                MessageBox.Show("Факторизация для выбранных методов не требуется");
             SolveAsync();
         }
 
-        string fullDirectoryName = "";
-
         private async void SolveAsync()
         {
+            methodsData.Enabled = false;
+            outputData.Enabled = false;
+            inputData.Enabled = false;
+            startBtn.Enabled = false;
+            x0_tmp = currentSLAE.x0.Clone();
+            FactorizersEnum factorizerName = FactorizersFactory.FactorizersSimDictionary[factorizerBox.Text];
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
-            //var uniqueDirectoryName = string.Format(@"\{0}", Guid.NewGuid());
-            fullDirectoryName = path + uniqueDirectoryName;
+            FullDirectoryName = path + uniqueDirectoryName;
             
             _Methods = new(string name, SaveBufferLogger log, double time)[methodListBox.CheckedItems.Count];
 
             
-            Directory.CreateDirectory(fullDirectoryName);
+            Directory.CreateDirectory(FullDirectoryName);
 
             MethodProgressBar.Value = 0;
             MethodProgressBar.Maximum = methodListBox.CheckedItems.Count;
-
             IterProgressBar.Maximum = (int)iterBox.Value;
             int count = 0;
             done_label.Text = Convert.ToString(count);
@@ -250,77 +336,123 @@ namespace UI
             need_label.Visible = true;
             label5.Visible = true;
             int i = 0;
-            foreach (var methodName in methodListBox.CheckedItems)
+            foreach (MethodsEnum methodName in methodListBox.CheckedItems)
             {
-                currentSLAE.x0 = x0_tmp;
+                bool needFactorization_method = false;
+                switch (methodName)
+                {
+                    case MethodsEnum.BCGStab:
+                        needFactorization_method = true;
+                        break;
+                    case MethodsEnum.CGM:
+                        needFactorization_method = true;
+                        break;
+                    case MethodsEnum.LOS:
+                        needFactorization_method = true;
+                        break;
+                }
+                IFactorization factorizer = FactorizersFactory.SpawnFactorization(factorizerName, currentSLAE.matrix.ConvertToCoordinationalMatrix());
+                currentSLAE.x0 = x0_tmp.Clone();
                 _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
-                MethodsEnum method =(MethodsEnum)methodName;
                 Logger = new SaveBufferLogger();
-                var loggingSolver = LoggingSolversFabric.Spawn(method, Logger);
+                IVector result;
+                ISolver loggingSolver;
+                if (needFactorization_method)
+                {
+                     loggingSolver = LoggingSolversFabric.Spawn(methodName, Logger);
+                }
+                else loggingSolver = LoggingSolversFabric.Spawn(methodName, Logger);
+
                 timer1.Enabled = true;
-                timer1.Start();
+                
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
-                IVector result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                timer1.Start();
+                result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
                 sw.Stop();
-               
                 timer1.Stop();
+                MethodProgressBar.Increment(1);
                 timer1.Enabled = false;
 
-                _Methods[i].time = 0;
+                _Methods[i].time = sw.ElapsedMilliseconds;
                 
-                _Methods[i].log = (SaveBufferLogger)Logger;
+                _Methods[i].log = Logger;
 
-                MethodProgressBar.Increment(1);
+               
                 var LogList = Logger.GetList();
                 if (!LogList.IsEmpty) residual_label.Text = Convert.ToString(LogList[LogList.Count - 1]);
-                else residual_label.Text = Convert.ToString(-1); 
+                
                 IterProgressBar.Value = (int)iterBox.Value;
                 
                 count++;
                 done_label.Text = Convert.ToString(count);
-                if (!LogList.IsEmpty) WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, LogList.Count, LogList[LogList.Count - 1], fullDirectoryName);
+                WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, FullDirectoryName, LogList);
                 i++;
             }
-
+            startBtn.Enabled = true;
+            methodsData.Enabled = true;
+            outputData.Enabled = true;
+            inputData.Enabled = true;
         }
 
         private void WriteResultToFile(
           IVector result,
           string method,
           long time,
-          int iterationCount,
-          double residual,
-          string pathToDirectory)
+          string pathToDirectory,
+          IImmutableList<double> logList)
         {
+            int iterationCount = logList.Count;
+            double resultResidual;
+            if (logList.Count>0)
+                resultResidual = logList[logList.Count - 1];
+            else resultResidual = -1;
+
             var directory = $"{pathToDirectory}\\{method}";
             Directory.CreateDirectory(directory);
 
             var pathToTotalFile = $"{pathToDirectory}\\Сводные данные.txt";
-            var pathToSolveReportFile = $"{directory}\\Протокол решения.txt";
+            var pathToResultFile = $"{pathToDirectory}\\Решение.txt";
+            var pathToSolveReportFile = $"{directory}\\Информация о решении.txt";
             var pathToVectorFile = $"{directory}\\Вектор решения.txt";
 
             var totalString = new StringBuilder();
             var resultReportString = new StringBuilder();
-
-            var solve = string.Join(" ", result);
+            var resultTotalString = new StringBuilder();
+            string solve;
+            if (result != null) {  solve = string.Join(" ", result); }
+            else {  solve = string.Join(" ","нет решения"); }
 
             totalString
                 .AppendLine($"{method}")
                 .AppendLine($"Время решения в миллисекундах: {time}")
                 .AppendLine($"Вектор решения: {solve}")
                 .AppendLine($"Число итераций: {iterationCount}")
-                .AppendLine($"Невязка: {residual}\r\n");
+                .AppendLine($"Невязка: {resultResidual}\r\n");
 
             resultReportString
                .AppendLine($"Число итераций: {iterationCount}")
-               .AppendLine($"Невязка: {residual}");
+               .AppendLine($"Невязка: {resultResidual}");
 
+            resultTotalString
+              .AppendLine($"{method}\r")
+              .AppendLine($"Итерация\tНевязка");
+
+           
+            File.AppendAllText(pathToTotalFile, resultTotalString.ToString());
+            int i = 1;
+            foreach (double element in logList)
+            {
+                File.AppendAllText(pathToTotalFile, $"{i}\t\t");
+                File.AppendAllText(pathToTotalFile, $"{element}\r\n");
+                i++;
+            }
+            File.AppendAllText(pathToTotalFile, "\r\n");
 
             File.WriteAllText(pathToSolveReportFile, resultReportString.ToString());
             File.WriteAllText(pathToVectorFile, solve.ToString());
-            File.AppendAllText(pathToTotalFile, totalString.ToString());
+            File.AppendAllText(pathToResultFile, totalString.ToString());
         }
 
 
@@ -334,16 +466,12 @@ namespace UI
 
         private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
         {
-            return Task.Run(() =>
-           {
-                return loggingSolver.Solve((ILinearOperator)matrix, x0, b,(int)iterBox.Value, double.Parse(epsBox.Text.Replace(".", ",")));
-           });
+            return Task.Run(() => loggingSolver.Solve((ILinearOperator)matrix, x0, b, (int)iterBox.Value, double.Parse(epsBox.Text)));
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            FolderBrowserDialog FBD = new FolderBrowserDialog();
-            FBD.SelectedPath = path;
+            FolderBrowserDialog FBD = new FolderBrowserDialog {SelectedPath = path};
             if (FBD.ShowDialog() == DialogResult.OK)
             {
                 path = FBD.SelectedPath;
@@ -351,9 +479,47 @@ namespace UI
             }
         }
 
-        private void fileInputBtn_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void sim_CheckedChanged(object sender, EventArgs e)
         {
+            if (sim.Checked)
+            {
+                factorizerBox.Items.Clear();
+                var FactList = new List<string>(FactorizersFactory.FactorizersSimDictionary.Keys);
+                foreach (var factorizer in FactList)
+                {
+                    factorizerBox.Items.Add(factorizer);
+                }
+                factorizerBox.Text = factorizerBox.Items[0].ToString();
+            }
+            else
+            {
+                factorizerBox.Items.Clear();
+                var FactList = new List<string>(FactorizersFactory.FactorizersDictionary.Keys);
+                foreach (var factorizer in FactList)
+                {
+                    factorizerBox.Items.Add(factorizer);
+                }
+                factorizerBox.Text = factorizerBox.Items[0].ToString();
+            }
+        }
 
+        private void MainForm_HelpButtonClicked(object sender, CancelEventArgs e)
+        {
+            string path_to_exe = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string path_to_help = Path.GetDirectoryName(path_to_exe);
+
+            string url = path_to_help + "\\Help.chm";
+            var data = Resources.Help;
+            if (!File.Exists(url))
+            {
+                using (var stream = new FileStream("Help.chm", FileMode.Create))
+                {
+                    stream.Write(data, 0, data.Length);
+                    stream.Flush();
+                }
+            }
+            Help.ShowHelp(this, url);
         }
     }
 }
+ 

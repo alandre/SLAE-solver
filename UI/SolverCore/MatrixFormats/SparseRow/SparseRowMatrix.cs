@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 
 namespace SolverCore
 {
@@ -288,6 +289,7 @@ namespace SolverCore
             {
                 throw new RankException();
             }
+            var di = Diagonal;
             var result = vector.Clone();
             double sum = 0;
             for (int i = 0; i < Size; i++)
@@ -301,14 +303,9 @@ namespace SolverCore
                     j = ja[ia1];
                     sum += result[j] * a[ia1];
                 }
-                if (i == ja[ia1] && ia1 < ia2)
-                {
-                    result[i] = UseDiagonal ? (result[i] - sum) / a[ia1] : result[i] - sum;
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(a));
-                }
+                
+                    result[i] = UseDiagonal ? (result[i] - sum) / di[i] : result[i] - sum;
+                
             }
             return result;
         }
@@ -337,14 +334,8 @@ namespace SolverCore
                     j = ja[ia1];
                     result[j] -= result[i] * a[ia1] / di[i];
                 }
-                if (i == ja[ia1] && ia1 < ia2)
-                {
-                    result[i] = result[i] / di[i];
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(a));
-                }
+                result[i] = result[i] / di[i];
+                
             }
             return result;
         }
@@ -474,6 +465,7 @@ namespace SolverCore
             {
                 throw new RankException();
             }
+            var di = Diagonal;
             var result = vector.Clone();
             for (int i = Size - 1; i >= 0; i--)
             {
@@ -486,15 +478,8 @@ namespace SolverCore
                     j = ja[ia2];
                     sum += result[j] * a[ia2];
                 }
-                j = ja[ia2];
-                if (i == j && ia1 <= ia2)
-                {
-                    result[i] = UseDiagonal ? (result[i] - sum) / a[ia2] : result[i] - sum;
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(a));
-                }
+                result[i] = UseDiagonal ? (result[i] - sum) / di[i] : result[i] - sum;
+                
             }
             return result;
         }
@@ -523,14 +508,9 @@ namespace SolverCore
                     j = ja[ia2];
                     result[j] -= result[i] * a[ia2] / di[i];
                 }
-                if (i == ja[ia2] && ia1 <= ia2)
-                {
+                
                     result[i] = result[i] / di[i];
-                }
-                else
-                {
-                    throw new ArgumentNullException();
-                }
+                
             }
             return result;
         }
@@ -540,6 +520,18 @@ namespace SolverCore
         {
             var obj = new { ia, b, x0, gg = a, ja };
             return JsonConvert.SerializeObject(obj);
+        }
+
+        public string BinarySerialize(IVector b, IVector x0)
+        {
+            var obj = new { ia, b, x0, gg = a, ja };
+            MemoryStream ms = new MemoryStream();
+            using (BsonWriter writer = new BsonWriter(ms))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(writer, obj);
+            }
+            return Convert.ToBase64String(ms.ToArray());
         }
     }
 }

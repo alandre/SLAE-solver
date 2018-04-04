@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 
 namespace SolverCore
 {
@@ -246,14 +247,8 @@ namespace SolverCore
                     var j = ja[ia1];
                     sum += a[ia1] * vector[j];
                 }
-                if (i == ja[ia1])
-                {
                     sum += UseDiagonal ? a[ia1] * vector[i] : (double)diagonalElement * vector[i];
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(a));
-                }
+                
                 result[i] = sum;
             }
             return result;
@@ -271,6 +266,7 @@ namespace SolverCore
                 throw new RankException();
             }
             double sum = 0;
+            var di = Diagonal;
             var result = vector.Clone();
             for (int i = 0; i < Size; i++)
             {
@@ -283,14 +279,8 @@ namespace SolverCore
                     j = ja[ia1];
                     sum += result[j] * a[ia1];
                 }
-                if (i == ja[ia1] && ia1 < ia2)
-                {
-                    result[i] = UseDiagonal ? (result[i] - sum) / a[ia1] : result[i] - sum;
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(a));
-                }
+                    result[i] = UseDiagonal ? (result[i] - sum) / di[i] : result[i] - sum;
+        
             }
             return result;
         }
@@ -374,14 +364,8 @@ namespace SolverCore
                     j = ja[ia1];
                     result[j] -= result[i] * a[ia1] / di[i];//??????
                 }
-                if (i == ja[ia1] && ia1 < ia2)
-                {
-                    result[i] = result[i] / di[i];
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(a));
-                }
+                 result[i] = result[i] / di[i];
+                
             }
             return result;
         }
@@ -393,6 +377,18 @@ namespace SolverCore
             var obj = new { ia, b, x0, gg = a, ja };
             return JsonConvert.SerializeObject(obj);
 
+        }
+
+        public string BinarySerialize(IVector b, IVector x0)
+        {
+            var obj = new { ia, b, x0, gg = a, ja };
+            MemoryStream ms = new MemoryStream();
+            using (BsonWriter writer = new BsonWriter(ms))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                serializer.Serialize(writer, obj);
+            }
+            return Convert.ToBase64String(ms.ToArray());
         }
     }
 }

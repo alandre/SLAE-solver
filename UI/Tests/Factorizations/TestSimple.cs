@@ -11,7 +11,6 @@ using Xunit;
 
 namespace Factorizations
 {
-    // https://sun9-8.userapi.com/c840438/v840438364/6c285/ERyLqvUKAps.jpg
 
     public class TestSimple
     {
@@ -22,7 +21,7 @@ namespace Factorizations
             int[] rows = new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
             int[] collumns = new int[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
             double[] values = new double[] { 10, 1, 2, 1, 10, 3, 2, 3, 10 };
-            FA = new CoordinationalMatrix(rows, collumns, values, 3); // симметричная или нет?
+            FA = new CoordinationalMatrix(rows, collumns, values, 3); 
         }
 
         [Fact]

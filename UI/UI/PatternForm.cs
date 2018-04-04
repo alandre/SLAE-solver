@@ -115,7 +115,7 @@ namespace UI
             var save = new SaveFileDialog
             {
                 Filter = "Text file|*.txt",
-                FileName = "Output.txt"
+                FileName = "matrix.txt"
             };
             if (save.ShowDialog() == DialogResult.OK)
             {

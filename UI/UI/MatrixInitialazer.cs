@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.IO;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Bson;
 
 namespace UI
 {
@@ -32,6 +35,19 @@ namespace UI
             var matrix = JsonConvert.DeserializeObject<MatrixInitialazer>(data);
             matrix.symmetry = symmetry;
             return matrix;
+        }
+
+        public static MatrixInitialazer InputB(string data, bool symmetry)
+        {
+            byte[] tmp = Convert.FromBase64String(data);
+            MemoryStream ms = new MemoryStream(tmp);
+            using (BsonReader reader = new BsonReader(ms))
+            {
+                JsonSerializer serializer = new JsonSerializer();
+                var matrix = serializer.Deserialize<MatrixInitialazer>(reader);
+                matrix.symmetry = symmetry;
+                return matrix;
+            }
         }
     }   
 }

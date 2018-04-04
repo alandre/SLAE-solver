@@ -8,6 +8,7 @@ namespace SolverCore.Methods
 {
     public class GaussianSeidelMethod : IMethod
     {
+        IFactorization Factorizer;
         IVector x0, b;
         ILinearOperator A;
         double norm_b;

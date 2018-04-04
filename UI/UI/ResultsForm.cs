@@ -18,7 +18,7 @@ namespace UI
 
         }
 
-        public ResultsForm((string name, SolverCore.Loggers.SaveBufferLogger log, double time)[] _Methods)
+        public ResultsForm(List<(string name, SolverCore.Loggers.SaveBufferLogger log, double time)> _Methods)
         {
             if (_Methods == null)
             {
@@ -27,7 +27,7 @@ namespace UI
 
             InitializeComponent();
 
-            methods_number = _Methods.Length;
+            methods_number = _Methods.Count;
             Methods = new(string name, List<double> residual, double time)[methods_number];
             dataGridView1.Rows.Add(methods_number);
             for (int i = 0; i < methods_number; i++)
@@ -39,7 +39,11 @@ namespace UI
                 Methods[i].residual = new List<double>();
 
                 for (int j = 0; j < item_num; j++)
+                {
                     Methods[i].residual.Add(_residual[j]);
+                    if (_residual[j] <= 0)
+                        checkBox1.Enabled = false;
+                }
 
                 dataGridView1.Rows[i].Cells["method"].Value = _Methods[i].name;
                 dataGridView1.Rows[i].Cells["res_res"].Value = _residual[item_num - 1];
@@ -97,7 +101,6 @@ namespace UI
                 dataGridView1.Location = panel1.Location;
                 Height -= panel1.Height;
             }
-
        }
 
         private void ResultsForm_Load(object sender, EventArgs e)

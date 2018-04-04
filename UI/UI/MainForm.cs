@@ -52,7 +52,7 @@ namespace UI
 
         public string FullDirectoryName = "";
 
-        (string name, SolverCore.Loggers.SaveBufferLogger log, double time)[] _Methods;
+        List<(string name, SaveBufferLogger log, double time)> _Methods;
 
 
         public MainForm()
@@ -317,7 +317,7 @@ namespace UI
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.MM.yyyy");
             FullDirectoryName = path + uniqueDirectoryName;
             
-            _Methods = new(string name, SaveBufferLogger log, double time)[methodListBox.CheckedItems.Count];
+            _Methods = new List<(string name, SaveBufferLogger log, double time)>();
 
             
             Directory.CreateDirectory(FullDirectoryName);
@@ -376,6 +376,7 @@ namespace UI
                 if (LogList.IsEmpty || lastLog.residual == -1 && LogList.Count <= 1)
                 {
                     MessageBox.Show("Метод " + methodName.ToString() + " разошелся на 1 итерации.", "Внимание!", MessageBoxButtons.OK);
+                    MethodProgressBar.Maximum--;
                 }
                 else
                 {
@@ -386,9 +387,7 @@ namespace UI
                     }
                     if (!LogList.IsEmpty) residual_label.Text = Convert.ToString(LogList[LogList.Count - 1]);
 
-                    _Methods[i].name = methodName.ToString();
-                    _Methods[i].time = sw.ElapsedMilliseconds;
-                    _Methods[i].log = Logger;
+                    _Methods.Add((methodName.ToString(), Logger, sw.ElapsedMilliseconds));
 
                     IterProgressBar.Value = (int)iterBox.Value;
 

@@ -56,7 +56,6 @@ namespace UI
             dataGridView1.Height += addHeight;
             dataGridView1.Location = loc;
             panel1.Height -= addHeight;
-            MinimumSize = Size;
 
             int maxiter = 0;
             for (int i = 0; i < methods_number; i++)
@@ -98,9 +97,11 @@ namespace UI
             else
             {
                 panel1.Visible = false;
-                dataGridView1.Location = panel1.Location;
                 Height -= panel1.Height;
+                dataGridView1.Location = panel1.Location;
             }
+
+            MinimumSize = Size;
        }
 
         private void ResultsForm_Load(object sender, EventArgs e)

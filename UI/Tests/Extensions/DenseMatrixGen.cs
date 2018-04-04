@@ -29,9 +29,10 @@ namespace Extensions
             {
                 for(int j=0;j<size;j++)
                 {
-                    matrix[i, j] = rand.Next(-10, -1);
+                    //matrix[i, j] = rand.Next(-10, -1);
+                    matrix[i, j] =  j;// rand.Next(-10, -1);
                 }
-                matrix[i, i] = rand.Next(1, 50);
+                matrix[i, i] = 50;// rand.Next(1, 50);
 
             }
             return new DenseMatrix(matrix);
@@ -45,9 +46,9 @@ namespace Extensions
             {
                 for (int j = 0; j < i; j++)
                 {
-                    matrix[i, j] = matrix[j, i] = rand.Next(-10, -1);
+                    matrix[i, j] = matrix[j, i] = 2;// rand.Next(-10, -1);
                 }
-                matrix[i, i] = rand.Next(1, 50);
+                matrix[i, i] = 40 ;
 
             }
             return new DenseMatrix(matrix);

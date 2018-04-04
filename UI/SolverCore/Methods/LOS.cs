@@ -1,5 +1,6 @@
 ﻿using System;
 
+
 namespace SolverCore.Methods
 {
     public class LOS : IMethod
@@ -25,14 +26,23 @@ namespace SolverCore.Methods
             this.x0 = x0;
             this.b = b;
             this.A = A;
+            this.Factorizer = Factorizer;
             norm_b = b.Norm;
             currentIter = 0;
-            //r = b.Add(A.Multiply(x0), -1);
-            //z = r.Clone();
-            //p = A.Multiply(r);
-            r = A.LSolve(b.Add(A.Multiply(x0), -1), true);
-            z = A.USolve(r, false);
-            p = A.LSolve(A.Multiply(z), true);
+
+            if (Factorizer != null)
+            {
+                r = Factorizer.LSolve(b.Add(A.Multiply(x0), -1));
+                z = Factorizer.USolve(r);
+                p = Factorizer.LSolve(A.Multiply(z));
+            }
+            else
+            {
+                r = b.Add(A.Multiply(x0), -1);
+                z = r.Clone();
+                p = A.Multiply(z);
+            }
+
             dotproduct_pp = p.DotProduct(p);
             init = true;
             return init;
@@ -48,24 +58,52 @@ namespace SolverCore.Methods
             currentIter++;
             iter = currentIter;
 
-            coefficient = p.DotProduct(r) / dotproduct_pp;
-            if (Double.IsInfinity(coefficient) || Double.IsNaN(coefficient))
+            if (Factorizer != null)
             {
-                residual = -1;
-                return;
+                coefficient = p.DotProduct(r) / dotproduct_pp;
+                if (Double.IsInfinity(coefficient) || Double.IsNaN(coefficient))
+                {
+                    residual = -1;
+                    return;
+                }
+
+                x = x.Add(z, coefficient);
+                r = r.Add(p, -coefficient);
+                Ar = Factorizer.LSolve(A.Multiply(Factorizer.USolve(r)));
+
+                coefficient = -p.DotProduct(Ar) / dotproduct_pp;
+                if (Double.IsInfinity(coefficient) || Double.IsNaN(coefficient))
+                {
+                    residual = -1;
+                    return;
+                }
+
+                z = Factorizer.USolve(r).Add(z, coefficient);
+                
             }
-            x = x.Add(z, coefficient);
-            r = r.Add(p, -coefficient);
-            // Ar = A.Multiply(r);
-            Ar = A.LSolve(A.Multiply(A.USolve(r, false)), true);
-            coefficient = -p.DotProduct(Ar) / dotproduct_pp;
-            if (Double.IsInfinity(coefficient) || Double.IsNaN(coefficient))
+            else
             {
-                residual = -1;
-                return;
+                coefficient = p.DotProduct(r) / dotproduct_pp;
+                if (Double.IsInfinity(coefficient) || Double.IsNaN(coefficient))
+                {
+                    residual = -1;
+                    return;
+                }
+
+                x = x.Add(z, coefficient);
+                r = r.Add(p, -coefficient);
+                Ar = A.Multiply(r);
+
+                coefficient = -p.DotProduct(Ar) / dotproduct_pp;
+                if (Double.IsInfinity(coefficient) || Double.IsNaN(coefficient))
+                {
+                    residual = -1;
+                    return;
+                }
+
+                z = r.Add(z, coefficient);
             }
-            // z = r.Add(z, coefficient);
-            z = A.USolve(r,false).Add(z, coefficient);
+
             p = Ar.Add(p, coefficient);
             dotproduct_pp = p.DotProduct(p);
 

@@ -18,7 +18,7 @@ namespace SolverCore.Factorizations
         {
             FactorizedMatrix = (CoordinationalMatrix) M.Clone();
             for (int i = 0; i < FactorizedMatrix.Size; i++)
-                FactorizedMatrix.Set(i, i, 1 / FactorizedMatrix[i,i]);
+                FactorizedMatrix.Set(i, i, Math.Sqrt(FactorizedMatrix[i,i]));
         }
         public IVector LMult(IVector x)
         {

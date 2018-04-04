@@ -33,14 +33,14 @@ namespace SolverCore.Solvers
         /// <param name="maxIter">Максимальное число итераций</param>
         /// <param name="eps">Относительня невязка для выхода</param>
         /// <param name="malloc">false - результат сохранится в x0, true - результат сохранится в новый вектор</param>
+        /// <param name="Factorizer">Разложение, по умолчанию отсутствует</param>
         /// <returns></returns>
-        public IVector Solve(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, bool malloc = false)
+        public IVector Solve(ILinearOperator A, IVector x0, IVector b, int maxIter = (int) 1E+4, double eps = 1.0E-14, bool malloc = false, IFactorization Factorizer = null)
         {
-            IVector result;
             int iter;
             double residual;
 
-            if (!Method.InitMethod(A, x0, b, malloc))
+            if (!Method.InitMethod(A, x0, b, malloc, Factorizer))
                 return null;
 
             while (true)

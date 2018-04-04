@@ -34,17 +34,16 @@
             this.factorizerBox = new System.Windows.Forms.ComboBox();
             this.iterBox = new System.Windows.Forms.NumericUpDown();
             this.label7 = new System.Windows.Forms.Label();
-            this.methodCheckedImg = new System.Windows.Forms.PictureBox();
             this.methodListBox = new System.Windows.Forms.CheckedListBox();
             this.label2 = new System.Windows.Forms.Label();
             this.epsBox = new System.Windows.Forms.TextBox();
             this.inputData = new System.Windows.Forms.GroupBox();
-            this.inputCheckedImg = new System.Windows.Forms.PictureBox();
             this.manualInputBtn = new System.Windows.Forms.LinkLabel();
             this.manualInpitRadioBtn = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.fileInputRadioBtn = new System.Windows.Forms.RadioButton();
             this.fileInputPanel = new System.Windows.Forms.Panel();
+            this.fileInputBtn = new System.Windows.Forms.LinkLabel();
             this.sim = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.formatBox = new System.Windows.Forms.ComboBox();
@@ -64,15 +63,16 @@
             this.done_label = new System.Windows.Forms.Label();
             this.need_label = new System.Windows.Forms.Label();
             this.residual_label = new System.Windows.Forms.Label();
-            this.fileInputBtn = new System.Windows.Forms.LinkLabel();
+            this.inputCheckedImg = new System.Windows.Forms.PictureBox();
+            this.methodCheckedImg = new System.Windows.Forms.PictureBox();
             this.methodsData.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
             this.inputData.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).BeginInit();
             this.fileInputPanel.SuspendLayout();
             this.menuStrip2.SuspendLayout();
             this.outputData.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).BeginInit();
             this.SuspendLayout();
             // 
             // methodsData
@@ -148,17 +148,6 @@
             this.label7.TabIndex = 29;
             this.label7.Text = "Максимальное \r\nчисло итераций:";
             // 
-            // methodCheckedImg
-            // 
-            this.methodCheckedImg.Enabled = false;
-            this.methodCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
-            this.methodCheckedImg.Location = new System.Drawing.Point(251, 11);
-            this.methodCheckedImg.Name = "methodCheckedImg";
-            this.methodCheckedImg.Size = new System.Drawing.Size(20, 20);
-            this.methodCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.methodCheckedImg.TabIndex = 21;
-            this.methodCheckedImg.TabStop = false;
-            // 
             // methodListBox
             // 
             this.methodListBox.BackColor = System.Drawing.SystemColors.Control;
@@ -207,17 +196,6 @@
             this.inputData.TabIndex = 3;
             this.inputData.TabStop = false;
             this.inputData.Text = "Входные данные";
-            // 
-            // inputCheckedImg
-            // 
-            this.inputCheckedImg.Enabled = false;
-            this.inputCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
-            this.inputCheckedImg.Location = new System.Drawing.Point(211, 11);
-            this.inputCheckedImg.Name = "inputCheckedImg";
-            this.inputCheckedImg.Size = new System.Drawing.Size(20, 20);
-            this.inputCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.inputCheckedImg.TabIndex = 20;
-            this.inputCheckedImg.TabStop = false;
             // 
             // manualInputBtn
             // 
@@ -277,6 +255,21 @@
             this.fileInputPanel.Name = "fileInputPanel";
             this.fileInputPanel.Size = new System.Drawing.Size(224, 91);
             this.fileInputPanel.TabIndex = 19;
+            // 
+            // fileInputBtn
+            // 
+            this.fileInputBtn.ActiveLinkColor = System.Drawing.Color.Maroon;
+            this.fileInputBtn.AutoSize = true;
+            this.fileInputBtn.LinkColor = System.Drawing.SystemColors.MenuHighlight;
+            this.fileInputBtn.Location = new System.Drawing.Point(75, 3);
+            this.fileInputBtn.MaximumSize = new System.Drawing.Size(133, 13);
+            this.fileInputBtn.Name = "fileInputBtn";
+            this.fileInputBtn.Size = new System.Drawing.Size(48, 13);
+            this.fileInputBtn.TabIndex = 18;
+            this.fileInputBtn.TabStop = true;
+            this.fileInputBtn.Text = "Обзор...";
+            this.fileInputBtn.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
+            this.fileInputBtn.Click += new System.EventHandler(this.fileInput_Click);
             // 
             // sim
             // 
@@ -459,20 +452,27 @@
             this.residual_label.TextAlign = System.Drawing.ContentAlignment.TopRight;
             this.residual_label.Visible = false;
             // 
-            // fileInputBtn
+            // inputCheckedImg
             // 
-            this.fileInputBtn.ActiveLinkColor = System.Drawing.Color.Maroon;
-            this.fileInputBtn.AutoSize = true;
-            this.fileInputBtn.LinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.fileInputBtn.Location = new System.Drawing.Point(75, 3);
-            this.fileInputBtn.MaximumSize = new System.Drawing.Size(133, 13);
-            this.fileInputBtn.Name = "fileInputBtn";
-            this.fileInputBtn.Size = new System.Drawing.Size(48, 13);
-            this.fileInputBtn.TabIndex = 18;
-            this.fileInputBtn.TabStop = true;
-            this.fileInputBtn.Text = "Обзор...";
-            this.fileInputBtn.VisitedLinkColor = System.Drawing.SystemColors.MenuHighlight;
-            this.fileInputBtn.Click += new System.EventHandler(this.fileInput_Click);
+            this.inputCheckedImg.Enabled = false;
+            this.inputCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
+            this.inputCheckedImg.Location = new System.Drawing.Point(211, 11);
+            this.inputCheckedImg.Name = "inputCheckedImg";
+            this.inputCheckedImg.Size = new System.Drawing.Size(20, 20);
+            this.inputCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.inputCheckedImg.TabIndex = 20;
+            this.inputCheckedImg.TabStop = false;
+            // 
+            // methodCheckedImg
+            // 
+            this.methodCheckedImg.Enabled = false;
+            this.methodCheckedImg.Image = global::UI.Properties.Resources.UnabledCheckMark;
+            this.methodCheckedImg.Location = new System.Drawing.Point(251, 11);
+            this.methodCheckedImg.Name = "methodCheckedImg";
+            this.methodCheckedImg.Size = new System.Drawing.Size(20, 20);
+            this.methodCheckedImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.methodCheckedImg.TabIndex = 21;
+            this.methodCheckedImg.TabStop = false;
             // 
             // MainForm
             // 
@@ -504,16 +504,16 @@
             this.methodsData.ResumeLayout(false);
             this.methodsData.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.iterBox)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).EndInit();
             this.inputData.ResumeLayout(false);
             this.inputData.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).EndInit();
             this.fileInputPanel.ResumeLayout(false);
             this.fileInputPanel.PerformLayout();
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
             this.outputData.ResumeLayout(false);
             this.outputData.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.inputCheckedImg)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.methodCheckedImg)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

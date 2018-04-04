@@ -85,11 +85,6 @@ namespace UI
             outPathBox.Text = path;
         }
 
-        private void MainForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void fileInput_Click(object sender, EventArgs e)
         {
             try
@@ -319,7 +314,7 @@ namespace UI
          
             x0_tmp = currentSLAE.x0.Clone();
             FactorizersEnum factorizerName = FactorizersFactory.FactorizersSimDictionary[factorizerBox.Text];
-            var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
+            var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.MM.yyyy");
             FullDirectoryName = path + uniqueDirectoryName;
             
             _Methods = new(string name, SaveBufferLogger log, double time)[methodListBox.CheckedItems.Count];
@@ -354,7 +349,6 @@ namespace UI
                 }
                 IFactorization factorizer = FactorizersFactory.SpawnFactorization(factorizerName, currentSLAE.matrix.ConvertToCoordinationalMatrix());
                 currentSLAE.x0 = x0_tmp.Clone();
-                _Methods[i].name = methodName.ToString();
                 IterProgressBar.Value = 0;
                 Logger = new SaveBufferLogger();
                 IVector result;
@@ -373,29 +367,47 @@ namespace UI
                 result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b, factorizer);
                 sw.Stop();
                 timer1.Stop();
-                MethodProgressBar.Increment(1);
                 timer1.Enabled = false;
 
-                _Methods[i].time = sw.ElapsedMilliseconds;
-                
-                _Methods[i].log = Logger;
-
-               
                 var LogList = Logger.GetList();
-                if (!LogList.IsEmpty) residual_label.Text = Convert.ToString(LogList[LogList.Count - 1]);
-                
-                IterProgressBar.Value = (int)iterBox.Value;
-                
-                count++;
-                done_label.Text = Convert.ToString(count);
-                WriteResultToFile(result, methodName.ToString(),sw.ElapsedMilliseconds, FullDirectoryName, LogList);
-                i++;
+
+                var lastLog = Logger.GetCurrentState();
+
+                if (LogList.IsEmpty || lastLog.residual == -1 && LogList.Count <= 1)
+                {
+                    MessageBox.Show("Метод " + methodName.ToString() + " разошелся на 1 итерации.", "Внимание!", MessageBoxButtons.OK);
+                }
+                else
+                {
+                    if (lastLog.residual == -1)
+                    {
+                        MessageBox.Show("Метод " + methodName.ToString() + " разошелся на " + LogList.Count.ToString() + " итерации. См. протокол решения в выходных данных.", "Внимание!", MessageBoxButtons.OK);
+                        Logger.RemoveLast();
+                    }
+                    if (!LogList.IsEmpty) residual_label.Text = Convert.ToString(LogList[LogList.Count - 1]);
+
+                    _Methods[i].name = methodName.ToString();
+                    _Methods[i].time = sw.ElapsedMilliseconds;
+                    _Methods[i].log = Logger;
+
+                    IterProgressBar.Value = (int)iterBox.Value;
+
+                    count++;
+                    done_label.Text = Convert.ToString(count);
+                    WriteResultToFile(result, methodName.ToString(), sw.ElapsedMilliseconds, FullDirectoryName, LogList);
+                    i++;
+                    
+                    MethodProgressBar.Increment(1);
+                }
             }
             startBtn.Enabled = true;
             methodsData.Enabled = true;
             outputData.Enabled = true;
             inputData.Enabled = true;
-            resultsFormToolStripMenuItem.Enabled = toolStripMenuOpenOutput.Enabled = true;
+            resultsFormToolStripMenuItem.Enabled = toolStripMenuOpenOutput.Enabled = count > 0;
+
+            if (count == 0)
+                Directory.Delete(FullDirectoryName);
         }
 
         private void WriteResultToFile(
@@ -415,8 +427,7 @@ namespace UI
             Directory.CreateDirectory(directory);
 
             var pathToTotalFile = $"{pathToDirectory}\\Сводные данные.txt";
-            var pathToResultFile = $"{pathToDirectory}\\Решение.txt";
-            var pathToSolveReportFile = $"{directory}\\Информация о решении.txt";
+            var pathToSolveReportFile = $"{directory}\\Протокол решения.txt";
             var pathToVectorFile = $"{directory}\\Вектор решения.txt";
 
             var totalString = new StringBuilder();
@@ -438,23 +449,20 @@ namespace UI
                .AppendLine($"Невязка: {resultResidual}");
 
             resultTotalString
-              .AppendLine($"{method}\r")
               .AppendLine($"Итерация\tНевязка");
 
            
-            File.AppendAllText(pathToTotalFile, resultTotalString.ToString());
+            File.AppendAllText(pathToTotalFile, totalString.ToString());
+            File.WriteAllText(pathToSolveReportFile, resultTotalString.ToString());
+            File.WriteAllText(pathToVectorFile, solve.ToString());
             int i = 1;
             foreach (double element in logList)
             {
-                File.AppendAllText(pathToTotalFile, $"{i}\t\t");
-                File.AppendAllText(pathToTotalFile, $"{element}\r\n");
+                File.AppendAllText(pathToSolveReportFile, $"{i}\t\t");
+                File.AppendAllText(pathToSolveReportFile, $"{element}\r\n");
                 i++;
             }
-            File.AppendAllText(pathToTotalFile, "\r\n");
-
-            File.WriteAllText(pathToSolveReportFile, resultReportString.ToString());
-            File.WriteAllText(pathToVectorFile, solve.ToString());
-            File.AppendAllText(pathToResultFile, totalString.ToString());
+            File.AppendAllText(pathToSolveReportFile, "\r\n");
         }
 
 
@@ -521,6 +529,11 @@ namespace UI
                 }
             }
             Help.ShowHelp(this, url);
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

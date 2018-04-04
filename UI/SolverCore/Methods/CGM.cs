@@ -4,6 +4,7 @@ namespace SolverCore.Methods
 {
     public class CGM : IMethod
     {
+        IFactorization Factorizer;
         IVector x0, b, z, r, Az;
         ILinearOperator A, At;
         double norm_b, dotproduct_rr, coefficient;
@@ -11,7 +12,7 @@ namespace SolverCore.Methods
         bool init;
         public IVector x { get; private set; }
 
-        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
+        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false, IFactorization Factorizer = null)
         {
             if (malloc)
             {

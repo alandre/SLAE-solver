@@ -133,7 +133,6 @@
             this.ClientSize = new System.Drawing.Size(602, 561);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.dataGridView1);
-            this.MinimumSize = new System.Drawing.Size(618, 495);
             this.Name = "ResultsForm";
             this.ShowIcon = false;
             this.Text = "Результаты";

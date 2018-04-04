@@ -20,7 +20,7 @@ namespace SolverCore.Methods
 
         public IVector x { get; private set; }
 
-        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
+        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false, IFactorization Factorizer = null)
         {
             if (malloc)
             {

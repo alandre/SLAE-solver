@@ -42,5 +42,11 @@ namespace SolverCore.Loggers
             logList = logList.Add(residual);
         }
 
+        public void RemoveLast()
+        {
+            int i = logList.Count() - 1;
+            logList = logList.RemoveAt(i);
+        }
+
     }
 }

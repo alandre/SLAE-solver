@@ -302,7 +302,7 @@ namespace UI
                
             }
           
-            if (!needFactorization)
+            if (!needFactorization && (FactorizersFactory.FactorizersSimDictionary[factorizerBox.Text]!=FactorizersEnum.WithoutFactorization))
                 MessageBox.Show("Факторизация для выбранных методов не требуется");
             SolveAsync();
             menuStrip2.Enabled = true;
@@ -313,6 +313,7 @@ namespace UI
         {
          
             x0_tmp = currentSLAE.x0.Clone();
+            string factorizerRusName = factorizerBox.Text;
             FactorizersEnum factorizerName = FactorizersFactory.FactorizersSimDictionary[factorizerBox.Text];
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.MM.yyyy");
             FullDirectoryName = path + uniqueDirectoryName;
@@ -393,7 +394,7 @@ namespace UI
 
                     count++;
                     done_label.Text = Convert.ToString(count);
-                    WriteResultToFile(result, methodName.ToString(), sw.ElapsedMilliseconds, FullDirectoryName, LogList);
+                    WriteResultToFile(result, methodName.ToString(), sw.ElapsedMilliseconds, FullDirectoryName, LogList, factorizerRusName);
                     i++;
                     
                     MethodProgressBar.Increment(1);
@@ -414,8 +415,11 @@ namespace UI
           string method,
           long time,
           string pathToDirectory,
-          IImmutableList<double> logList)
+          IImmutableList<double> logList,
+          string factorization)
         {
+            if (method == "Jacobi" || method == "GaussianSeidel")
+                factorization = "Без факторизации";
             int iterationCount = logList.Count;
             double resultResidual;
             if (logList.Count>0)
@@ -438,6 +442,7 @@ namespace UI
 
             totalString
                 .AppendLine($"{method}")
+                .AppendLine($"{factorization}")
                 .AppendLine($"Время решения в миллисекундах: {time}")
                 .AppendLine($"Вектор решения: {solve}")
                 .AppendLine($"Число итераций: {iterationCount}")

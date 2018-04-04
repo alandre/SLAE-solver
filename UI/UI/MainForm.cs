@@ -370,7 +370,7 @@ namespace UI
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 timer1.Start();
-                result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b, factorizer);
                 sw.Stop();
                 timer1.Stop();
                 MethodProgressBar.Increment(1);
@@ -466,9 +466,9 @@ namespace UI
             IterProgressBar.Value = iter;
         }
 
-        private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
+        private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b, IFactorization factorizer)
         {
-            return Task.Run(() => loggingSolver.Solve((ILinearOperator)matrix, x0, b, (int)iterBox.Value, double.Parse(epsBox.Text)));
+            return Task.Run(() => loggingSolver.Solve((ILinearOperator)matrix, x0, b, (int)iterBox.Value, double.Parse(epsBox.Text), factorizer));
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

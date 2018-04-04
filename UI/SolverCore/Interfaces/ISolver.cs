@@ -18,6 +18,6 @@ namespace SolverCore
         /// <param name="eps">Значение относительной невязки для выхода</param>
         /// <param name="malloc">false - результат сохраняется в вектор x0, true - выделяется новый вектор</param>
         /// <returns>Вектор с результатом</returns>
-        IVector Solve(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, bool malloc = false, IFactorization Factorizer = null);
+        IVector Solve(ILinearOperator A, IVector x0, IVector b, int maxIter, double eps, IFactorization Factorizer = null, bool malloc = false );
     }
 }

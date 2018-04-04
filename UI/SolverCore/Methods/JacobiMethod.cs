@@ -8,6 +8,7 @@ namespace SolverCore.Methods
 {
     public class JacobiMethod : IMethod
     {
+        IFactorization Factorizer;
         IVector x0, b;
         ILinearOperator A;
         double norm_b;

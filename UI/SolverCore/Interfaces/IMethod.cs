@@ -15,8 +15,9 @@ namespace SolverCore
         /// <param name="x0">Начальное приблежение</param>
         /// <param name="b">Вектор правой части СЛАУ</param>
         /// <param name="malloc">false - результат сохраняется в вектор x0, true - выделяется новый вектор</param>
+        /// <param name="Factorizer">Разложение, по умолчанию отсутствует</param>
         /// <returns>true - инициализация прошла успешно</returns>
-        bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false);
+        bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false, IFactorization Factorizer = null);
 
         /// <summary>
         /// Делает шаг иттерационного метода

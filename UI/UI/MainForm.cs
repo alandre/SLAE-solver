@@ -278,13 +278,15 @@ namespace UI
             }
 
             startBtn.Enabled = inputChecked && methodChecked;
+            
 
         }
 
         private void Start_Click(object sender, EventArgs e)
         {
-            inputData.Enabled = outputData.Enabled = methodsData.Enabled = false;
+            inputData.Enabled = outputData.Enabled = methodsData.Enabled =  startBtn.Enabled = false;
             needFactorization = false;
+            resultsFormToolStripMenuItem.Enabled = toolStripMenuOpenOutput.Enabled = false;
             menuStrip2.Enabled = false;
             currentSLAE = manualInpitRadioBtn.Checked ? manualInputedSLAE : fileInputedSLAE;
             foreach (MethodsEnum methodName in methodListBox.CheckedItems)
@@ -308,14 +310,13 @@ namespace UI
             if (!needFactorization)
                 MessageBox.Show("Факторизация для выбранных методов не требуется");
             SolveAsync();
+            menuStrip2.Enabled = true;
+            
         }
 
         private async void SolveAsync()
         {
-            methodsData.Enabled = false;
-            outputData.Enabled = false;
-            inputData.Enabled = false;
-            startBtn.Enabled = false;
+         
             x0_tmp = currentSLAE.x0.Clone();
             FactorizersEnum factorizerName = FactorizersFactory.FactorizersSimDictionary[factorizerBox.Text];
             var uniqueDirectoryName = "\\Solution " + DateTime.Now.ToString("hh-mm-ss dd.mm.yyyy");
@@ -369,7 +370,7 @@ namespace UI
                 Stopwatch sw = new Stopwatch();
                 sw.Start();
                 timer1.Start();
-                result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b);
+                result = await RunAsync((LoggingSolver)loggingSolver, currentSLAE.matrix, currentSLAE.x0, currentSLAE.b, factorizer);
                 sw.Stop();
                 timer1.Stop();
                 MethodProgressBar.Increment(1);
@@ -394,6 +395,7 @@ namespace UI
             methodsData.Enabled = true;
             outputData.Enabled = true;
             inputData.Enabled = true;
+            resultsFormToolStripMenuItem.Enabled = toolStripMenuOpenOutput.Enabled = true;
         }
 
         private void WriteResultToFile(
@@ -464,9 +466,9 @@ namespace UI
             IterProgressBar.Value = iter;
         }
 
-        private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b)
+        private Task<IVector> RunAsync(LoggingSolver loggingSolver, IMatrix matrix, IVector x0, IVector b, IFactorization factorizer)
         {
-            return Task.Run(() => loggingSolver.Solve((ILinearOperator)matrix, x0, b, (int)iterBox.Value, double.Parse(epsBox.Text)));
+            return Task.Run(() => loggingSolver.Solve((ILinearOperator)matrix, x0, b, (int)iterBox.Value, double.Parse(epsBox.Text), factorizer));
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

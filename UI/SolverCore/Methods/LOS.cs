@@ -4,6 +4,7 @@ namespace SolverCore.Methods
 {
     public class LOS : IMethod
     {
+        IFactorization Factorizer;
         IVector x0, b, p, z, r, Ar;
         ILinearOperator A;
         double norm_b, dotproduct_pp, coefficient;
@@ -11,7 +12,7 @@ namespace SolverCore.Methods
         bool init;
         public IVector x { get; private set; }
 
-        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
+        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false, IFactorization Factorizer = null)
         {
             if (malloc)
             {

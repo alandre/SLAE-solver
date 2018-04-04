@@ -4,6 +4,7 @@ namespace SolverCore.Methods
 {
     public class BCGStab : IMethod
     {
+        IFactorization Factorizer;
         IVector xk, b, z, r0, r, LAUz, LAUp, r_prev;
         ILinearOperator A;
         double norm_b, dotproduct_rr, dotproduct_rkr0, dotproduct_rprevr0;
@@ -12,7 +13,7 @@ namespace SolverCore.Methods
 
         public IVector x { get; private set; }
 
-        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false)
+        public bool InitMethod(ILinearOperator A, IVector x0, IVector b, bool malloc = false, IFactorization Factorizer = null)
         {
             if (malloc)
             {

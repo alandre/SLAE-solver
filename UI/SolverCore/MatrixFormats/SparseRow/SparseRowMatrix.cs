@@ -233,13 +233,13 @@ namespace SolverCore
                 var ia1 = ia[i];//1ый элемент строки
                 var ia2 = ia[i + 1];//1ый элемент следующий строки строки
                 int j;
-                for (; ja[ia1] < i && ia1 < ia2; ia1++)
+                for (; ia1 < ia2 && ja[ia1] < i; ia1++)
                 {
                     j = ja[ia1];
                     sum += a[ia1] * vector[j];
                 }
                 j = ja[ia1];
-                if (j == i && ia1 < ia2)
+                if (ia1 < ia2 && j == i)
                 {
                     sum += UseDiagonal ? a[ia1] * vector[j] : (double)diagonalElement * vector[j];
                 }

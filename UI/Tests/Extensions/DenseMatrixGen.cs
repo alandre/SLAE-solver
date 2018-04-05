@@ -29,9 +29,26 @@ namespace Extensions
             {
                 for(int j=0;j<size;j++)
                 {
-                    matrix[i, j] = rand.Next(-10, -1);
+                    //matrix[i, j] = rand.Next(-10, -1);
+                    matrix[i, j] =  j;// rand.Next(-10, -1);
                 }
-                matrix[i, i] = rand.Next(1, 50);
+                matrix[i, i] = 50;// rand.Next(1, 50);
+
+            }
+            return new DenseMatrix(matrix);
+        }
+
+        public static DenseMatrix SymmetricMatrix(int size)
+        {
+            double[,] matrix = new double[size, size];
+
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    matrix[i, j] = matrix[j, i] = 2;// rand.Next(-10, -1);
+                }
+                matrix[i, i] = 40 ;
 
             }
             return new DenseMatrix(matrix);
@@ -66,6 +83,23 @@ namespace Extensions
                     matrix[i, j] = matrix[j, i] = rand.Next(20, 60);
             }
                 
+            return new DenseMatrix(matrix);
+        }
+        public static DenseMatrix SingularMatrix(int size)
+        {
+            double[,] matrix = new double[size, size];
+
+            for (int i = 0; i < size; i++)
+                for (int j = 0; j < size; j++)
+                {
+                    matrix[i, j] = rand.Next(1, 10);
+                }
+
+            for (int i = 0; i < size; i++)
+            {
+                matrix[i, 0] = 0;
+            }
+
             return new DenseMatrix(matrix);
         }
 

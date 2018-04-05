@@ -21,7 +21,9 @@ namespace Factorizations
         {
             int[] rows = new int[] { 0, 0, 0, 1, 1, 1, 2, 2, 2 };
             int[] collumns = new int[] { 0, 1, 2, 0, 1, 2, 0, 1, 2 };
-            double[] values = new double[] { 10, 1, 2, 1, 10, 3, 2, 3, 10 };
+            double[] values = new double[] { 10, 1, 2,
+                                             1, 10, 3,
+                                             2, 3, 10 };
             FA = new CoordinationalMatrix(rows, collumns, values, 3);
         }
 

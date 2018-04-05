@@ -46,6 +46,9 @@ namespace Methods
 
             var result = loggingSolver.Solve(denseMatrix, x0, b);
 
+            foreach (var elem in result)
+                _testOutputHelper.WriteLine(elem.ToString());
+
             for (int i = 0; i < resultActual.Size; i++)
                 Assert.Equal(result[i], resultActual[i], 8);
 
@@ -99,8 +102,72 @@ namespace Methods
 
         }
 
-    
 
+        [Fact]
+        public void PositiveDefiniteMatrix()
+        {
+            _matrix = new double[5, 5] { { 3, 1, 0, 7, 5 },
+                                         { 0, 6, 3, 6, 0 },
+                                         { 9, 0, 7, 0, 0 },
+                                         { 8, 3, 4, 2, 0 },
+                                         { 1, 2, 0, 1, 5 }};
+
+            IVector resultActual = new Vector(new double[] { 1, 1, 1, 1, 1 });
+
+            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
+            Vector x0 = new Vector(new double[] { 0, 0, 0, 0, 0 });
+            IVector b = denseMatrix.Multiply(resultActual);
+
+            var result = loggingSolver.Solve(denseMatrix, x0, b);
+
+            foreach (var elem in result)
+                _testOutputHelper.WriteLine(elem.ToString());
+
+            Assert.NotEmpty(result);
+        }
+
+
+        [Fact]
+        public void NegativeDefiniteMatrix()
+        {
+            _matrix = new double[5, 5] { { -3, -1, 0, -7, -5 },
+                                         { 0, -6, -3, -6, 0 },
+                                         { -9, 0, 7, 0, 0 },
+                                         { -8, -3, -4, -2, 0 },
+                                         {1, 2, 0, 1, -3 }};
+
+            IVector resultActual = new Vector(new double[] { 1, 1, 1, 1, 1 });
+
+            DenseMatrix denseMatrix = new DenseMatrix(_matrix);
+            Vector x0 = new Vector(new double[] { 0, 0, 0, 0, 0 });
+            IVector b = denseMatrix.Multiply(resultActual);
+
+            var result = loggingSolver.Solve(denseMatrix, x0, b);
+
+            foreach (var elem in result)
+                _testOutputHelper.WriteLine(elem.ToString());
+
+            Assert.NotEmpty(result);
+        }
+
+        [Fact]
+        public void SingularMatrix()
+        {
+            IVector resultActual = new Vector(new double[] { 1, 1, 1 });
+
+            DenseMatrix denseMatrix = DenseMatrixGen.SingularMatrix(3);
+            Vector x0 = new Vector(new double[] { 0, 0, 0 });
+            IVector b = denseMatrix.Multiply(resultActual);
+
+            var result = loggingSolver.Solve(denseMatrix, x0, b);
+
+            foreach (var elem in result)
+                _testOutputHelper.WriteLine(elem.ToString());
+
+            Assert.NotEmpty(result);
+        }
+
+       
 
     }
 }

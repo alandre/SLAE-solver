@@ -65,7 +65,7 @@ namespace SolverCore.Methods
             var x_k = inverseDioganal.HadamardProduct(b.Add(L_Ux, -1));
 
             double w = 1.0;
-
+            double tempResidual = Double.MaxValue;
             while (w >= 0.1)
             {
                 for (int i = 0; i < x.Size; i++)
@@ -75,16 +75,15 @@ namespace SolverCore.Methods
 
                 L_Ux = A.LMult(x_temp, false, 0).Add(A.UMult(x_temp, false, 0));
                 //tempResidual = ||b - (Ux+Lx+Dx)|| / ||b||
-                double tempResidual = A.Diagonal.HadamardProduct(x_temp).Add(L_Ux).Add(b, -1).Norm / norm_b;
+                tempResidual = A.Diagonal.HadamardProduct(x_temp).Add(L_Ux).Add(b, -1).Norm / norm_b;
 
                 if (tempResidual < lastResidual)
                 {
-                    lastResidual = tempResidual;
                     break;
                 }
                 w -= 0.1;
             }
-
+            lastResidual = tempResidual;
             for (int i = 0; i < x.Size; i++)
             {
                 x[i] = x_temp[i];

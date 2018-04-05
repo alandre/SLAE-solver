@@ -233,13 +233,13 @@ namespace SolverCore
                 var ia1 = ia[i];//1ый элемент строки
                 var ia2 = ia[i + 1];//1ый элемент следующий строки строки
                 int j;
-                for (; ja[ia1] < i && ia1 < ia2; ia1++)
+                for (; ia1 < ia2 && ja[ia1] < i; ia1++)
                 {
                     j = ja[ia1];
                     sum += a[ia1] * vector[j];
                 }
                 j = ja[ia1];
-                if (j == i && ia1 < ia2)
+                if (ia1 < ia2 && j == i)
                 {
                     sum += UseDiagonal ? a[ia1] * vector[j] : (double)diagonalElement * vector[j];
                 }
@@ -265,13 +265,13 @@ namespace SolverCore
                 var ia1 = ia[i];//1ый элемент строки 
                 var ia2 = ia[i + 1];//последний элемент строки
                 int j;
-                for (; ja[ia1] < i && ia1 < ia2; ia1++)
+                for (; ia1 < ia2 && ja[ia1] < i; ia1++)
                 {
                     j = ja[ia1];
                     result[j] += a[ia1] * vector[i];
                 }
                 j = ja[ia1];
-                if (j == i && ia1 < ia2)
+                if (ia1 < ia2 && j == i)
                 {
                     result[j] += UseDiagonal ? a[ia1] * vector[j] : (double)diagonalElement * vector[j];
                 }
@@ -298,7 +298,7 @@ namespace SolverCore
                 var ia2 = ia[i + 1];
                 int j;
                 sum = 0;
-                for (; ja[ia1] < i && ia1 < ia2; ia1++)
+                for (; ia1 < ia2 && ja[ia1] < i; ia1++)
                 {
                     j = ja[ia1];
                     sum += result[j] * a[ia1];
@@ -329,7 +329,7 @@ namespace SolverCore
                 var ia2 = ia[i + 1];
                 int j;
                 di[i] = UseDiagonal ? di[i] : 1.0;
-                for (; ja[ia1] < i && ia1 < ia2; ia1++)
+                for (; ia1 < ia2 && ja[ia1] < i; ia1++)
                 {
                     j = ja[ia1];
                     result[j] -= result[i] * a[ia1] / di[i];
@@ -410,7 +410,7 @@ namespace SolverCore
                 var ia1 = ia[i];
                 var ia2 = ia[i + 1] - 1;
                 var j = ja[ia2];
-                for (; j > i && ia1 < ia2; ia2--)
+                for (; ia1 < ia2 && j > i; ia2--)
                 {
                     j = ja[ia2];
                     sum += a[ia2] * vector[j];
@@ -503,7 +503,7 @@ namespace SolverCore
                 var ia2 = ia[i + 1] - 1;
                 int j;
                 di[i] = UseDiagonal ? di[i] : 1.0;
-                for (; ja[ia2] > i && ia1 < ia2; ia2--)
+                for (; ia1 < ia2 && ja[ia2] > i; ia2--)
                 {
                     j = ja[ia2];
                     result[j] -= result[i] * a[ia2] / di[i];

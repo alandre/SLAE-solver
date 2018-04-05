@@ -8,7 +8,6 @@ namespace SolverCore.Methods
 {
     public class GaussianSeidelMethod : IMethod
     {
-        IFactorization Factorizer;
         IVector x0, b;
         ILinearOperator A;
         double norm_b;
@@ -60,6 +59,8 @@ namespace SolverCore.Methods
 
             double w = 1.0;
 
+            double tempResidual = Double.MaxValue;
+
             while (w >= 0.1)
             {
                 ////????????????????
@@ -72,16 +73,15 @@ namespace SolverCore.Methods
                 Ux = Ux = A.UMult(x_temp, false, 0);
 
                 //tempResidual = ||b - (Ux+Lx+Dx)|| / ||b||
-                double tempResidual = Ux.Add(A.LMult(x_temp,false,0)).Add(A.Diagonal.HadamardProduct(x_temp)).Add(b, -1).Norm / norm_b;
+                tempResidual = Ux.Add(A.LMult(x_temp,false,0)).Add(A.Diagonal.HadamardProduct(x_temp)).Add(b, -1).Norm / norm_b;
 
+                w -= 0.1;
                 if (tempResidual < lastResidual)
                 {
-                    lastResidual = tempResidual;
                     break;
                 }
-                w -= 0.1;
             }
-
+            lastResidual = tempResidual;
             ////????????????????
             for (int i = 0; i < x.Size; i++)
             {

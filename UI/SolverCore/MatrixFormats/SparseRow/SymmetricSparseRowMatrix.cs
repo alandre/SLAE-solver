@@ -242,7 +242,7 @@ namespace SolverCore
                 double sum = 0;
                 var ia1 = ia[i];
                 var ia2 = ia[i + 1];
-                for (; i > ja[ia1] && ia1 < ia2; ia1++)
+                for (; ia1 < ia2 && i > ja[ia1]; ia1++)
                 {
                     var j = ja[ia1];
                     sum += a[ia1] * vector[j];
@@ -274,7 +274,7 @@ namespace SolverCore
                 var ia2 = ia[i + 1];
                 int j;
                 sum = 0;
-                for (; ja[ia1] < i && ia1 < ia2; ia1++)
+                for (; ia1 < ia2 && ja[ia1] < i; ia1++)
                 {
                     j = ja[ia1];
                     sum += result[j] * a[ia1];
@@ -359,7 +359,7 @@ namespace SolverCore
                 var ia2 = ia[i + 1];
                 int j;
                 di[i] = UseDiagonal ? di[i] : 1.0;
-                for (; ja[ia1] < i && ia1 < ia2; ia1++)
+                for (; ia1 < ia2 && ja[ia1] < i; ia1++)
                 {
                     j = ja[ia1];
                     result[j] -= result[i] * a[ia1] / di[i];//??????
